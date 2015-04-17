@@ -603,7 +603,7 @@ public class Structure extends Buildable {
 				
 		double refund = this.getCost();
 		this.getTown().depositDirect(refund);
-		CivMessage.sendTown(getTown(), "Town refunded "+refund+" Redbacks.");
+		CivMessage.sendTown(getTown(), "Town refunded "+refund+" Coins.");
 		
 		this.unbindStructureBlocks();
 	}
@@ -658,7 +658,7 @@ public class Structure extends Buildable {
 		
 		double cost = getRepairCost();
 		if (!getTown().getTreasury().hasEnough(cost)) {
-			throw new CivException("Your town cannot not afford the "+cost+" Redbacks to build a "+getDisplayName());
+			throw new CivException("Your town cannot not afford the "+cost+" Coins to build a "+getDisplayName());
 		}
 		
 		repairStructureForFree();

@@ -69,7 +69,7 @@ public class DisableTeleportEvent implements EventInterface {
 
 	public static void disableTeleport() {
 
-		File file = new File("teleportsOff.txt");
+		File file = new File(CivSettings.plugin.getDataFolder().getPath()+"/data/teleportsOff.txt");
 		
 		
 		if (!file.exists()) {
@@ -101,7 +101,7 @@ public class DisableTeleportEvent implements EventInterface {
 
 	
 	public static void enableTeleport() {
-		File file = new File("teleportsOn.txt");
+		File file = new File(CivSettings.plugin.getDataFolder().getPath()+"/data/teleportsOn.txt");
 		
 		
 		if (!file.exists()) {

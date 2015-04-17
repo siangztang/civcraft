@@ -2734,8 +2734,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_creeper_egg_3'
           item_id: 383
@@ -2755,8 +2755,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_creeper_egg_4'
           item_id: 383
@@ -2776,8 +2776,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_skeleton_egg'
           item_id: 383
@@ -2817,8 +2817,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_skeleton_egg_3'
           item_id: 383
@@ -2838,8 +2838,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_skeleton_egg_4'
           item_id: 383
@@ -2859,8 +2859,8 @@ materials:
                 letter: 'c'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_spider_egg'
           item_id: 383
@@ -2900,8 +2900,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_spider_egg_3'
           item_id: 383
@@ -2921,8 +2921,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_spider_egg_4'
           item_id: 383
@@ -2942,8 +2942,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_zombie_egg'
           item_id: 383
@@ -2983,8 +2983,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_zombie_egg_3'
           item_id: 383
@@ -3004,8 +3004,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_zombie_egg_4'
           item_id: 383
@@ -3025,8 +3025,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_slime_egg'
           item_id: 383
@@ -3067,8 +3067,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_slime_egg_3'
           item_id: 383
@@ -3088,8 +3088,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
         - id: 'mat_slime_egg_4'
           item_id: 383
@@ -3109,8 +3109,8 @@ materials:
                 letter: 'e'
           shape:
               - " c "
-              - "cec"
-              - " c "
+              - " e "
+              - "   "
 
 # Catalyst/Crystal ingredients
         - id: 'mat_metallic_crystal_fragment_1'
