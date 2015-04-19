@@ -31,15 +31,15 @@ debug_heartbeat: 'false'
 
 # MySQL database to store game data in across reloads. 
 mysql:
-   hostname: localhost
-   port: '3306'
-   database: 
-   username: 
-   password: 
-   table_prefix: 
-   min_conns: '5'
-   max_conns: '10'
-   parts: '3'
+    hostname: localhost
+    port: '3306'
+    database: 
+    username: 
+    password: 
+    table_prefix: 
+    min_conns: '5'
+    max_conns: '10'
+    parts: '3'
    
 global_database:
     database: 
