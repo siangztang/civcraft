@@ -80,6 +80,13 @@ public class Structure extends Buildable {
 		Structure struct;
 		
 		switch (id) {
+//		case "s_lighthouse":
+//			if (rs == null) {
+//				struct = (Structure) new Lighthouse(center, id, town);
+//			} else {
+//				struct = (Structure) new Lighthouse(rs);
+//			}
+//			break;
 		case "s_bank":
 			if (rs == null) {
 				struct = (Structure) new Bank(center, id, town);
@@ -206,6 +213,14 @@ public class Structure extends Buildable {
 				struct = (Structure) new TownHall(center, id, town);
 			} else {
 				struct = (Structure) new TownHall(rs);
+			}
+			break;
+		// Just for backwards compatibility with old typos on existing servers:
+		case "s_capital":
+			if (rs == null) {
+				struct = (Structure) new Capitol(center, id, town);
+			} else {
+				struct = (Structure) new Capitol(rs);
 			}
 			break;
 		case "s_capitol":
