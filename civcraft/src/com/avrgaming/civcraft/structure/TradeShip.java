@@ -35,7 +35,7 @@ import com.avrgaming.civcraft.util.MultiInventory;
 import com.avrgaming.civcraft.util.SimpleBlock;
 import com.avrgaming.civcraft.util.TimeTools;
 
-public class TradeShip extends Structure {
+public class TradeShip extends WaterStructure {
 	
 	private int upgradeLevel = 1;
 	private int tickLevel = 1;
@@ -47,6 +47,7 @@ public class TradeShip extends Structure {
 	
 	protected TradeShip(Location center, String id, Town town) throws CivException {
 		super(center, id, town);
+		setUpgradeLvl(town.saved_tradeship_upgrade_levels);
 	}
 
 	public TradeShip(ResultSet rs) throws SQLException, CivException {

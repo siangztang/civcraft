@@ -1879,7 +1879,7 @@ customItem_NoEnchanting: "Items cannot be enchanted with enchantment tables."
 customItem_restrictedItemsRemoved: "Restricted vanilla items in your inventory have been removed."
 customItem_enchantTableDisabled: "Cannot use enchantment tables. XP and Levels disabled in CivCraft."
 customItem_anvilDisabled: "Cannot use anvils. XP and Levels disabled in CivCraft."
-var_customItem_Pickup: "You've Picked up [%0] [%1]"
+var_customItem_Pickup: "You picked up [%0] [%1]"
 
 # =========================== Hero Chat Messages =========================
 hc_prefix_far: "[Far]:"
@@ -1969,7 +1969,7 @@ var_civ_found_townExists: "A town already exists with the name of '[%0]"
 civ_found_mustleavecamp: "You must first leave your camp before founding a civilization."
 var_civ_found_errorTooClose1: "You cannot found a civilization here. You are too close to the culture of [%0]! [%1] is your current distance, needs to be at least [%2]"
 civ_found_databaseException: "We detected and internal inconsistency with the database. Try founding your civ again, if the problem persists, contact an admin."
-var_civ_found_success1: "The Civilization of [%0] has been founded by [%1], with [%2] as it's capitol!"
+
 var_civ_found_invalidName: "'[%0]' is not a valid name, please choose another."
 var_civ_debtAnnounce: "[%0] is in debt by [%1] [%2]!"
 var_civ_fellIntoRuin: "[%0] and its towns have fallen into ruin!"
@@ -2368,8 +2368,6 @@ fishingBoat_tooDeep: "You must be close to the water's surface to build this str
 #---- Grocer.java ----
 # "Bought 1 fish for 10 Coins"
 var_grocer_msgBought: "Bought [%0] [%1] for [%2]"
-# "Paid the town of Spawn 50 Coins in non-resident taxes"
-var_grocer_msgPaidTaxes: "Paid the town of %s %s in non-resident taxes"
 #These are for the grocer signs.
 grocer_sign_buy: "Buy"
 grocer_sign_for: "For"
@@ -2636,7 +2634,7 @@ var_daily_residentTaxes: "Collected [%0] [%1] in resident taxes."
 var_daily_townTaxes: "Collected [%0] [%1] in town taxes."
 
 effectEvent_noTownHall: "Your town does not have a town hall! Structures have no effect!"
-var_effectEvent_convertBeakers: "Converted [%0] beakers into [%1] culture as we are not research any new technologies."
+var_effectEvent_convertBeakers: "Converted [%0] beakers into [%1] culture as we are not researching any new technologies."
 
 var_syncTrade_payout: "Generated [%0] from trade."
 
@@ -2800,7 +2798,7 @@ var_tradeship_productionGrew: "A level [%0] Trade Ship's production rose. [%1]"
 var_tradeship_lvlUp: "A Trade Ship gained a level. It is now level [%0]"
 var_tradeship_maxed: "A level [%0] Trade Ship is maxed. [%1]"
 var_tradeship_success: "Your Trade Ship generated [%0] [%1] and [%2] culture from selling [%3] units of cargo."
-tradeship_successSpecail: "It also brought back something specail! Check your Trade Ship's incoming cargo hold."
+tradeship_successSpecail: "It also brought back something special! Check your Trade Ship's incoming cargo hold."
 tradeship_sign_input_line0: "Incoming"
 tradeship_sign_input_notupgraded_line1: "Unavailable"
 tradeship_sign_input_notupgraded_line2: "Town Upgrade"
@@ -2822,8 +2820,56 @@ adcmd_lag_speedCheckOnChunk: "Toggles speed check updates to Chunks or always"
 
 adcmd_lag_SpeedCheck: "Speed Check on Chunk enabled:"
 var_buildable_tooCloseToCannonShip: "Cannot build here. Too close to another Cannon Ship at location [%0]"
+var_buildable_tooCloseToTeslaTower: "Cannot build here. Too close to another Tesla Tower at location [%0]"
 var_war_mostLethal: "Most Lethal: [%0]"
 war_wartimeSkippedHeading: "WarTime Has Been Skipped, No Civs at War."
 
+PlayerLoginAsync_perk_Medieval: "Medieval"
+adcmd_build_changeNearestDesc: "[town] [Theme] Change the nearest structure in the town to the entered template Theme. Confirmation is required."
+
+var_adcmd_build_wouldChangeTheme: "Would change the [%0] at location [%1] to the [%2] theme. Are you sure? Type '/ad changenearest [town] [theme] yes' to confirm."
+adcmd_build_wouldChangeTheme_NoTheme: "Please enter a theme, for example: default, aztec, roman"
+
+newItemLore_Defense: "Defense Bonus"
+capitol_Sign_noPermission: "You must be a Mayor, Leader, Advisor, or Assistant to change the respawn Town."
+
+university_sign: "Univesity Of"
+
+# "Paid the town of Spawn 50 Coins in non-resident taxes"
+var_grocer_msgPaidTaxes: "Paid the town of [%0] [%1] in non-resident taxes"
+
+town_border_outlaw: "You are an outlaw here."
+var_civ_border_welcomeBack: "Welcome Back, [%0]"
+var_civ_border_welcomeHome: "Welcome Home, [%0]"
+var_civ_border_relation: "Current Status: [%0]"
+
+war_wartimeBegin_title_length: "War time will last for [%0] hours."
+
+cmd_res_toggle_titleAPIDesc: "Toggles displaying of on screen titles."
+
+var_civ_found_successTitle: "New Civilization of [%0]!"
+var_civ_found_successSubTitle: "Capitol: [%0] - Founded by: [%1]"
+
+general_upkeep_tick: "Starting Daily Upkeep Processing"
+general_upkeep_tick_finish: "Daily Upkeep Finished"
+
+announce_ancientEra: "The Ancient Era"
+announce_classicalEra: "The Classical Era"
+announce_medievalEra: "The Medieval Era"
+announce_renaissanceEra: "The Renaissance Era"
+announce_industrialEra: "The Industrial Era"
+announce_modernEra: "The Modern Era"
+announce_atomicEra: "The Atomic Era"
+announce_informationEra: "The Information Era"
+var_announce_newEraCiv: "Has been achieved by [%0]."
+
+cmd_town_unclaim_errorTownHall: "You cannot unclaim a town chunk containing your town hall."
+stable_missingTech_MilitaryScience: "You need the technology 'Military Science' in order to buy this."
+cmd_civ_research_eraDesc: "Shows your current technicalogical era, and the era of the most advanced Civ."
+cmd_civ_research_era: "Civilization Era"
+var_cmd_civ_research_highestEra: "The Highest Era achieved is [%0]"
+var_cmd_civ_research_currentEra: "Your Civilization is in [%0]"
+var_cmd_civ_research_eraDiscount: "You are currently receiving a [%0]% discount on the Beaker and [%1] cost of Technologies you research."
+cmd_civ_research_eraNoDiscount: "You are not receiving a discount on the cost of Technologies you research."
 # =========================== END 1.76 =========================
 # ----------------------------------------------------------------

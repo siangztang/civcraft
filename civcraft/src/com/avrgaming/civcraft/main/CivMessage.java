@@ -38,6 +38,7 @@ import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.util.CivColor;
+import com.connorlinfoot.titleapi.TitleAPI;
 
 public class CivMessage {
 
@@ -79,6 +80,39 @@ public class CivMessage {
 		} catch (CivException e) {
 		}
 		CivLog.info(line);	
+	}
+	public static void sendTitle(Object sender, int fadeIn, int show, int fadeOut, String title, String subTitle) {
+		if (CivSettings.hasTitleAPI) {
+			Player player = null;
+			Resident resident = null;
+			if ((sender instanceof Player)) {
+				player = (Player) sender;
+				resident = CivGlobal.getResident(player);
+			} else if (sender instanceof Resident) {
+				try {
+					resident = (Resident)sender;
+					player = CivGlobal.getPlayer(resident);
+				} catch (CivException e) {
+					// No player online
+				}
+			}
+			if (player != null && resident != null && resident.isTitleAPI())
+			{
+				TitleAPI.sendTitle(player, fadeIn, show, fadeOut, title, subTitle);
+				return;
+			} else {
+				
+			}
+		}
+		send(sender, title);
+		if (subTitle != "") {
+			send(sender, subTitle);
+		}
+	}
+	
+	
+	public static void sendTitle(Object sender, String title, String subTitle) {
+		sendTitle(sender, 10, 40, 5, title, subTitle);
 	}
 	
 	public static void send(Object sender, String line) {
@@ -165,6 +199,18 @@ public class CivMessage {
 		CivLog.info("[Global] "+string);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.sendMessage(CivColor.LightBlue+CivSettings.localize.localizedString("civMsg_Globalprefix")+" "+CivColor.White+string);
+		}
+	}
+	
+	public static void globalTitle(String title, String subTitle) {
+		CivLog.info("[GlobalTitle] "+title+" - "+subTitle);
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			Resident resident = CivGlobal.getResident(player);
+			if (CivSettings.hasTitleAPI && resident.isTitleAPI()) {
+				CivMessage.sendTitle(player, 10, 60, 10, title, subTitle);
+			} 
+			send(player, buildTitle(title));
+			send(player, subTitle);
 		}
 	}
 	

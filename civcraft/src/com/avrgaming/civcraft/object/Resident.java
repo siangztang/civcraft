@@ -104,6 +104,7 @@ public class Resident extends SQLObject {
 	private boolean civChat = false;
 	private boolean adminChat = false;
 	private boolean combatInfo = false;
+	private boolean titleAPI = true;
 	
 	private boolean usesAntiCheat = false;
 	
@@ -170,7 +171,7 @@ public class Resident extends SQLObject {
 	private boolean insideArena = false;
 	private boolean isProtected = false;
 	
-	public HashMap<BlockCoord, SimpleBlock> previewUndo = null;
+	public ConcurrentHashMap<BlockCoord, SimpleBlock> previewUndo = null;
 	public LinkedHashMap<String, Perk> perks = new LinkedHashMap<String, Perk>();
 	private Date lastKilledTime = null;
 	private String lastIP = "";
@@ -387,6 +388,9 @@ public class Resident extends SQLObject {
 		if (this.combatInfo) {
 			flagString += "combatinfo,";
 		}
+		if (this.isTitleAPI()) {
+			flagString += "titleapi,";
+		}
 		
 		if (this.itemMode.equals("rare")) {
 			flagString += "itemModeRare,";
@@ -423,6 +427,14 @@ public class Resident extends SQLObject {
 				break;
 			case "combatinfo":
 				this.setCombatInfo(true);
+				break;
+			case "titleapi":
+				if (CivSettings.hasTitleAPI)
+				{
+				this.setTitleAPI(true);
+				} else {
+					this.setTitleAPI(false);
+				}
 				break;
 			case "itemmoderare":
 				this.itemMode = "rare";
@@ -1044,7 +1056,7 @@ public class Resident extends SQLObject {
 	
 	public void undoPreview() {
 		if (this.previewUndo == null) {
-			this.previewUndo = new HashMap<BlockCoord, SimpleBlock>();
+			this.previewUndo = new ConcurrentHashMap<BlockCoord, SimpleBlock>();
 			return;
 		}
 		
@@ -1071,7 +1083,7 @@ public class Resident extends SQLObject {
 		}
 		
 		this.previewUndo.clear();
-		this.previewUndo = new HashMap<BlockCoord, SimpleBlock>();
+		this.previewUndo = new ConcurrentHashMap<BlockCoord, SimpleBlock>();
 	}
 
 	public boolean isShowInfo() {
@@ -1142,29 +1154,8 @@ public class Resident extends SQLObject {
 	public void setOnRoad(boolean onRoad) {
 		this.onRoad = onRoad;
 	}
-
-	public void giveAllArcticPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("tpl_arctic") || perk.getIdent().startsWith("template_arctic"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
 	
-	public void giveAllAtlanteanPerks() {
+	public void giveTemplate(String name) {
 		int perkCount;
 		try {
 			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
@@ -1172,11 +1163,10 @@ public class Resident extends SQLObject {
 			e.printStackTrace();
 			return;
 		}
-		
 		for (ConfigPerk p : CivSettings.perks.values()) {
 			Perk perk = new Perk(p);
 			
-			if (perk.getIdent().startsWith("prem_tpl_atlantean") || perk.getIdent().startsWith("template_atlantean"))
+			if (perk.getIdent().startsWith(("tpl_"+name).toLowerCase()) || perk.getIdent().startsWith(("prem_tpl_"+name).toLowerCase()) || perk.getIdent().startsWith(("template_"+name).toLowerCase()))
 			{
 				perk.count = perkCount;
 				this.perks.put(perk.getIdent(), perk);
@@ -1184,154 +1174,6 @@ public class Resident extends SQLObject {
 		}
 		
 	}
-	
-	public void giveAllAztecPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("tpl_aztec") || perk.getIdent().startsWith("template_aztec"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllEgyptianPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("tpl_egyptian") || perk.getIdent().startsWith("template_egyptian"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllRomanPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("tpl_roman") || perk.getIdent().startsWith("template_roman"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllNightLightsPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("prem_tpl_nightlights") || perk.getIdent().startsWith("template_nightlights"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllHellPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("tpl_hell") || perk.getIdent().startsWith("template_hell"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllElvenPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("prem_tpl_elven") || perk.getIdent().startsWith("template_elven"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-	
-	public void giveAllCultistPerks() {
-		int perkCount;
-		try {
-			perkCount = CivSettings.getInteger(CivSettings.perkConfig, "system.free_perk_count");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		for (ConfigPerk p : CivSettings.perks.values()) {
-			Perk perk = new Perk(p);
-			
-			if (perk.getIdent().startsWith("prem_tpl_cultist") || perk.getIdent().startsWith("template_cultist"))
-			{
-				perk.count = perkCount;
-				this.perks.put(perk.getIdent(), perk);
-			}
-		}
-		
-	}
-
 
 	public void giveAllFreePerks() {
 		int perkCount;
@@ -1396,51 +1238,12 @@ public class Resident extends SQLObject {
 							perkMessage += "Weather"+", ";
 						}
 					}
-					if (player.hasPermission(CivSettings.ARCTIC_PERKS))
-					{
-						resident.giveAllArcticPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Arctic")+", ";
-					}
-					if (player.hasPermission(CivSettings.ATLANTEAN_PERKS))
-					{
-						resident.giveAllAtlanteanPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Atlantean")+", ";
-					}
-					if (player.hasPermission(CivSettings.AZTEC_PERKS))
-					{
-						resident.giveAllAztecPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Aztec")+", ";
-					}
-					if (player.hasPermission(CivSettings.CULTIST_PERKS))
-					{
-						resident.giveAllCultistPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Cultist")+", ";
-					}
-					if (player.hasPermission(CivSettings.EGYPTIAN_PERKS))
-					{
-						resident.giveAllEgyptianPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Egyptian")+", ";
-					}
-					if (player.hasPermission(CivSettings.ELVEN_PERKS))
-					{
-						resident.giveAllElvenPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Elven")+", ";
-					}
-					if (player.hasPermission(CivSettings.HELL_PERKS))
-					{
-						resident.giveAllHellPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Hell")+", ";
-					}
-					if (player.hasPermission(CivSettings.ROMAN_PERKS))
-					{
-						resident.giveAllRomanPerks();
-						perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perk_Roman")+", ";
-					}
-
-					if (player.hasPermission(CivSettings.NIGHTLIGHTS_PERKS))
-					{
-						resident.giveAllNightLightsPerks();
-						perkMessage += "Night Lights"+", ";
+					
+					for (ConfigPerk p : CivSettings.templates.values()) {
+						if (player.hasPermission("civ.perk"+p.simple_name)) {
+							resident.giveTemplate(p.simple_name);
+							perkMessage += p.display_name+", ";
+						}
 					}
 
 					perkMessage += CivSettings.localize.localizedString("PlayerLoginAsync_perksMsg2");
@@ -2048,5 +1851,13 @@ public class Resident extends SQLObject {
 			}
 		}
 		this.walkingModifier = speed;
+	}
+
+	public boolean isTitleAPI() {
+		return titleAPI;
+	}
+
+	public void setTitleAPI(boolean titleAPI) {
+		this.titleAPI = titleAPI;
 	}
 }

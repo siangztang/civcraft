@@ -152,6 +152,7 @@ public class CivSettings {
 	
 	public static FileConfiguration perkConfig; /* perks.yml */
 	public static Map<String, ConfigPerk> perks = new HashMap<String, ConfigPerk>();
+	public static Map<String, ConfigPerk> templates = new HashMap<String, ConfigPerk>();
 
 	public static FileConfiguration enchantConfig; /* enchantments.yml */
 	public static Map<String, ConfigEnchant> enchants = new HashMap<String, ConfigEnchant>();
@@ -205,15 +206,6 @@ public class CivSettings {
 	public static final String HACKER = "civ.hacker";
 	public static final String MODERATOR = "civ.moderator";
 	public static final String FREE_PERKS = "civ.freeperks";
-	public static final String ARCTIC_PERKS = "civ.arcticperks";
-	public static final String ATLANTEAN_PERKS = "civ.atlanteanperks";
-	public static final String AZTEC_PERKS = "civ.aztecperks";
-	public static final String EGYPTIAN_PERKS = "civ.egyptianperks";
-	public static final String ROMAN_PERKS = "civ.romanperks";
-	public static final String HELL_PERKS = "civ.hellperks";
-	public static final String ELVEN_PERKS = "civ.elvenperks";
-	public static final String CULTIST_PERKS = "civ.cultistperks";
-	public static final String NIGHTLIGHTS_PERKS = "civ.nightlightperks";
 	public static final String ECON = "civ.econ";
 	public static final String TPALLY = "civ.tp.ally";
 	public static final String TPNEUTRAL = "civ.tp.neutral";
@@ -228,6 +220,8 @@ public class CivSettings {
 	public static String CURRENCY_NAME;
 	
 	public static Localize localize;
+	
+	public static boolean hasTitleAPI = false;
 	
 	public static void init(JavaPlugin plugin) throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
 		CivSettings.plugin = (CivCraft)plugin;
@@ -311,6 +305,10 @@ public class CivSettings {
 		
 		if (CivSettings.plugin.hasPlugin("VanishNoPacket")) {
 			hasVanishNoPacket = true;
+		}
+		
+		if (CivSettings.plugin.hasPlugin("TitleAPI")) {
+			hasTitleAPI = true;
 		}
 
 	}
@@ -416,9 +414,9 @@ public class CivSettings {
 	}
 	
 	public static void reloadPerks() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
-
 		perkConfig = loadCivConfig("perks.yml");
 		ConfigPerk.loadConfig(perkConfig, perks);
+		ConfigPerk.loadTemplates(perkConfig, templates);
 	}
 	
 	public static void reloadNoCheat() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
@@ -449,6 +447,7 @@ public class CivSettings {
 		ConfigUnit.loadConfig(unitConfig, units);
 		ConfigMission.loadConfig(espionageConfig, missions);
 		ConfigPerk.loadConfig(perkConfig, perks);
+		ConfigPerk.loadTemplates(perkConfig, templates);
 		ConfigCampLonghouseLevel.loadConfig(campConfig, longhouseLevels);
 		ConfigCampUpgrade.loadConfig(campConfig, campUpgrades);
 		ConfigMarketItem.loadConfig(marketConfig, marketItems);
@@ -556,7 +555,12 @@ public class CivSettings {
 		switchItems.add(Material.ACACIA_DOOR);
 		switchItems.add(Material.DARK_OAK_DOOR);
 		
-		
+		// 1.7 additions
+		switchItems.add(Material.ACACIA_FENCE_GATE);
+		switchItems.add(Material.BIRCH_FENCE_GATE);
+		switchItems.add(Material.DARK_OAK_FENCE_GATE);
+		switchItems.add(Material.SPRUCE_FENCE_GATE);
+		switchItems.add(Material.JUNGLE_FENCE_GATE);
 	}
 	
 	private static void initBlockPlaceExceptions() {

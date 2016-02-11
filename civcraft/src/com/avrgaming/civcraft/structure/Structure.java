@@ -38,6 +38,7 @@ import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.Resident;
+import com.avrgaming.civcraft.object.StructureSign;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.road.Road;
 import com.avrgaming.civcraft.template.Template;
@@ -135,6 +136,22 @@ public class Structure extends Buildable {
 				struct = (Structure) new Store(rs);
 			}
 			break;
+			
+		case "s_stadium":
+			if (rs == null) {
+				struct = (Structure) new Stadium(center, id, town);
+			} else {
+				struct = (Structure) new Stadium(rs);
+			}
+			break;
+			
+		case "ti_hospital":
+			if (rs == null) {
+				struct = (Structure) new Hospital(center, id, town);
+			} else {
+				struct = (Structure) new Hospital(rs);
+			}
+			break;
 		
 		case "s_grocer":
 			if (rs == null) {
@@ -149,6 +166,30 @@ public class Structure extends Buildable {
 				struct = (Structure) new Library(center, id, town);
 			} else {
 				struct = (Structure) new Library(rs);
+			}
+			break;	
+			
+		case "s_university":
+			if (rs == null) {
+				struct = (Structure) new University(center, id, town);
+			} else {
+				struct = (Structure) new University(rs);
+			}
+			break;	
+			
+		case "s_school":
+			if (rs == null) {
+				struct = (Structure) new School(center, id, town);
+			} else {
+				struct = (Structure) new School(rs);
+			}
+			break;
+			
+		case "s_research_lab":
+			if (rs == null) {
+				struct = (Structure) new ResearchLab(center, id, town);
+			} else {
+				struct = (Structure) new ResearchLab(rs);
 			}
 			break;	
 		
@@ -283,9 +324,9 @@ public class Structure extends Buildable {
 			break;
 		case "s_shipyard":
 			if (rs == null) {
-				struct = (Structure) new WaterStructure(center, id, town);
+				struct = (Structure) new Shipyard(center, id, town);
 			} else {
-				struct = (Structure) new WaterStructure(rs);
+				struct = (Structure) new Shipyard(rs);
 			}
 			break;
 		case "ti_wall":
@@ -349,6 +390,13 @@ public class Structure extends Buildable {
 				struct = (Lighthouse) new Lighthouse(center, id, town);
 			} else {
 				struct = (Lighthouse) new Lighthouse(rs);
+			}
+			break;
+		case "s_teslatower":
+			if (rs == null) {
+				struct = (TeslaTower) new TeslaTower(center, id, town);
+			} else {
+				struct = (TeslaTower) new TeslaTower(rs);
 			}
 			break;
 		default:
@@ -505,6 +553,10 @@ public class Structure extends Buildable {
 			
 			if (!(this instanceof Wall || this instanceof FortifiedWall || this instanceof Road))
 			{
+				/* Remove StructureSigns */
+				for (StructureSign sign : this.getSigns()) {
+					sign.delete();
+				}
 				try {
 					this.undoFromTemplate();	
 				} catch (IOException | CivException e1) {

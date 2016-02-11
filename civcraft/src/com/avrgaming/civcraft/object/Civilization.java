@@ -73,6 +73,7 @@ public class Civilization extends SQLObject {
 	
 	private int color;
 	private int daysInDebt = 0;
+	private int currentEra = 0;
 	private double incomeTaxRate;
 	private double sciencePercentage;
 	private ConfigTech researchTech = null;
@@ -242,6 +243,13 @@ public class Civilization extends SQLObject {
 		this.setTreasury(new EconObject(this));
 		this.getTreasury().setBalance(rs.getDouble("coins"), false);
 		this.getTreasury().setDebt(rs.getDouble("debt"));
+
+		for (ConfigTech tech : this.getTechs())
+		{
+			if (tech.era > this.getCurrentEra()) {
+				this.setCurrentEra(tech.era);
+			}
+		}
 	}
 
 	@Override
@@ -373,6 +381,10 @@ public class Civilization extends SQLObject {
 	}
 	
 	public void addTech(ConfigTech t) {
+		if (t.era > this.getCurrentEra()) {
+			this.setCurrentEra(t.era);
+		}
+		
 		CivGlobal.researchedTechs.add(t.id.toLowerCase());
 		techs.put(t.id, t);
 		
@@ -585,7 +597,7 @@ public class Civilization extends SQLObject {
 			CivGlobal.addCiv(civ);
 			ItemStack newStack = new ItemStack(Material.AIR);
 			player.setItemInHand(newStack);
-			CivMessage.global(CivSettings.localize.localizedString("var_civ_found_success1",civ.getName(),player.getName(),civ.getCapitolName()));
+			CivMessage.globalTitle(CivSettings.localize.localizedString("var_civ_found_successTitle",civ.getName()),CivSettings.localize.localizedString("var_civ_found_successSubTitle",civ.getCapitolName(),player.getName()));
 			
 		} catch (InvalidNameException e) {
 			throw new CivException(CivSettings.localize.localizedString("var_civ_found_invalidName",name));
@@ -1028,12 +1040,12 @@ public class Civilization extends SQLObject {
 		
 		if (beakers == 0) {
 			return;
-		}	
+		}
 		
 		TaskMaster.asyncTask(new UpdateTechBar(this), 0);
 		setResearchProgress(getResearchProgress() + beakers);
 		
-		if (getResearchProgress() >= getResearchTech().beaker_cost) {
+		if (getResearchProgress() >= getResearchTech().getAdjustedBeakerCost(this)) {
 			CivMessage.sendCiv(this, CivSettings.localize.localizedString("var_civ_research_Discovery",getResearchTech().name));
 			this.addTech(this.getResearchTech());
 			this.setResearchProgress(0);
@@ -1044,7 +1056,7 @@ public class Civilization extends SQLObject {
 			return;
 		}
 		
-		int percentageComplete = (int)((getResearchProgress() / this.getResearchTech().beaker_cost)*100);
+		int percentageComplete = (int)((getResearchProgress() / this.getResearchTech().getAdjustedBeakerCost(this))*100);
 		if ((percentageComplete % 10) == 0) {
 			
 			if (percentageComplete != lastTechPercentage) {
@@ -1062,9 +1074,10 @@ public class Civilization extends SQLObject {
 		if (this.getResearchTech() != null) {
 			throw new CivException(CivSettings.localize.localizedString("var_civ_research_switchAlert1",this.getResearchTech().name));
 		}
+		double cost = tech.getAdjustedTechCost(this);
 		
-		if (!this.getTreasury().hasEnough(tech.cost)) {
-			throw new CivException(CivSettings.localize.localizedString("var_civ_research_notEnoughMoney",tech.cost,CivSettings.CURRENCY_NAME));
+		if (!this.getTreasury().hasEnough(cost)) {
+			throw new CivException(CivSettings.localize.localizedString("var_civ_research_notEnoughMoney",cost,CivSettings.CURRENCY_NAME));
 		}
 		
 		if (this.hasTech(tech.id)) {
@@ -1078,7 +1091,7 @@ public class Civilization extends SQLObject {
 		this.setResearchTech(tech);
 		this.setResearchProgress(0.0);
 	
-		this.getTreasury().withdraw(tech.cost);
+		this.getTreasury().withdraw(cost);
 		TaskMaster.asyncTask(new UpdateTechBar(this),0);
 	}
 
@@ -1287,6 +1300,9 @@ public class Civilization extends SQLObject {
 		}
 		for (Relation relation : deletedRelations) {
 			try {
+				if (relation.getStatus() == Relation.Status.WAR) {
+					relation.setStatus(Relation.Status.NEUTRAL);
+				}
 				relation.delete();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -1878,6 +1894,19 @@ public class Civilization extends SQLObject {
 		
 		ItemStack stack = ItemManager.spawnPlayerHead(leader, message+" ("+leader+")");
 		return stack;
+	}
+
+	public int getCurrentEra() {
+		return currentEra;
+	}
+
+	public void setCurrentEra(int currentEra) {
+		this.currentEra = currentEra;
+		
+		if (this.currentEra > CivGlobal.highestCivEra)
+		{
+			CivGlobal.setCurrentEra(this.currentEra, this);
+		}
 	}
 	
 }

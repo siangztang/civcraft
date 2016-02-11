@@ -206,6 +206,8 @@ public class CivGlobal {
 	public static PerkManager perkManager = null;
 	public static boolean installMode = false;
 	
+	public static int highestCivEra = 0;
+	
 	public static void loadGlobals() throws SQLException, CivException {
 		
 		CivLog.heading("Loading CivCraft Objects From Database");
@@ -376,6 +378,47 @@ public class CivGlobal {
 			}
 		}
 	}
+	
+	public static String localizedEraString(int era) {
+		String newEra = "";
+		switch (era) {
+		case 0: //ANCIENT
+			newEra = "announce_ancientEra";
+			break;
+		case 1: //CLASSICAL
+			newEra = "announce_classicalEra";
+			break;
+		case 2: //MEDIEVAL
+			newEra = "announce_medievalEra";
+			break;
+		case 3: //RENAISSANCE
+			newEra = "announce_renaissanceEra";
+			break;
+		case 4: //INDUSTRIAL
+			newEra = "announce_industrialEra";
+			break;
+		case 5: //MODERN
+			newEra = "announce_modernEra";
+			break;
+		case 6: //ATOMIC
+			newEra = "announce_atomicEra";
+			break;
+		case 7: //INFORMATION
+			newEra = "announce_informationEra";
+			break;
+		default:
+			break;
+		}
+		return CivSettings.localize.localizedString(newEra);
+	}
+	
+	public static void setCurrentEra(int era, Civilization civ) {
+		if (era > highestCivEra) {
+			highestCivEra = era;
+			CivMessage.globalTitle(CivColor.Green+ localizedEraString(highestCivEra) , CivColor.LightGreen+CivSettings.localize.localizedString("var_announce_newEraCiv", civ.getName()));
+			
+		}
+	}
 
 	private static void loadCivs() throws SQLException {
 		Connection context = null;
@@ -391,6 +434,12 @@ public class CivGlobal {
 			while(rs.next()) {
 				try {
 					Civilization civ = new Civilization(rs);
+					
+					if (highestCivEra < civ.getCurrentEra())
+					{
+						highestCivEra = civ.getCurrentEra();
+					}
+					
 					if (!civ.isConquered()) {
 						CivGlobal.addCiv(civ);
 					} else {
@@ -1142,7 +1191,7 @@ public class CivGlobal {
 		return false;		
 	}
 
-	public static boolean hasTimeElapsed(SessionEntry se, int seconds) {
+	public static boolean hasTimeElapsed(SessionEntry se, double seconds) {
 		long now = System.currentTimeMillis();
 		int secondsBetween = getSecondsBetween(se.time, now);
 		

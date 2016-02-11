@@ -100,6 +100,11 @@ public class Stable extends Structure {
 					CivMessage.sendError(player, CivSettings.localize.localizedString("stable_unknownHorse"));
 					return;
 				}
+				if (horse_id >= 5 && !getCiv().hasTechnology("tech_military_science"))
+				{
+					CivMessage.sendError(player, CivSettings.localize.localizedString("stable_missingTech_MilitaryScience"));
+					return;
+				}
 				
 				Resident resident = CivGlobal.getResident(player);
 				if (!horse.mule) {
@@ -144,6 +149,8 @@ public class Stable extends Structure {
 				if (!horse.mule) {			
 					mod = HorseModifier.spawn(horseSpawnCoord.getLocation());
 					mod.setType(HorseType.NORMAL);
+					mod.setTamed(true);
+					mod.setSaddled(true);
 				} else {
 					mod = HorseModifier.spawn(muleSpawnCoord.getLocation());
 					mod.setType(HorseType.MULE);
@@ -154,7 +161,8 @@ public class Stable extends Structure {
 				((Horse)mod.getHorse()).setJumpStrength(horse.jump);
 				((Horse)mod.getHorse()).setHealth(horse.health);
 				((Horse)mod.getHorse()).setOwner(player);
-				((Horse)mod.getHorse()).setBaby();
+				((Horse)mod.getHorse()).setCustomName(horse.name);
+				((Horse)mod.getHorse()).setCustomNameVisible(true);
 				
 				CivMessage.send(player, CivColor.LightGreen+CivSettings.localize.localizedString("var_stable_buySuccess",paid,CivSettings.CURRENCY_NAME));
 			}
@@ -174,6 +182,11 @@ public class Stable extends Structure {
 			public void process(Player player) {
 
 				Resident resident = CivGlobal.getResident(player);
+				if ((item_id >= 417 && item_id <= 419)  && !getCiv().hasTechnology("tech_military_science"))
+				{
+					CivMessage.sendError(player, CivSettings.localize.localizedString("stable_missingTech_MilitaryScience"));
+					return;
+				}
 				
 				double paid;
 				if (resident.getTown() != getTown()) {

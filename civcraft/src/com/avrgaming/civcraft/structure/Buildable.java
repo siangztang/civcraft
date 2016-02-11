@@ -94,6 +94,7 @@ import com.avrgaming.civcraft.util.FireworkEffectPlayer;
 import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.util.SimpleBlock;
 import com.avrgaming.civcraft.util.SimpleBlock.Type;
+import com.avrgaming.civcraft.war.War;
 import com.avrgaming.global.perks.Perk;
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
@@ -464,7 +465,11 @@ public abstract class Buildable extends SQLObject {
 		CivMessage.send(player, CivColor.Yellow+ChatColor.BOLD+CivSettings.localize.localizedString("buildable_preview_prompt1"));
 		CivMessage.send(player, CivColor.LightGreen+ChatColor.BOLD+CivSettings.localize.localizedString("buildable_preview_prompt2"));
 		Resident resident = CivGlobal.getResident(player);
-		resident.startPreviewTask(tpl, centerLoc.getBlock(), player.getUniqueId());
+		
+		if (!War.isWarTime())
+		{
+			resident.startPreviewTask(tpl, centerLoc.getBlock(), player.getUniqueId());
+		}
 		
 		/* Run validation on position. */
 		//validate(player, this, tpl, centerLoc, null);
@@ -749,9 +754,11 @@ public abstract class Buildable extends SQLObject {
 			}
 		}
 		
-		if (this.getConfigId().equals("s_shipyard") || this.getConfigId().equals("ti_tradeship") || this.getConfigId().equals("w_grand_ship_ingermanland")) {
+		if (this.getConfigId().equals("s_shipyard") || this.getConfigId().equals("s_arrowship") || this.getConfigId().equals("s_scoutship") || this.getConfigId().equals("s_cannonship") || this.getConfigId().equals("ti_tradeship") || this.getConfigId().equals("w_grand_ship_ingermanland")) {
 			if (!centerBlock.getBiome().equals(Biome.OCEAN) && 
 				!centerBlock.getBiome().equals(Biome.BEACH) &&
+				!centerBlock.getBiome().equals(Biome.STONE_BEACH) &&
+				!centerBlock.getBiome().equals(Biome.COLD_BEACH) &&
 				!centerBlock.getBiome().equals(Biome.DEEP_OCEAN) &&
 				!centerBlock.getBiome().equals(Biome.RIVER) &&
 				!centerBlock.getBiome().equals(Biome.FROZEN_OCEAN) &&
@@ -1159,8 +1166,10 @@ public abstract class Buildable extends SQLObject {
 	}
 	
 	public void onDamage(int amount, World world, Player player, BlockCoord coord, BuildableDamageBlock hit) {
+		if (!this.getCiv().getDiplomacyManager().isAtWar()) {
+			return;
+		}
 		boolean wasTenPercent = false;
-		
 		if(hit.getOwner().isDestroyed()) {
 			if (player != null) {
 				CivMessage.sendError(player, CivSettings.localize.localizedString("var_buildable_alreadyDestroyed",hit.getOwner().getDisplayName()));
@@ -1489,6 +1498,7 @@ public abstract class Buildable extends SQLObject {
 	
 	@Override
 	public void delete() throws SQLException {
+		this.setEnabled(false);
 		for (Component comp : this.attachedComponents) {
 			comp.destroyComponent();
 		}

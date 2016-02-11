@@ -38,6 +38,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
@@ -87,6 +88,7 @@ import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.camp.CampBlock;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
+import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
@@ -110,6 +112,7 @@ import com.avrgaming.civcraft.structure.Pasture;
 //import com.avrgaming.civcraft.structure.Temple;
 import com.avrgaming.civcraft.structure.Wall;
 import com.avrgaming.civcraft.structure.farm.FarmChunk;
+import com.avrgaming.civcraft.structure.wonders.Battledome;
 import com.avrgaming.civcraft.structure.wonders.GrandShipIngermanland;
 import com.avrgaming.civcraft.threading.CivAsyncTask;
 import com.avrgaming.civcraft.threading.TaskMaster;
@@ -243,7 +246,7 @@ public class BlockListener implements Listener {
 				afc.setHit(true);
 			}
 		}
-
+		
 		if (event.getEntity() instanceof Fireball) {
 			CannonFiredCache cfc = CivCache.cannonBallsFired.get(event.getEntity().getUniqueId());
 			if (cfc != null) {
@@ -281,13 +284,19 @@ public class BlockListener implements Listener {
 				return;
 			}
 		}
-
-		if (!(event.getEntity() instanceof Player)) {			
-			return;
-		}	
+		
+		if (event.getDamager() instanceof LightningStrike) {
+//			CivLog.debug("onEntityDamageByEntityEvent LightningStrike: "+event.getDamager().getUniqueId());
+			try {
+				event.setDamage(CivSettings.getInteger(CivSettings.warConfig, "tesla_tower.damage"));
+			} catch (InvalidConfiguration e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		Player defender = (Player)event.getEntity();
-		/* Only protect agaisnt players and entities that players can throw. */
+		/* Only protect against players and entities that players can throw. */
 		if (!CivSettings.playerEntityWeapons.contains(event.getDamager().getType())) {
 			return;
 		}
@@ -312,6 +321,7 @@ public class BlockListener implements Listener {
 				}
 			}
 		}
+		
 
 		coord.setFromLocation(event.getEntity().getLocation());
 		TownChunk tc = CivGlobal.getTownChunk(coord);
@@ -414,6 +424,12 @@ public class BlockListener implements Listener {
 
 		if (tc.perms.isMobs() == false) {
 			if (event.getSpawnReason().equals(SpawnReason.CUSTOM)) {
+				return;
+			}
+			ChunkCoord coord = new ChunkCoord(event.getEntity().getLocation());
+			Battledome battledome = Battledome.battledomeChunks.get(coord);
+
+			if (battledome != null) {
 				return;
 			}
 
@@ -1124,6 +1140,12 @@ public class BlockListener implements Listener {
 					case JUNGLE_DOOR:
 					case ACACIA_DOOR:
 					case DARK_OAK_DOOR:
+                    case ACACIA_FENCE_GATE:
+                    case BIRCH_FENCE_GATE:
+                    case DARK_OAK_FENCE_GATE: 
+                    case FENCE_GATE:
+                    case SPRUCE_FENCE_GATE:
+                    case JUNGLE_FENCE_GATE: 
 						return;
 					default:
 						break;
@@ -1409,6 +1431,11 @@ public class BlockListener implements Listener {
 		if (pasture != null) {
 			pasture.onEntityDeath(event.getEntity());
 		}
+		
+		Battledome battledome = Battledome.battledomeEntities.get(event.getEntity().getUniqueId());
+		if (battledome != null) {
+			battledome.onEntityDeath(event.getEntity());
+		}
 		return;
 
 
@@ -1464,7 +1491,7 @@ public class BlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-		if (War.isWarTime()) {
+		if (War.isWarTime() && !event.getEntity().getType().equals(EntityType.HORSE)) {
 			if (!event.getSpawnReason().equals(SpawnReason.BREEDING)){
 				event.setCancelled(true);
 				return;

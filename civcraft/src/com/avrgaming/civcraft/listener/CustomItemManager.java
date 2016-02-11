@@ -19,6 +19,7 @@
 package com.avrgaming.civcraft.listener;
 
 import gpl.AttributeUtil;
+import gpl.HorseModifier;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +28,8 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -240,6 +243,7 @@ public class CustomItemManager implements Listener {
 
 		if (LoreMaterial.isCustom(stack)) {
 			LoreMaterial.getMaterial(stack).onItemSpawn(event);
+			return;
 		}
 		
 		if (isUnwantedVanillaItem(stack)) {
@@ -262,6 +266,17 @@ public class CustomItemManager implements Listener {
 			defendingPlayer = (Player)event.getEntity();
 		}
 		
+		if (event.getDamager() instanceof LightningStrike) {
+			/* Return after Tesla tower does damage, do not apply armor defense. */
+			try {
+				event.setDamage(CivSettings.getInteger(CivSettings.warConfig, "tesla_tower.damage"));
+				return;
+			} catch (InvalidConfiguration e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (event.getDamager() instanceof Arrow) {
 			LivingEntity shooter = (LivingEntity) ((Arrow)event.getDamager()).getShooter();
 			
@@ -277,13 +292,15 @@ public class CustomItemManager implements Listener {
 					/* Arrow was fired by a tower. */
 					afc.setHit(true);
 					afc.destroy(event.getDamager());
-					
-					Resident defenderResident = CivGlobal.getResident(defendingPlayer);
-					if (defenderResident != null && defenderResident.hasTown() && 
-							defenderResident.getTown().getCiv() == afc.getFromTower().getTown().getCiv()) {
-						/* Prevent friendly fire from arrow towers. */
-						event.setCancelled(true);
-						return;
+					if (defendingPlayer != null)
+					{
+						Resident defenderResident = CivGlobal.getResident(defendingPlayer);
+						if (defenderResident != null && defenderResident.hasTown() && 
+								defenderResident.getTown().getCiv() == afc.getFromTower().getTown().getCiv()) {
+							/* Prevent friendly fire from arrow towers. */
+							event.setCancelled(true);
+							return;
+						}
 					}
 					
 					/* Return after arrow tower does damage, do not apply armor defense. */
@@ -299,6 +316,13 @@ public class CustomItemManager implements Listener {
 			} else {
 				/* Non-civcraft items only do 0.5 damage. */
 				event.setDamage(0.5);
+			}
+		}
+		
+		if (event.getEntity() instanceof Horse) {
+			if (HorseModifier.isCivCraftHorse((LivingEntity) event.getEntity())) {
+				//Horses take 50% damage from all sources.
+				event.setDamage(event.getDamage()/2.0);
 			}
 		}
 		
@@ -526,14 +550,36 @@ public class CustomItemManager implements Listener {
 				event.getItem().remove();
 				event.setCancelled(true);
 			}
-		}
-		
-		if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.RAW_FISH)
+		} else if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.ENDER_PEARL)) {
+			LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(event.getItem().getItemStack());
+			if (craftMat == null) {
+				/* Found a vanilla ender peral. */
+				LoreCraftableMaterial slime = LoreCraftableMaterial.getCraftMaterialFromId("mat_ender_pearl");
+				ItemStack newStack = LoreCraftableMaterial.spawn(slime);
+				newStack.setAmount(event.getItem().getItemStack().getAmount());
+				event.getPlayer().getInventory().addItem(newStack);
+				event.getPlayer().updateInventory();
+				event.getItem().remove();
+				event.setCancelled(true);
+			}
+		} else if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.TNT)) {
+			LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(event.getItem().getItemStack());
+			if (craftMat == null) {
+				/* Found a vanilla tnt. */
+				LoreCraftableMaterial slime = LoreCraftableMaterial.getCraftMaterialFromId("mat_vanilla_tnt");
+				ItemStack newStack = LoreCraftableMaterial.spawn(slime);
+				newStack.setAmount(event.getItem().getItemStack().getAmount());
+				event.getPlayer().getInventory().addItem(newStack);
+				event.getPlayer().updateInventory();
+				event.getItem().remove();
+				event.setCancelled(true);
+			}
+		} else if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.RAW_FISH)
 				&& ItemManager.getData(event.getItem().getItemStack()) == 
 					ItemManager.getData(ItemManager.getMaterialData(CivData.FISH_RAW, CivData.CLOWNFISH))) {
 			LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(event.getItem().getItemStack());
 			if (craftMat == null) {
-				/* Found a vanilla slime ball. */
+				/* Found a vanilla clownfish. */
 				LoreCraftableMaterial clown = LoreCraftableMaterial.getCraftMaterialFromId("mat_vanilla_clownfish");
 				ItemStack newStack = LoreCraftableMaterial.spawn(clown);
 				newStack.setAmount(event.getItem().getItemStack().getAmount());
@@ -542,14 +588,12 @@ public class CustomItemManager implements Listener {
 				event.getItem().remove();
 				event.setCancelled(true);
 			}
-		}
-		
-		if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.RAW_FISH)
+		} else if (ItemManager.getId(event.getItem().getItemStack()) == ItemManager.getId(Material.RAW_FISH)
 				&& ItemManager.getData(event.getItem().getItemStack()) == 
 					ItemManager.getData(ItemManager.getMaterialData(CivData.FISH_RAW, CivData.PUFFERFISH))) {
 			LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(event.getItem().getItemStack());
 			if (craftMat == null) {
-				/* Found a vanilla slime ball. */
+				/* Found a vanilla pufferfish. */
 				LoreCraftableMaterial clown = LoreCraftableMaterial.getCraftMaterialFromId("mat_vanilla_pufferfish");
 				ItemStack newStack = LoreCraftableMaterial.spawn(clown);
 				newStack.setAmount(event.getItem().getItemStack().getAmount());

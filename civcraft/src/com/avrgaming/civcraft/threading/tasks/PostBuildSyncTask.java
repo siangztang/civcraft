@@ -33,6 +33,7 @@ import com.avrgaming.civcraft.structure.ArrowTower;
 import com.avrgaming.civcraft.structure.Buildable;
 import com.avrgaming.civcraft.structure.CannonShip;
 import com.avrgaming.civcraft.structure.CannonTower;
+import com.avrgaming.civcraft.structure.TeslaTower;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.structure.TradeOutpost;
 import com.avrgaming.civcraft.structure.wonders.GrandShipIngermanland;
@@ -151,6 +152,9 @@ public class PostBuildSyncTask implements Runnable {
 				} else if (buildable instanceof CannonTower) {
 					CannonTower cannontower = (CannonTower)buildable;
 					cannontower.setTurretLocation(absCoord);
+				} else if (buildable instanceof TeslaTower) {
+					TeslaTower teslaTower = (TeslaTower)buildable;
+					teslaTower.setTurretLocation(absCoord);
 				}
 				
 				break;
@@ -201,14 +205,14 @@ public class PostBuildSyncTask implements Runnable {
 				if (ItemManager.getId(block) != CivData.CHEST) {		
 					byte chestData = CivData.convertSignDataToChestData((byte)sb.getData());
 					ItemManager.setTypeId(block, CivData.CHEST);
-					ItemManager.setData(block, chestData, true);
+					ItemManager.setData(block, chestData, true);}
 				
 					Chest chest = (Chest)block.getState();
 					MaterialData data = chest.getData();
-					ItemManager.setData(data, chestData);
+//					ItemManager.setData(data, chestData);
 					chest.setData(data);
 					chest.update();
-				}
+//				}
 				
 				break;
 			}
@@ -334,13 +338,21 @@ public class PostBuildSyncTask implements Runnable {
 				}
 				break;
 			case "/towerfire":
-				if (buildable instanceof ArrowTower) {
+				if (buildable instanceof ArrowShip) {
+					ArrowShip arrowship = (ArrowShip)buildable;
+					arrowship.setTurretLocation(absCoord);
+				} else if (buildable instanceof ArrowTower) {
 					ArrowTower arrowtower = (ArrowTower)buildable;
 					arrowtower.setTurretLocation(absCoord);
-				}
-				if (buildable instanceof CannonTower) {
+				} else if (buildable instanceof CannonShip) {
+					CannonShip cannonship = (CannonShip)buildable;
+					cannonship.setTurretLocation(absCoord);
+				} else if (buildable instanceof CannonTower) {
 					CannonTower cannontower = (CannonTower)buildable;
 					cannontower.setTurretLocation(absCoord);
+				} else if (buildable instanceof TeslaTower) {
+					TeslaTower teslaTower = (TeslaTower)buildable;
+					teslaTower.setTurretLocation(absCoord);
 				}
 				break;
 			case "/arrowfire":
@@ -390,14 +402,14 @@ public class PostBuildSyncTask implements Runnable {
 				if (ItemManager.getId(block) != CivData.CHEST) {		
 					byte chestData = CivData.convertSignDataToChestData((byte)sb.getData());
 					ItemManager.setTypeId(block, CivData.CHEST);
-					ItemManager.setData(block, chestData, true);
+					ItemManager.setData(block, chestData, true); }
 				
 					Chest chest = (Chest)block.getState();
 					MaterialData data = chest.getData();
-					ItemManager.setData(data, chestData);
+//					ItemManager.setData(data, chestData);
 					chest.setData(data);
 					chest.update();
-				}
+//				}
 				
 				break;
 			}

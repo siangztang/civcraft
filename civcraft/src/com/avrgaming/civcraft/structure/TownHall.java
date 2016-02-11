@@ -361,7 +361,7 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		if (allDestroyed) {
 			
 			if (this.getTown().getCiv().getCapitolName().equals(this.getTown().getName())) {
-				CivMessage.global(CivColor.LightBlue+ChatColor.BOLD+CivSettings.localize.localizedString("var_townHall_destroyed_isCap",this.getTown().getCiv().getName(),attacker.getCiv().getName()));
+				CivMessage.globalTitle(CivColor.LightBlue+ChatColor.BOLD+CivSettings.localize.localizedString("var_townHall_destroyed_isCap",this.getTown().getCiv().getName(),attacker.getCiv().getName()),"");
 				for (Town town : this.getTown().getCiv().getTowns()) {
 					town.defeated = true;
 				}
@@ -412,7 +412,7 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		if (allDestroyed) {
 			
 			if (this.getTown().getCiv().getCapitolName().equals(this.getTown().getName())) {
-				CivMessage.global(CivColor.LightBlue+ChatColor.BOLD+CivSettings.localize.localizedString("var_townHall_destroyed_isCap",this.getTown().getCiv().getName(),attacker.getCiv().getName()));
+				CivMessage.globalTitle(CivColor.LightBlue+ChatColor.BOLD+CivSettings.localize.localizedString("var_townHall_destroyed_isCap",this.getTown().getCiv().getName(),attacker.getCiv().getName()),"");
 				for (Town town : this.getTown().getCiv().getTowns()) {
 					town.defeated = true;
 				}
@@ -563,6 +563,9 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 	}
 
 	public void onCannonDamage(int damage, CannonProjectile projectile) throws CivException {
+		if (!this.getCiv().getDiplomacyManager().isAtWar()) {
+			return;
+		}
 		this.hitpoints -= damage;
 
 //		Resident resident = projectile.whoFired;
@@ -593,7 +596,9 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 	}
 	
 	public void onTNTDamage(int damage) {
-		
+		if (!this.getCiv().getDiplomacyManager().isAtWar()) {
+			return;
+		}
 		if (hitpoints >= damage+1) {
 			this.hitpoints -= damage;
 			CivMessage.sendCiv(getCiv(), CivSettings.localize.localizedString("var_townHall_tntHit",this.getDisplayName(),("("+this.hitpoints+"/"+this.getMaxHitPoints()+")")));

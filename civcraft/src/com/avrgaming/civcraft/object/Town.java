@@ -66,10 +66,13 @@ import com.avrgaming.civcraft.randomevents.RandomEvent;
 import com.avrgaming.civcraft.road.Road;
 import com.avrgaming.civcraft.structure.Buildable;
 import com.avrgaming.civcraft.structure.Mine;
+import com.avrgaming.civcraft.structure.ResearchLab;
+import com.avrgaming.civcraft.structure.School;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.Temple;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.structure.TradeOutpost;
+import com.avrgaming.civcraft.structure.University;
 import com.avrgaming.civcraft.structure.Wall;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.template.Template;
@@ -156,8 +159,11 @@ public class Town extends SQLObject {
 	
 	/* XXX kind of a hacky way to save the bank's level information between build undo calls */
 	public int saved_bank_level = 1;
+	public int saved_store_level = 1;
+	public int saved_library_level = 1;
 	public int saved_trommel_level = 1;
 	public int saved_tradeship_upgrade_levels = 1;
+	public int saved_grocer_levels = 1;
 	public int saved_quarry_level = 1;
 	public int saved_fish_hatchery_level = 1;
 	public double saved_bank_interest_amount = 0;
@@ -599,6 +605,9 @@ public class Town extends SQLObject {
 		
 		double additional = this.getBuffManager().getEffectiveDouble(Buff.FINE_ART);
 		
+		if (this.getBuffManager().hasBuff("buff_art_appreciation")) {
+			additional += this.getBuffManager().getEffectiveDouble("buff_art_appreciation");
+		}
 		if (this.getBuffManager().hasBuff("buff_pyramid_culture")) {
 			additional += this.getBuffManager().getEffectiveDouble("buff_pyramid_culture");
 		}
@@ -766,13 +775,14 @@ public class Town extends SQLObject {
 		sources.put("Culture Biomes", cultureHammers);
 		total += cultureHammers; 
 		
-		/* Grab happiness generated from structures with components. */
+		/* Grab hammers generated from structures with components. */
 		double structures = 0;
+		double mines = 0;
 		for (Structure struct : this.structures.values()) {
 			if (struct instanceof Mine)
 			{
 				Mine mine = (Mine)struct;
-				structures += mine.getBonusHammers(); 
+				mines += mine.getBonusHammers(); 
 			}
 			for (Component comp : struct.attachedComponents) {
 				if (comp instanceof AttributeBase) {
@@ -783,6 +793,8 @@ public class Town extends SQLObject {
 				}
 			}
 		}
+
+		sources.put("Mines", mines);
 
 		total += structures;
 		sources.put("Structures", structures);
@@ -1817,7 +1829,7 @@ public class Town extends SQLObject {
 			struct.onDemolish();
 			struct.unbindStructureBlocks();
 			this.removeStructure(struct);
-			struct.delete();
+			struct.deleteSkipUndo();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CivException(CivSettings.localize.localizedString("internalDatabaseException"));
@@ -1844,6 +1856,12 @@ public class Town extends SQLObject {
 		double newRate = rate * getGovernment().growth_rate;
 		rates.put("Government", newRate - rate);
 		rate = newRate;
+		
+		if (this.getCiv().hasTechnology("tech_fertilizer")) {
+			double techRate = 0.3;
+			rates.put("Technology", techRate);
+			rate += techRate;
+		}
 		
 		/* Wonders and Goodies. */
 		double additional = this.getBuffManager().getEffectiveDouble(Buff.GROWTH_RATE);
@@ -2415,6 +2433,10 @@ public class Town extends SQLObject {
 		//return outpost_upkeep*outposts.size();
 		return 0;
 	}
+	
+	public boolean isOutlaw(Resident res) {
+		return this.outlaws.contains(res.getUUIDString());
+	}
 
 	public boolean isOutlaw(String name) {
 		Resident res = CivGlobal.getResident(name);
@@ -2651,6 +2673,31 @@ public class Town extends SQLObject {
 		additional += rate*getBuffManager().getEffectiveDouble("buff_greatlibrary_extra_beakers");
 		rate += additional;
 		rates.put("Goodies/Wonders", additional);
+		
+//		double education = 0.0;
+//		for (Structure struct : this.structures.values()) {
+//			for (Component comp : struct.attachedComponents) {
+//				if (comp instanceof AttributeBase) {
+//					AttributeBase as = (AttributeBase)comp;
+//					if (as.getString("attribute").equalsIgnoreCase("BEAKERBOOST")) {
+//						double boostPerRes = as.getGenerated();
+//						int maxBoost = 0;
+//
+//						if (struct instanceof University) {
+//							maxBoost = 5;
+//						}
+//						else if (struct instanceof School || struct instanceof ResearchLab) {
+//							maxBoost = 10;
+//						}
+//						int resCount = Math.min(this.getResidentCount(),maxBoost);
+//						education += (boostPerRes * resCount);
+//					}
+//				}
+//			}
+//		}
+//		
+//		rate += education;
+//		rates.put("Education", education);
 
 		return new AttrSource(rates, rate, null);
 	}
@@ -2703,10 +2750,38 @@ public class Town extends SQLObject {
 		
 		beakers += wondersTrade;
 		sources.put("Goodies/Wonders", wondersTrade);
+		
+		double education = 0.0;
+		for (Structure struct : this.structures.values()) {
+			for (Component comp : struct.attachedComponents) {
+				if (comp instanceof AttributeBase) {
+					AttributeBase as = (AttributeBase)comp;
+					if (as.getString("attribute").equalsIgnoreCase("BEAKERBOOST")) {
+						double boostPerRes = as.getGenerated();
+						int maxBoost = 0;
+
+						if (struct instanceof University) {
+							maxBoost = 5;
+						}
+						else if (struct instanceof School || struct instanceof ResearchLab) {
+							maxBoost = 10;
+						}
+						int resCount = Math.min(this.getResidentCount(),maxBoost);
+						education += (boostPerRes * resCount);
+					}
+				}
+			}
+		}
+		double educationBeakers = (beakers*education);
+		beakers += educationBeakers;
+		sources.put("Education", educationBeakers);
 
 		/* Make sure we never give out negative beakers. */
 		beakers = Math.max(beakers, 0);
 		AttrSource rates = getBeakerRate();
+		
+		
+		
 		beakers = beakers*rates.total;
 		
 		if (beakers < 0) {
@@ -2776,10 +2851,7 @@ public class Town extends SQLObject {
 				if (comp instanceof AttributeBase) {
 					AttributeBase as = (AttributeBase)comp;
 					if (as.getString("attribute").equalsIgnoreCase("HAPPINESS")) {
-						double h = as.getGenerated();
-						if (h > 0) {
-							structures += h;
-						}
+						structures += as.getGenerated();
 					}
 				}
 			}
@@ -2903,11 +2975,8 @@ public class Town extends SQLObject {
 			for (Component comp : struct.attachedComponents) {
 				if (comp instanceof AttributeBase) {
 					AttributeBase as = (AttributeBase)comp;
-					if (as.getString("attribute").equalsIgnoreCase("HAPPINESS")) {
-						double h = as.getGenerated();
-						if (h < 0) {
-							structures += (h*-1);
-						}
+					if (as.getString("attribute").equalsIgnoreCase("UNHAPPINESS")) {
+						structures += as.getGenerated();					
 					}
 				}
 			}
@@ -3043,6 +3112,10 @@ public class Town extends SQLObject {
 		ArrayList<Perk> perks = CustomTemplate.getTemplatePerksForBuildable(this, buildable.getTemplateBaseName());
 		
 		for (Perk perk : resident.getPersonalTemplatePerks(info)) {
+			perks.add(perk);
+		}
+		for (Perk perk : resident.getUnboundTemplatePerks(perks, info))
+		{
 			perks.add(perk);
 		}
 		
