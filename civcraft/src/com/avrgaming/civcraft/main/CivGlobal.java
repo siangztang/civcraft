@@ -414,7 +414,7 @@ public class CivGlobal {
 	}
 	
 	public static void setCurrentEra(int era, Civilization civ) {
-		if (era > highestCivEra) {
+		if (era > highestCivEra && !civ.isAdminCiv()) {
 			highestCivEra = era;
 			CivMessage.globalTitle(CivColor.Green+ localizedEraString(highestCivEra) , CivColor.LightGreen+CivSettings.localize.localizedString("var_announce_newEraCiv", civ.getName()));
 			
@@ -436,7 +436,7 @@ public class CivGlobal {
 				try {
 					Civilization civ = new Civilization(rs);
 					
-					if (highestCivEra < civ.getCurrentEra())
+					if (highestCivEra < civ.getCurrentEra() && !civ.isAdminCiv())
 					{
 						highestCivEra = civ.getCurrentEra();
 					}

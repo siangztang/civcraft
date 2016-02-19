@@ -1112,11 +1112,6 @@ public class Civilization extends SQLObject {
 	}
 
 	public void changeGovernment(Civilization civ, ConfigGovernment gov, boolean force) throws CivException {
-		changeGovernment(civ, gov, force, 24);
-	}
-	
-	//TODO make hours of subvert government different.
-	public void changeGovernment(Civilization civ, ConfigGovernment gov, boolean force, int hours) throws CivException {
 		if (civ.getGovernment() == gov && !force) {
 			throw new CivException(CivSettings.localize.localizedString("var_civ_gov_already",gov.displayName));
 		}
@@ -1903,7 +1898,7 @@ public class Civilization extends SQLObject {
 	public void setCurrentEra(int currentEra) {
 		this.currentEra = currentEra;
 		
-		if (this.currentEra > CivGlobal.highestCivEra)
+		if (this.currentEra > CivGlobal.highestCivEra && !this.isAdminCiv())
 		{
 			CivGlobal.setCurrentEra(this.currentEra, this);
 		}

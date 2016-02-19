@@ -99,15 +99,12 @@ public class CivMessage {
 			if (player != null && resident != null && resident.isTitleAPI())
 			{
 				TitleAPI.sendTitle(player, fadeIn, show, fadeOut, title, subTitle);
-				return;
-			} else {
-				
 			}
 		}
-		send(sender, title);
-		if (subTitle != "") {
-			send(sender, subTitle);
-		}
+//		send(sender, title);
+//		if (subTitle != "") {
+//			send(sender, subTitle);
+//		}
 	}
 	
 	
