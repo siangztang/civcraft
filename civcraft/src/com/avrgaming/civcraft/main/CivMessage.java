@@ -101,10 +101,10 @@ public class CivMessage {
 				TitleAPI.sendTitle(player, fadeIn, show, fadeOut, title, subTitle);
 			}
 		}
-//		send(sender, title);
-//		if (subTitle != "") {
-//			send(sender, subTitle);
-//		}
+		send(sender, title);
+		if (subTitle != "") {
+			send(sender, subTitle);
+		}
 	}
 	
 	
@@ -205,9 +205,10 @@ public class CivMessage {
 			Resident resident = CivGlobal.getResident(player);
 			if (CivSettings.hasTitleAPI && resident.isTitleAPI()) {
 				CivMessage.sendTitle(player, 10, 60, 10, title, subTitle);
-			} 
-			send(player, buildTitle(title));
-			send(player, subTitle);
+			} else {
+				send(player, buildTitle(title));
+				send(player, subTitle);
+			}
 		}
 	}
 	

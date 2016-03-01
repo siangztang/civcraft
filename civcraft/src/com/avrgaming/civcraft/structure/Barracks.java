@@ -88,8 +88,22 @@ public class Barracks extends Structure {
 		
 		ConfigUnit unit = unitList.get(index);
 		String out = "\n";
+		int previousSettlers = 1;
+		double coinCost = unit.cost;
+		if (unit.id.equals("u_settler")) {
+			
+			ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup("settlers:"+this.getCiv().getName());
+			if (entries != null) {
+				for (SessionEntry entry : entries) {
+					previousSettlers += Integer.parseInt(entry.value);
+				}
+			}
+
+			coinCost *= previousSettlers;
+		}
+		
 		out += CivColor.LightPurple+unit.name+"\n";
-		out += CivColor.Yellow+unit.cost+"\n";
+		out += CivColor.Yellow+coinCost+"\n";
 		out += CivColor.Yellow+CivSettings.CURRENCY_NAME;
 		
 		return out;
@@ -130,28 +144,44 @@ public class Barracks extends Structure {
 		if (this.trainingUnit != null) {
 			throw new CivException(CivSettings.localize.localizedString("var_barracks_inProgress",this.trainingUnit.name));
 		}
-		
+
+		int previousSettlers = 1;
+		double coinCost = unit.cost;
 		if (unit.id.equals("u_settler")) {
 			if (!this.getCiv().getLeaderGroup().hasMember(whoClicked) && !this.getCiv().getAdviserGroup().hasMember(whoClicked)) {
 				throw new CivException(CivSettings.localize.localizedString("barracks_trainSettler_NoPerms"));
 			}
+			
+			ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup("settlers:"+this.getCiv().getName());
+			if (entries != null) {
+				CivLog.debug("entries: "+entries.size());
+				for (SessionEntry entry : entries) {
+					CivLog.debug("value: "+entry.value);
+					previousSettlers += Integer.parseInt(entry.value);
+				}
+			}
 
-			unit.cost *= this.getCiv().getTownCount();
-			unit.hammer_cost *= this.getCiv().getTownCount();
+			CivLog.debug("previousSettlers: "+previousSettlers);
+			coinCost *= previousSettlers;
+			CivLog.debug("unit.cost: "+coinCost);
 		}
 		
-		if (!getTown().getTreasury().hasEnough(unit.cost)) {
-			throw new CivException(CivSettings.localize.localizedString("var_barracks_tooPoor",unit.name,unit.cost,CivSettings.CURRENCY_NAME));
+		if (!getTown().getTreasury().hasEnough(coinCost)) {
+			throw new CivException(CivSettings.localize.localizedString("var_barracks_tooPoor",unit.name,coinCost,CivSettings.CURRENCY_NAME));
 		}
 		
 		
-		getTown().getTreasury().withdraw(unit.cost);
+		getTown().getTreasury().withdraw(coinCost);
 		
 		
 		this.setCurrentHammers(0.0);
 		this.setTrainingUnit(unit);
 		CivMessage.sendTown(getTown(), CivSettings.localize.localizedString("var_barracks_begin",unit.name));
 		this.updateTraining();
+		if (unit.id.equals("u_settler")) {
+			CivGlobal.getSessionDB().add("settlers:"+this.getCiv().getName(), "1" , this.getCiv().getId(), this.getCiv().getId(), this.getId());
+		}
+		this.onTechUpdate();
 	}
 	
 	@Override
