@@ -160,7 +160,14 @@ public class Structure extends Buildable {
 				struct = (Structure) new Grocer(rs);
 			}
 			break;
-			
+
+		case "s_broadcast_tower":
+			if (rs == null) {
+				struct = (BroadcastTower) new BroadcastTower(center, id, town);
+			} else {
+				struct = (BroadcastTower) new BroadcastTower(rs);
+			}
+			break;
 		case "s_library":
 			if (rs == null) {
 				struct = (Structure) new Library(center, id, town);
@@ -364,6 +371,13 @@ public class Structure extends Buildable {
 				struct = (Structure) new Windmill(rs);
 			}
 			break;
+		case "s_museum":
+			if (rs == null) {
+				struct = (Museum) new Museum(center, id, town);
+			} else {
+				struct = (Museum) new Museum(rs);
+			}
+			break;
 		case "s_market":
 			if (rs == null) {
 				struct = (Market) new Market(center, id, town);
@@ -553,6 +567,7 @@ public class Structure extends Buildable {
 			
 			if (!(this instanceof Wall || this instanceof FortifiedWall || this instanceof Road))
 			{
+				CivLog.debug("Delete with Undo! "+this.getDisplayName());
 				/* Remove StructureSigns */
 				for (StructureSign sign : this.getSigns()) {
 					sign.delete();
@@ -566,7 +581,12 @@ public class Structure extends Buildable {
 				CivGlobal.removeStructure(this);
 				this.getTown().removeStructure(this);
 				this.unbindStructureBlocks();
+				if (this instanceof Farm) {
+					Farm farm = (Farm)this;
+					farm.removeFarmChunk();
+				}
 			} else {
+				CivLog.debug("Delete skip Undo! "+this.getDisplayName());
 				CivGlobal.removeStructure(this);
 				this.getTown().removeStructure(this);
 				this.unbindStructureBlocks();
