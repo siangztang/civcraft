@@ -27,19 +27,13 @@ classpath so you'll be able to see the jar names.
 
    The databases should be empty and upon start up, civcraft will populate and create the desired tables.
 
-5) Copy civcraft_data/lib to <mc_server>/plugins/CivCraft
+5) Copy plugins to <mc_server> directory, merging with your existing plugins folder.
 
-6) Copy civcraft_data/data to <mc_server>/plugins/CivCraft/data
+6) Copy civcraft_data/templates to the <mc_server> directory.
 
-7) Copy civcraft_data/templates to the <mc_server> directory.
+7) Modify your java launch options to give civcraft at least 2GB of memory.
 
-8) Replace your server's bukkit.jar(or spigot.jar) with CivCraft's custom version: spigot-civcraft.jar
-   If you fail to do this step, then creative mode will break custom civcraft items and civcraft's armor
-   will be broken due to vanilla minecraft behavior.
-
-9) Modify your java launch options to give civcraft at least 2GB of memory.
-
-10) Launch server, hopefully it will start without any errors.
+8) Launch server, hopefully it will start without any errors.
 
 
 Installing CivCraft dynmap:
