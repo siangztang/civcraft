@@ -5,7 +5,8 @@ CivilizationCraft is a massive, server side Minecraft modification written for B
 
 This fork of Civcraft is used by the MineTexas CivilizationCraft Minecraft Server: http://www.minetexas.com/minecraft-civcraft-server.html
 
-Compiled versions of this plugin can be downloaded from our website: http://www.minetexas.com/minecraft-civcraft-download.html
+Compiled versions of this plugin can be downloaded from the releases tab.
+Server listing can be found here: http://atlas.civcraft.net/
 
 Installation Instructions
 ==========================
