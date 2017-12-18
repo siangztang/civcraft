@@ -18,20 +18,9 @@
  */
 package com.avrgaming.civcraft.listener;
 
-import gpl.HorseModifier;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.server.v1_11_R1.AttributeInstance;
-import net.minecraft.server.v1_11_R1.AxisAlignedBB;
-import net.minecraft.server.v1_11_R1.DamageSource;
-import net.minecraft.server.v1_11_R1.Entity;
-import net.minecraft.server.v1_11_R1.EntityInsentient;
-import net.minecraft.server.v1_11_R1.EntityPlayer;
-import net.minecraft.server.v1_11_R1.GenericAttributes;
-import net.minecraft.server.v1_11_R1.NBTTagCompound;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -145,6 +134,15 @@ import com.avrgaming.civcraft.util.ItemFrameStorage;
 import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.war.War;
 import com.avrgaming.civcraft.war.WarRegen;
+
+import gpl.HorseModifier;
+import net.minecraft.server.v1_11_R1.AttributeInstance;
+import net.minecraft.server.v1_11_R1.AxisAlignedBB;
+import net.minecraft.server.v1_11_R1.DamageSource;
+import net.minecraft.server.v1_11_R1.EntityInsentient;
+import net.minecraft.server.v1_11_R1.EntityPlayer;
+import net.minecraft.server.v1_11_R1.GenericAttributes;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
 
 public class BlockListener implements Listener {
 
@@ -571,22 +569,21 @@ public class BlockListener implements Listener {
 		            BlockFace.UP
 	  };
 
-    public BlockCoord generatesCobble(int id, Block b)
-    {
-        int mirrorID1 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA_RUNNING : CivData.WATER_RUNNING);
-        int mirrorID2 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA : CivData.WATER);
-        for(BlockFace face : faces)
-        {
-            Block r = b.getRelative(face, 1);
-            if(ItemManager.getId(r) == mirrorID1 || ItemManager.getId(r) == mirrorID2)
-            {
-            	
-            	return new BlockCoord(r);
-            }
-        }
-        
-        return null;
-    }
+	public BlockCoord generatesCobble(int id, Block b) {
+		int mirrorID1 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA_RUNNING : CivData.WATER_RUNNING);
+		int mirrorID2 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA : CivData.WATER);
+		int mirrorID3 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA_RUNNING : CivData.WATER);
+		int mirrorID4 = (id == CivData.WATER_RUNNING || id == CivData.WATER ? CivData.LAVA : CivData.WATER_RUNNING);
+		for(BlockFace face : faces) {
+			Block r = b.getRelative(face, 1);
+			if(ItemManager.getId(r) == mirrorID1 || ItemManager.getId(r) == mirrorID2 ||
+					ItemManager.getId(r) == mirrorID3 || ItemManager.getId(r) == mirrorID4) {
+				return new BlockCoord(r);
+			}
+		}
+		
+		return null;
+	}
 
 //    private static void destroyLiquidRecursive(Block source) {
 //    	//source.setTypeIdAndData(CivData.AIR, (byte)0, false);
@@ -610,61 +607,30 @@ public class BlockListener implements Listener {
 //    private static boolean isLiquid(int id) {
 //    	return (id >= CivData.WATER && id <= CivData.LAVA);
 //    }
-    
-    private static HashSet<BlockCoord> stopCobbleTasks = new HashSet<BlockCoord>();
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void OnBlockFromToEvent(BlockFromToEvent event) {
-		/* Disable cobblestone generators. */
+		/* Disable cobblestone and obsidian generators. */
 		int id = ItemManager.getId(event.getBlock());
-	    if(id >= CivData.WATER && id <= CivData.LAVA)
-	    {
-	        Block b = event.getToBlock();
-	        bcoord.setFromLocation(b.getLocation());
+		if(id >= CivData.WATER && id <= CivData.LAVA) {
+			Block b = event.getToBlock();
+			bcoord.setFromLocation(b.getLocation());
 
-	        int toid = ItemManager.getId(b);
-	        if(toid == 0)
-	        {
-	            BlockCoord other = generatesCobble(id, b);
-	        	if(other != null)
-	            {
-	            	//BlockCoord d = new BlockCoord(event.getToBlock());
-//	            	BlockCoord fromCoord = new BlockCoord(event.getBlock());
-	            	event.setCancelled(true);
-
-	            	class SyncTask implements Runnable {
-	            		BlockCoord block;
-
-	            		public SyncTask(BlockCoord block) {
-	            			this.block = block;
-	            		}
-
-						@Override
-						public void run() {
-							ItemManager.setTypeIdAndData(block.getBlock(), CivData.NETHERRACK, (byte)0, true);
-							stopCobbleTasks.remove(block);
-						}
-	            	}
-
-	            	if (!stopCobbleTasks.contains(other)) {
-	            		stopCobbleTasks.add(other);
-	            		TaskMaster.syncTask(new SyncTask(other), 2);
-	            	}
-
-//	            	if (!stopCobbleTasks.contains(fromCoord)) {
-//	            		stopCobbleTasks.add(fromCoord);
-//	            		TaskMaster.syncTask(new SyncTask(fromCoord));
-//	            	}
-	            }
-	        }
-	    }
+			int toid = ItemManager.getId(b);
+			if(toid == CivData.COBBLESTONE || toid == CivData.OBSIDIAN) {
+				BlockCoord other = generatesCobble(id, b);
+				if(other != null && other.getBlock().getType() != Material.AIR) {
+					other.getBlock().setType(Material.NETHERRACK);
+				}
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void OnBlockFormEvent (BlockFormEvent event) {
-
 		/* Disable cobblestone generators. */
-		if (ItemManager.getId(event.getNewState()) == CivData.COBBLESTONE) {
-			ItemManager.setTypeId(event.getNewState(), CivData.GRAVEL);
+		if (ItemManager.getId(event.getNewState()) == CivData.COBBLESTONE || ItemManager.getId(event.getNewState()) == CivData.OBSIDIAN) {
+			ItemManager.setTypeId(event.getNewState(), CivData.NETHERRACK);
 			return;
 		}
 
@@ -1789,9 +1755,9 @@ public class BlockListener implements Listener {
 						
 						AxisAlignedBB bb = AxisAlignedBB(x-r, y-r, z-r, x+r, y+r, z+r);
 						
-						List<Entity> entities = craftWorld.getHandle().getEntities(((CraftEntity)attacker).getHandle(), bb);
+						List<net.minecraft.server.v1_11_R1.Entity> entities = craftWorld.getHandle().getEntities(((CraftEntity)attacker).getHandle(), bb);
 						
-						for (Entity e : entities) {
+						for (net.minecraft.server.v1_11_R1.Entity e : entities) {
 							if (e instanceof EntityPlayer) {
 								EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(attacker, ((EntityPlayer)e).getBukkitEntity(), DamageCause.ENTITY_ATTACK, damage);
 								Bukkit.getServer().getPluginManager().callEvent(event);
