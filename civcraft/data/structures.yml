@@ -1493,7 +1493,7 @@ structures:
     check_event:
     update_event:
     onBuild_event:
-    limit: 0
+    limit: 1
     cost: 10000.0
     upkeep: 1250.0
     tile_improvement: false

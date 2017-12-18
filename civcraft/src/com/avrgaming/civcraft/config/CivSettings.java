@@ -418,8 +418,9 @@ public class CivSettings {
 		File dest = new File(plugin.getDataFolder().getPath()+filepath);
 		if (inputUrl == null) {
 			CivLog.error("Destination is null: "+filepath);
+		} else {
+			FileUtils.copyURLToFile(inputUrl, dest);
 		}
-		FileUtils.copyURLToFile(inputUrl, dest);
 	}
 
 	public static FileConfiguration loadCivConfig(String filepath) throws FileNotFoundException, IOException, InvalidConfigurationException {
