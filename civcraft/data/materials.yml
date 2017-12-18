@@ -212,7 +212,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 0.5
+          tradeValue: 5.0
           category: '<lightgreen>Tier 1 Materials'
           ingredients:
               - type_id: 338
@@ -382,7 +382,7 @@ materials:
           item_id: 385
           item_data: 0
           tradeable: true
-          tradeValue: 0.5
+          tradeValue: 5.0
           name: 'Tungsten Ore'
           components:
               - name: 'NoRightClick'
@@ -396,7 +396,7 @@ materials:
           item_id: 370
           item_data: 0
           tradeable: true
-          tradeValue: 0.1
+          tradeValue: 1.0
           name: 'Chromium Ore'
           craftable: false
           shaped: true
@@ -415,7 +415,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -435,7 +435,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 57
@@ -450,7 +450,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -482,7 +482,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -498,7 +498,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -544,7 +544,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           components:
               - name: 'NoRightClick'
@@ -570,7 +570,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           components:
               - name: 'NoRightClick'
@@ -595,7 +595,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -620,7 +620,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 2.0
+          tradeValue: 20.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -647,7 +647,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           ingredients:
               - type_id: 0
@@ -671,7 +671,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 1.0
+          tradeValue: 10.0
           category: '<lightblue>Tier 2 Materials'
           components:
               - name: 'NoRightClick'
@@ -765,7 +765,7 @@ materials:
           name: 'T3 Leather Straps'
           craftable: true
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           shaped: false
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
@@ -786,7 +786,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           components:
               - name: 'NoRightClick'
@@ -816,7 +816,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -882,7 +882,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -906,7 +906,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           components:
               - name: 'NoRightClick'
@@ -932,7 +932,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -955,7 +955,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           components:
               - name: 'NoRightClick'
@@ -980,7 +980,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 10.0
           category: '<lightpurple>Tier 3 Materials'
           components:
               - name: 'NoRightClick'
@@ -1007,7 +1007,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 20.0
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -1049,6 +1049,8 @@ materials:
           name: 'Proof Of Leadership'
           craftable: true
           shaped: false
+          tradeable: true
+          tradeValue: 1000.0
           category: 'Special'
           components:
               - name: 'Tagged'
@@ -1111,7 +1113,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 5.0
+          tradeValue: 20.0
           category: '<lightpurple>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -1203,7 +1205,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 10.0
+          tradeValue: 40.0
           category: '<gold>Tier 4 Materials'
           ingredients:
               - type_id: 0
@@ -1223,7 +1225,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 10.0
+          tradeValue: 40.0
           category: '<gold>Tier 4 Materials'
           ingredients:
               - type_id: 0
@@ -1335,7 +1337,7 @@ materials:
           craftable: true
           shaped: false
           tradeable: true
-          tradeValue: 10.0
+          tradeValue: 40.0
           category: '<gold>Tier 3 Materials'
           ingredients:
               - type_id: 0
@@ -1350,7 +1352,7 @@ materials:
           craftable: true
           shaped: true
           tradeable: true
-          tradeValue: 10.0
+          tradeValue: 40.0
           category: '<gold>Tier 3 Materials'
           ingredients:
               - type_id: 0

@@ -398,28 +398,28 @@ items:
       type_id: 0
       data: 0
       custom_id: 'mat_cow_egg'
-      value: 10
+      value: 100
 
     - id: 103
       name: 'T1 Chicken Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_chicken_egg'
-      value: 10
+      value: 100
 
     - id: 104
       name: 'T1 Pig Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_pig_egg'
-      value: 10
+      value: 100
 
     - id: 105
       name: 'T1 Sheep Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_sheep_egg'
-      value: 10
+      value: 100
 
 # Floor 2 Right side Middle 106-109
     - id: 106
@@ -427,49 +427,49 @@ items:
       type_id: 0
       data: 0
       custom_id: 'mat_rabbit_egg'
-      value: 10
+      value: 100
 
     - id: 107
       name: 'T1 Creeper Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_creeper_egg'
-      value: 10
+      value: 100
 
     - id: 108
       name: 'T1 Enderman Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_enderman_egg'
-      value: 10
+      value: 100
 
     - id: 109
       name: 'T1 Zombie Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_zombie_egg'
-      value: 10
+      value: 100
 # Floor 2 Right side Forward 110-113
     - id: 110
       name: 'T1 Skeleton Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_skeleton_egg'
-      value: 10
+      value: 100
 
     - id: 111
       name: 'T1 Spider Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_spider_egg'
-      value: 10
+      value: 100
 
     - id: 112
       name: 'T1 Slime Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_slime_egg'
-      value: 10
+      value: 100
 
     # - id: 113
     #   name: ''

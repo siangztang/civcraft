@@ -184,8 +184,8 @@ public class TradeLevelComponent extends Component {
 
 	private int hasCountToConsume(int thisLevelConsumptions) {
 
-		thisLevelConsumptions+= getConsumedAmount(consumptions.get(this.level));
-		int stacksToConsume = 0;
+		thisLevelConsumptions += getConsumedAmount(consumptions.get(this.level));
+		int itemsToConsume = 0;
 
 		for (ItemStack stack : source.getContents()) {
 			if (stack == null) {
@@ -196,24 +196,23 @@ public class TradeLevelComponent extends Component {
 			String tradeable = attrs.getCivCraftProperty("tradeable");
 			if (tradeable != null) {
 				if (tradeable.equalsIgnoreCase("true")) {
-					if (stacksToConsume < thisLevelConsumptions) {
-						stacksToConsume++;
+					if (itemsToConsume < thisLevelConsumptions) {
+						itemsToConsume += stack.getAmount();
 					} else {
 						break;
 					}
 				}
 			}
 		}
-		return stacksToConsume;
+		return itemsToConsume;
 	}
 	
-	private void processItemsFromStack(ItemStack stack) {
+	private void processItemsFromStack(ItemStack stack, Integer countInStackToConsume) {
 		String itemID = LoreMaterial.getMaterial(stack).getId();
-		Integer countInStack = stack.getAmount();
 		Random rand = new Random();
 		int MaxRand = 10000;
 		ArrayList<ItemStack> newItems = new ArrayList<ItemStack>();
-		for (int i = 0; i < countInStack; i++) {
+		for (int i = 0; i < countInStackToConsume; i++) {
 			int rand1 = rand.nextInt(MaxRand);
 
 			if (rand1 < (int)(HUGEPACK_CHANCE*MaxRand)) {
@@ -403,9 +402,9 @@ public class TradeLevelComponent extends Component {
 
 	}
 
-	private int consumeFromInventory(int stacksToConsume) {
+	private int consumeFromInventory(int countToConsume) {
 		int countConsumed = 0;
-		if (stacksToConsume <= 0) {
+		if (countToConsume <= 0) {
 			return countConsumed;
 		}
 		double monetaryValue = 0.0;
@@ -414,7 +413,7 @@ public class TradeLevelComponent extends Component {
 			if (stack == null) {
 				continue;
 			}
-			if (stacksToConsume <= 0) {
+			if (countToConsume <= 0) {
 				break;
 			}
 
@@ -422,23 +421,28 @@ public class TradeLevelComponent extends Component {
 			String tradeable = attrs.getCivCraftProperty("tradeable");
 			if (tradeable != null) {
 				if (tradeable.equalsIgnoreCase("true")) {
-					if (stacksToConsume > 0) {
+					if (countToConsume > 0) {
 						Integer countInStack = stack.getAmount();
+						Integer countInStackToConsume = Math.min(countToConsume, countInStack);
 						String tradeValue = attrs.getCivCraftProperty("tradeValue");
 						if (tradeValue != null) {
 							double valueForStack = Double.parseDouble(tradeValue);
-							double moneyForStack = countInStack * valueForStack;
+							double moneyForStack = countInStackToConsume * valueForStack;
 							monetaryValue += moneyForStack;
 						} else {
 							CivLog.debug("tradeValue null for item");
 						}
 	
-						processItemsFromStack(stack);
-						countConsumed += countInStack;
-						stacksToConsume--;
+						processItemsFromStack(stack, countInStackToConsume);
+						countConsumed += countInStackToConsume;
+						countToConsume -= countInStackToConsume;
 						/* Consume what we can */
 						try {
 							source.removeItem(stack, false);
+							if (countInStack != countInStackToConsume) {
+								stack.setAmount(countInStack - countInStackToConsume);
+								source.addItems(stack, false);
+							}
 						} catch (CivException e) {
 							e.printStackTrace();
 							return 0;
@@ -469,9 +473,9 @@ public class TradeLevelComponent extends Component {
 //			lastTrade.setResult(lastResult);
 //			return lastTrade;
 //		}
-		int stacksToConsume = hasCountToConsume((updgradeLevel*2));
-		if (stacksToConsume >= 1) {
-			countConsumed = consumeFromInventory(stacksToConsume);
+		int itemsToConsume = hasCountToConsume((updgradeLevel*2));
+		if (itemsToConsume >= 1) {
+			countConsumed = consumeFromInventory(itemsToConsume);
 
 			if ((this.upgradeTrade + countConsumed) >= currentCountMax) {
 				// Level up?
