@@ -761,7 +761,7 @@ structures:
     update_event: quarry_process
     onBuild_event:
     limit: 1
-    allow_outside_town: true
+    allow_outside_town: false
     tile_improvement: true
     cost: 10000.0
     upkeep: 5000.0
