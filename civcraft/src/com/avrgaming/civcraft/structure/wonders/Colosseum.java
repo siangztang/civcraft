@@ -20,10 +20,32 @@ public class Colosseum extends Wonder {
 
 	@Override
 	protected void removeBuffs() {
+		removeBuffFromCiv(this.getCiv(), "buff_colosseum_happiness_to_towns");
+		removeBuffFromTown(this.getTown(), "buff_colosseum_happiness_for_town");
 	}
 
 	@Override
-	protected void addBuffs() {		
+	protected void addBuffs() {
+		addBuffToCiv(this.getCiv(), "buff_colosseum_happiness_to_towns");
+		addBuffToTown(this.getTown(), "buff_colosseum_happiness_for_town");
+	}
+	
+	@Override
+	public void onLoad() {
+		if (this.isActive()) {
+			addBuffs();
+		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		removeBuffs();
+	}
+	
+	@Override
+	public void onComplete() {
+		addBuffs();
 	}
 
 }

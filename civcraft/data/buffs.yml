@@ -15,23 +15,23 @@ buffs:
    
     - id: 'buff_year_of_plenty'
       name: 'Year Of Plenty'
-      description: 'Increases growth rate of farms by <lightgreen>20%<r>. <gold>Stackable<r>'
+      description: 'Increases growth rate of farms by <lightgreen>20%<r>. <red>Not Stackable<r>'
       value: '0.2'
-      stackable: true
+      stackable: false
       parent:
 
     - id: 'buff_innovation'
       name: 'Innovation'
-      description: 'Increases Science rate for civilization by <lightgreen>10%<r> <gold>Stackable<r>'
+      description: 'Increases Science rate for civilization by <lightgreen>10%<r> <red>Not Stackable<r>'
       value: '0.1'
-      stackable: true
+      stackable: false
       parent:
 
     - id: 'buff_monopoly'
       name: 'Monopoly'
-      description: 'Increases coin output from all trade goods in use by <lightgreen>15%<r> <gold>Stackable<r>'
-      value: '0.15'
-      stackable: true
+      description: 'Increases coin output from all trade goods in use by <lightgreen>15%<r> <red>Not Stackable<r>'
+      value: '0.2'
+      stackable: false
       parent:
     
     - id: 'buff_preservative'
@@ -43,9 +43,9 @@ buffs:
 
     - id: 'buff_advanced_tooling'
       name: 'Advanced Tooling'
-      description: 'Increases the mine improvement production by a <lightgreen>50%<r> <gold>Stackable<r>'
+      description: 'Increases the mine improvement production by a <lightgreen>50%<r> <red>Not Stackable<r>'
       value: '0.5'
-      stackable: true
+      stackable: false
       parent:
 
     - id: 'buff_barricade'
@@ -57,9 +57,9 @@ buffs:
 
     - id: 'buff_barter'
       name: 'Barter'
-      description: 'Increases the exchange rate of minerals exchanged at the bank by <lightgreen>5%<r> <gold>Stackable<r>'
+      description: 'Increases the exchange rate of minerals exchanged at the bank by <lightgreen>5%<r> <red>Not Stackable<r>'
       value: '0.05'
-      stackable: true
+      stackable: false
       parent:
 
     - id: 'buff_fine_art'
@@ -240,13 +240,6 @@ buffs:
       parent:
 
 # Colossus buffs
-    - id: 'debuff_colossus_leech_upkeep'
-      name: 'Colossus Leach Upkeep'
-      description: 'Leeches 2% of your upkeep payments and sends it to the town with the Colossus.'
-      value: '0.02'
-      stackable: false
-      parent:
-
     - id: 'buff_colossus_reduce_upkeep'
       name: 'Colossus Reduce Upkeep'
       description: 'Reduces upkeep of your town by 25%'
@@ -256,8 +249,8 @@ buffs:
 
     - id: 'buff_colossus_coins_from_culture'
       name: 'Colossus Coins From Culture'
-      description: 'Grants 5 coins per day to the civilization for every culture chunk owned by it.'
-      value: '5'
+      description: 'Grants 10 coins per day to the civilization for every culture chunk owned by it.'
+      value: '10'
       stackable: false
       parent:
 # Notre Dame buffs
@@ -307,16 +300,37 @@ buffs:
 #Colosseum Buffs
     - id: 'buff_colosseum_coins_from_towns'
       name: 'Colosseum Coins From Towns'
-      description: 'Grants 100 coins per day to the civilization for every town in the world.'
-      value: '100'
+      description: 'Grants 250 coins per day to the civilization for every town in the world.'
+      value: '250'
+      stackable: false
+      parent:
+
+    - id: 'buff_colosseum_happiness_to_towns'
+      name: 'Colosseum Coins For Towns'
+      description: 'Grants 2 happiness to all towns in the Civilization.'
+      value: '2'
+      stackable: false
+      parent:
+
+    - id: 'buff_colosseum_happiness_for_town'
+      name: 'Colosseum Happines For Town'
+      description: 'Grants an additional 4 happiness to the town it is built in.'
+      value: '4'
       stackable: false
       parent:
 
 #Globe Theatre Buffs
     - id: 'buff_globe_theatre_culture_from_towns'
       name: 'Globe Theatre Culture From Towns'
-      description: 'Increase culture by 10 for every town in the world.'
-      value: '10'
+      description: 'Increase culture by 0.5% for every town in the world.'
+      value: '0.05'
+      stackable: false
+      parent:
+
+    - id: 'buff_globe_theatre_happiness_to_towns'
+      name: 'Globe Theatre Happiness to Towns'
+      description: 'Grants 2 happiness to all towns in the Civilization.'
+      value: '2'
       stackable: false
       parent:
 

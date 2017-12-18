@@ -626,6 +626,18 @@ public class Town extends SQLObject {
 			additional += this.getBuffManager().getEffectiveDouble("buff_pyramid_culture");
 		}
 		
+		if (this.getBuffManager().hasBuff("buff_globe_theatre_culture_from_towns")) {
+			int townCount = 0;
+			for (Civilization civ : CivGlobal.getCivs())
+			{
+				townCount += civ.getTownCount();
+			}
+			double culturePercentPerTown = Double.valueOf(CivSettings.buffs.get("buff_globe_theatre_culture_from_towns").value);
+			
+			double bonus = culturePercentPerTown*townCount;
+			additional += bonus;
+		}
+		
 		rates.put("Wonders/Goodies", additional);
 		rate += additional;
 		
@@ -670,21 +682,6 @@ public class Town extends SQLObject {
 				Temple temple = (Temple)struct;
 				fromStructures += temple.getCultureGenerated();
 			}
-		}
-		
-		if (this.getBuffManager().hasBuff("buff_globe_theatre_culture_from_towns")) {
-			int townCount = 0;
-			for (Civilization civ : CivGlobal.getCivs())
-			{
-				townCount += civ.getTownCount();
-			}
-			double culturePerTown = Double.valueOf(CivSettings.buffs.get("buff_globe_theatre_culture_from_towns").value);
-			
-			double bonus = culturePerTown*townCount;
-			
-			CivMessage.sendTown(this, CivColor.LightGreen+CivSettings.localize.localizedString("var_town_GlobeTheatreCulture",CivColor.Yellow+bonus+CivColor.LightGreen,townCount));
-
-			fromStructures += bonus;
 		}
 		
 		total += fromStructures;
@@ -1387,20 +1384,6 @@ public class Town extends SQLObject {
 		
 		if (this.getBuffManager().hasBuff("buff_colossus_reduce_upkeep")) {
 			upkeep = upkeep - (upkeep*this.getBuffManager().getEffectiveDouble("buff_colossus_reduce_upkeep"));
-		}
-		
-		if (this.getBuffManager().hasBuff("debuff_colossus_leech_upkeep")) {
-			double rate = this.getBuffManager().getEffectiveDouble("debuff_colossus_leech_upkeep");
-			double amount = upkeep*rate;
-			
-			Wonder colossus = CivGlobal.getWonderByConfigId("w_colossus");
-			if (colossus != null) {
-				colossus.getTown().getTreasury().deposit(amount);
-			} else {
-				CivLog.warning("Unable to find Colossus wonder but debuff for leech upkeep was present!");
-				//Colossus is "null", doesn't exist, we remove the buff in case of duplication
-				this.getBuffManager().removeBuff("debuff_colossus_leech_upkeep"); 
-			}
 		}
 		
 		if (this.getTreasury().hasEnough(upkeep)) {
@@ -2844,6 +2827,9 @@ public class Town extends SQLObject {
 		
 		/* Grab any sources from buffs. */
 		double goodiesWonders = this.buffManager.getEffectiveDouble("buff_hedonism");
+		goodiesWonders += this.buffManager.getEffectiveDouble("buff_globe_theatre_happiness_to_towns");
+		goodiesWonders += this.buffManager.getEffectiveDouble("buff_colosseum_happiness_to_towns");
+		goodiesWonders += this.buffManager.getEffectiveDouble("buff_colosseum_happiness_for_town");
 		sources.put("Goodies/Wonders", goodiesWonders);
 		total += goodiesWonders;
 		
@@ -3008,7 +2994,7 @@ public class Town extends SQLObject {
 		total += structures;
 		sources.put("Structures", structures);
 		
-		/* Grabe unhappiness from Random events. */
+		/* Grab unhappiness from Random events. */
 		double randomEvent = RandomEvent.getUnhappiness(this);
 		total += randomEvent;
 		if (randomEvent > 0) {

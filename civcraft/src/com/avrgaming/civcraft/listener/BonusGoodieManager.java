@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.EnderChest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
@@ -44,6 +45,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -115,7 +117,28 @@ public class BonusGoodieManager implements Listener {
 	}
 	
 	/*
-	 * When the chunk unloads, replenish it at the outpost
+	 * When the chunk loads with a goodie on the ground, replenish it at the outpost
+	 */
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void OnChunkLoad(ChunkLoadEvent event) {
+		BonusGoodie goodie;
+		
+		for (Entity entity : event.getChunk().getEntities()) {
+			if (!(entity instanceof Item)) {
+				continue;
+			}
+			
+			goodie = CivGlobal.getBonusGoodie(((Item)entity).getItemStack());
+			if (goodie == null) {
+				continue;
+			}
+			
+			goodie.replenish(((Item)entity).getItemStack(), (Item)entity, null, null);
+		}
+	}
+	
+	/*
+	 * When the chunk unloads with a goodie on the ground, replenish it at the outpost
 	 */
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void OnChunkUnload(ChunkUnloadEvent event) {
@@ -189,7 +212,7 @@ public class BonusGoodieManager implements Listener {
 			holder = view.getBottomInventory().getHolder();
 		}
 		
-		boolean isAllowedHolder = (holder instanceof Chest) || (holder instanceof DoubleChest) || (holder instanceof Player);
+		boolean isAllowedHolder = (holder instanceof Chest) || (holder instanceof DoubleChest) || (holder instanceof Player) || !(holder instanceof EnderChest);
 		
 		if ((holder == null) || !isAllowedHolder) {
 			
@@ -259,9 +282,9 @@ public class BonusGoodieManager implements Listener {
 			return;
 		}
 		
-		// Verify that the player dropping this item is in fact our holder.
-	//	goodie.validateItem(event.getItemDrop().getItemStack(), null, event.getPlayer(), null);
-		
+		// Players are no longer allowed to drop goodies
+		// There is some weird state where the holder doesn't update and the goodie can go poof.
+		event.setCancelled(true);
 	}
 	
 	/*
@@ -412,7 +435,9 @@ public class BonusGoodieManager implements Listener {
 				
 				BonusGoodie goodie = CivGlobal.getBonusGoodie(itemEntry.getValue());
 				if (goodie != null) {
-					inv.remove(itemEntry.getValue());				
+					inv.remove(itemEntry.getValue());
+					// Just in case the player still has the item at login.
+					goodie.replenish();
 				}
 			}
 		}

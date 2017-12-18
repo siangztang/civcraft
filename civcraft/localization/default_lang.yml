@@ -2134,7 +2134,7 @@ var_town_chunk_purchase_tooPoor: "You cannot purchase this plot as you do not ha
 town_chunk_status_owned: "Owned by:"
 town_chunk_status_unowned: "Unowned"
 town_chunk_status_forSale: "For Sale:"
-var_town_GlobeTheatreCulture: "The Globe Theatre generated [%0] culture from shows for [%1] towns."
+var_town_GlobeTheatreCulture: "The Globe Theatre generated [%0]% more culture from shows for [%1] towns."
 
 # =========================== Command Request Messages =========================
 var_capitulateAccept: "[%0] has capitulated to [%1]!"

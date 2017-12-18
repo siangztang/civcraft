@@ -5280,6 +5280,10 @@ removed_recipes:
     #Nether Wart Block
     - type_id: 214
       data: 0
+      
+    #Shield
+    - type_id: 442
+      data: 0
 
       
 # Amount of tungston to drop
