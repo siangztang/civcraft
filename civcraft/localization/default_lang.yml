@@ -2894,3 +2894,5 @@ cmd_res_exchangeNoTradeGoods: "You Cannot Exchange Trade Goods"
 
 var_cmd_civ_info_victory: "The Civilization of [%0] has won with a [%1] victory!"
 cmd_res_showModerator: "Status of Moderators is Hidden"
+
+playerListen_repawnAtName: "You find yourself back at [%0]."

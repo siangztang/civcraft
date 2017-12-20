@@ -76,6 +76,7 @@ import com.avrgaming.civcraft.object.Relation;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.road.Road;
 import com.avrgaming.civcraft.structure.Capitol;
+import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.PlayerChunkNotifyAsyncTask;
 import com.avrgaming.civcraft.threading.tasks.PlayerLoginAsyncTask;
@@ -261,7 +262,6 @@ public class PlayerListener implements Listener {
 		
 		if (War.isWarTime() && !resident.isInsideArena()) {
 			if (resident.getTown().getCiv().getDiplomacyManager().isAtWar()) {
-				//TownHall townhall = resident.getTown().getTownHall();
 				Capitol capitol = resident.getCiv().getCapitolStructure();
 				if (capitol != null) {
 					BlockCoord respawn = capitol.getRandomRespawnPoint();
@@ -272,6 +272,27 @@ public class PlayerListener implements Listener {
 						CivMessage.send(player, CivColor.LightGray+CivSettings.localize.localizedString("playerListen_repawnInWarRoom"));
 						
 						//TaskMaster.asyncTask("", reviveTask, 0);
+					}
+				}
+			}
+		} else {
+			if (resident.hasCamp()) {
+				Camp camp = resident.getCamp();
+				BlockCoord respawn = camp.getCorner();
+				if (respawn != null) {
+					event.setRespawnLocation(respawn.getCenteredLocation());
+					CivMessage.send(player, CivColor.LightGray+CivSettings.localize.localizedString("playerListen_repawnAtName", camp.getName()));
+				}
+				return;
+			
+			}
+			if (resident.hasTown()) {
+				TownHall townhall = resident.getTown().getTownHall();
+				if (townhall != null) {
+					BlockCoord respawn = townhall.getRandomRevivePoint();
+					if (respawn != null) {
+						event.setRespawnLocation(respawn.getCenteredLocation());
+						CivMessage.send(player, CivColor.LightGray+CivSettings.localize.localizedString("playerListen_repawnAtName", resident.getTown().getName()));
 					}
 				}
 			}
