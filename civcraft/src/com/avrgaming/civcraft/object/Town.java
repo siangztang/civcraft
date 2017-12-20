@@ -661,11 +661,6 @@ public class Town extends SQLObject {
 		
 		double total = 0;
 		HashMap<String, Double> sources = new HashMap<String, Double>();
-		
-		/* Grab any culture from goodies. */
-		double goodieCulture = getBuffManager().getEffectiveInt(Buff.EXTRA_CULTURE);
-		sources.put("Goodies", goodieCulture);
-		total += goodieCulture;
 			
 		/* Grab beakers generated from structures with components. */
 		double fromStructures = 0;
@@ -1959,9 +1954,6 @@ public class Town extends SQLObject {
 	
 	public double getCottageRate() {
 		double rate = getGovernment().cottage_rate;
-
-		double additional = rate*this.getBuffManager().getEffectiveDouble(Buff.COTTAGE_RATE);
-		rate += additional;
 		
 		/* Adjust for happiness state. */
 		rate *= this.getHappinessState().coin_rate;

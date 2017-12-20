@@ -35,11 +35,10 @@ generation:
 
     # World size in x chunks (radius)
     chunks_x: 625
-#    chunks_x: 100 
+
     # World size in z chunks (radius)
     chunks_z: 625
-#    chunks_z: 100
-    
+
     # Random seed for trade good locations
     seed: 2520150148
 
@@ -116,16 +115,18 @@ hemispheres:
 ########## Trade Good Types #######
 # id - unquie ID to identify this good
 # name - Display name shown on goods and messages
+# rarity - a Goodie's rarity value. Higher values are rarer (range 1-4)
 # value - amount of base coins this good generates
 # buffs - list of buff id's that this trade good is using. (See buffs.yml)
 # material - item id of in-game item used for visuals.
 # material_data - data value of in-game item used for visuals.
 #
 #
-#
+
 land_goods:
     - id: 'good_pelts'
       name: Pelts
+      rarity: 2
       value: 250.0
       buffs: 'buff_monopoly, buff_fine_art'
       material: 334 # leather
@@ -133,6 +134,7 @@ land_goods:
      
     - id: 'good_horses'
       name: Horses
+      rarity: 2
       value: 250.0
       buffs: 'buff_advanced_tooling, buff_year_of_plenty'
       material: 329 # saddle
@@ -140,6 +142,7 @@ land_goods:
 
     - id: 'good_oil'
       name: Oil
+      rarity: 3
       value: 375.0
       buffs: 'buff_advanced_tooling, buff_extraction, buff_fire_bomb'
       material: 351 # ink sack
@@ -147,6 +150,7 @@ land_goods:
 
     - id: 'good_papyrus'
       name: Papyrus
+      rarity: 1
       value: 125.0
       buffs: 'buff_innovation'
       material: 351 # Ink sack
@@ -154,6 +158,7 @@ land_goods:
 
     - id: 'good_silver'
       name: Silver
+      rarity: 1
       value: 125.0
       buffs: 'buff_barter, buff_hedonism'
       material: 265 # iron ingot
@@ -161,6 +166,7 @@ land_goods:
 
     - id: 'good_poison_ivy'
       name: "Poison Ivy"
+      rarity: 3
       value: 375.0
       buffs: 'buff_espionage, buff_sabotage, buff_dirty_money'
       material: 106 # vines
@@ -168,6 +174,7 @@ land_goods:
 
     - id: 'good_ivory'
       name: Ivory
+      rarity: 2
       value: 250.0
       buffs: 'buff_fine_art, buff_monopoly'
       material: 406 # nether quartz
@@ -175,6 +182,7 @@ land_goods:
 
     - id: 'good_incense'
       name: Incense
+      rarity: 2
       value: 250.0
       buffs: 'buff_fine_art, buff_innovation'
       material: 362 # melon seed
@@ -182,6 +190,7 @@ land_goods:
     
     - id: 'good_herbs'
       name: Herbs
+      rarity: 2
       value: 250.0
       buffs: 'buff_medicine, buff_year_of_plenty'
       material: 31 # tall grass
@@ -189,6 +198,7 @@ land_goods:
 
     - id: 'good_hemlock'
       name: Hemlock
+      rarity: 3
       value: 375.0
       buffs: 'buff_espionage, buff_sabotage, buff_dirty_money'
       material: 31 # tall grass
@@ -196,6 +206,7 @@ land_goods:
 
     - id: 'good_guarana'
       name: Guarana
+      rarity: 3
       value: 375.0
       buffs: 'buff_extraction, buff_rush, buff_medicine'
       material: 351 # ink sack
@@ -203,6 +214,7 @@ land_goods:
 
     - id: 'good_grapes'
       name: Grapes
+      rarity: 1
       value: 125.0
       buffs: 'buff_year_of_plenty, buff_hedonism'
       material: 372 # nether wart seed
@@ -210,6 +222,7 @@ land_goods:
 
     - id: 'good_gems'
       name: Gems
+      rarity: 3
       value: 375.0
       buffs: 'buff_barter, buff_greed, buff_monopoly'
       material: 388 # emerald
@@ -217,6 +230,7 @@ land_goods:
     
     - id: 'good_olives'
       name: Olives
+      rarity: 1
       value: 125.0
       buffs: 'buff_hedonism'
       material: 375 # seeds
@@ -224,6 +238,7 @@ land_goods:
 
     - id: 'good_cotton'
       name: Cotton
+      rarity: 1
       value: 125.0
       buffs: 'buff_fine_art'
       material: 387 # string
@@ -231,6 +246,7 @@ land_goods:
 
     - id: 'good_corn'
       name: Corn
+      rarity: 1
       value: 125.0
       buffs: 'buff_year_of_plenty'
       material: 371 # gold nugget
@@ -238,6 +254,7 @@ land_goods:
 
     - id: 'good_copper'
       name: Copper
+      rarity: 1
       value: 125.0
       buffs: 'buff_advanced_tooling'
       material: 369 # blaze rod
@@ -245,6 +262,7 @@ land_goods:
 
     - id: 'good_coffee'
       name: Coffee
+      rarity: 3
       value: 375.0
       buffs: 'buff_innovation, buff_extraction, buff_rush'
       material: 372 # nether wart seed
@@ -253,6 +271,7 @@ land_goods:
 
     - id: 'good_limestone'
       name: Limestone
+      rarity: 2
       value: 250.0
       buffs: 'buff_construction, buff_barricade'
       material: 351 # light grey dye
@@ -260,6 +279,7 @@ land_goods:
     
     - id: 'good_tobacco'
       name: Tobacco
+      rarity: 3
       value: 375.0
       buffs: 'buff_fine_art, buff_greed, buff_monopoly'
       material: 338 # sugar canes
@@ -267,6 +287,7 @@ land_goods:
 
     - id: 'good_spice'
       name: Spice
+      rarity: 1
       value: 125.0
       buffs: 'buff_preservative'
       material: 295 # seeds
@@ -274,6 +295,7 @@ land_goods:
 
     - id: 'good_Marble'
       name: Marble
+      rarity: 2
       value: 250.0
       buffs: 'buff_fine_art, buff_construction'
       material: 155 # quartz block
@@ -282,6 +304,7 @@ land_goods:
 water_goods: 
     - id: 'good_crabs'
       name: Crabs
+      rarity: 2
       value: 250.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 376 # fermented spider eye
@@ -289,6 +312,7 @@ water_goods:
 
     - id: 'good_salmon'
       name: Salmon
+      rarity: 2
       value: 250.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 350 # cooked fish
@@ -296,6 +320,7 @@ water_goods:
 
     - id: 'good_pearls'
       name: Pearls
+      rarity: 3
       value: 375.0
       buffs: 'buff_monopoly, buff_greed'
       material: 332 # Snow ball
@@ -303,6 +328,7 @@ water_goods:
     
     - id: 'good_whale'
       name: Whale
+      rarity: 4
       value: 500.0
       buffs: 'buff_innovation, buff_advanced_tooling, buff_fine_art, buff_extraction'
       material: 345 # compass
@@ -310,6 +336,7 @@ water_goods:
 
     - id: 'good_shrimp'
       name: Shrimp
+      rarity: 2
       value: 250.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 375 # Spider Eye
@@ -317,6 +344,7 @@ water_goods:
 
     - id: 'good_tuna'
       name: Tuna
+      rarity: 2
       value: 250.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 349 # fish

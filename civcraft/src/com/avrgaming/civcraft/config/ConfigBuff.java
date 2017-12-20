@@ -32,7 +32,6 @@ public class ConfigBuff {
 	public String description;
 	public String value;
 	public boolean stackable;
-	public String parent;
 	
 	public static void loadConfig(FileConfiguration cfg, Map<String, ConfigBuff> buffs){
 		buffs.clear();
@@ -47,11 +46,6 @@ public class ConfigBuff {
 			
 			buff.value = (String)b.get("value");
 			buff.stackable = (Boolean)b.get("stackable");
-			buff.parent = (String)b.get("parent");
-			
-			if (buff.parent == null) {
-				buff.parent = buff.id;
-			}
 			
 			buffs.put(buff.id, buff);
 		}

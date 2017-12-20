@@ -86,7 +86,7 @@ public class BuffManager {
 		ArrayList<Buff> returnList = new ArrayList<Buff>();
 		synchronized(this) {
 			for (Buff buff : effectiveBuffs.values()) {
-				if (buff.getParent().equals(buff_id)) {
+				if (buff.getId().equals(buff_id)) {
 					returnList.add(buff);
 				}
 			}
@@ -106,7 +106,7 @@ public class BuffManager {
 		
 		synchronized(this) {
 			for (Buff buff : effectiveBuffs.values()) {
-				if (buff.getParent().equals(buff_id)) {
+				if (buff.getId().equals(buff_id)) {
 					ret += Double.valueOf(buff.getValue());
 				}
 			}
@@ -120,7 +120,7 @@ public class BuffManager {
 		
 		synchronized(this) {
 			for (Buff buff : effectiveBuffs.values()) {
-				if (buff.getParent().equals(buff_id)) {
+				if (buff.getId().equals(buff_id)) {
 					ret += Integer.valueOf(buff.getValue());
 				}
 			}
@@ -132,7 +132,7 @@ public class BuffManager {
 	public String getValue(String buff_id) {
 		synchronized(this) {
 			for (Buff buff : effectiveBuffs.values()) {
-				if (buff.getParent().equals(buff_id)) {
+				if (buff.getId().equals(buff_id)) {
 					return buff.getValue();
 				}
 			}
@@ -155,7 +155,7 @@ public class BuffManager {
 
 	public boolean hasBuff(String id) {
 		for (Buff buff : buffs.values()) {
-			if (buff.getId().equals(id) || buff.getParent().equals(id)) {
+			if (buff.getId().equals(id)) {
 				return true;
 			}
 		}

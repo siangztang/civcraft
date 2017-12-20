@@ -43,7 +43,6 @@ public class TradeGoodPreGenerate {
 	private String worldName;
 	
 	// Maybe all we need is a hashset?
-//	public Map<ChunkCoord, String> goodPlacements = new HashMap<ChunkCoord, String>();
 	public Map<ChunkCoord, TradeGoodPick> goodPicks = new HashMap<ChunkCoord, TradeGoodPick>();
 	
 	public TradeGoodPreGenerate() {
@@ -70,7 +69,6 @@ public class TradeGoodPreGenerate {
     
     private TreeSet<ConfigTradeGood> getValidTradeGoods(int x, int z, Map<String, ConfigTradeGood> goods) {
     	
-    	//ArrayList<ConfigTradeGood> validGoods = new ArrayList<ConfigTradeGood>();
     	TreeSet<ConfigTradeGood> validGoods = new TreeSet<ConfigTradeGood>();
     	for (ConfigTradeGood good : goods.values()) {
     		String hemiString = good.hemiString;
@@ -141,7 +139,6 @@ public class TradeGoodPreGenerate {
 				
 				ChunkCoord cCoord = new ChunkCoord(worldName, randX, randZ);
 				pickFromCoord(cCoord);
-				//goodPlacements.put(cCoord, "goodie");
 			}
 		}
 		
@@ -150,28 +147,17 @@ public class TradeGoodPreGenerate {
 		
 	}
 	private ConfigTradeGood pickFromSet(TreeSet<ConfigTradeGood> set, int rand) {
-		
-		//Find the lowest rarity that qualifies in our list.
-		double lowest_rarity = Double.MAX_VALUE;
-		for (ConfigTradeGood good : set) {
-			if (rand < (good.rarity*100)) {
-				if (good.rarity < lowest_rarity) {
-					lowest_rarity = good.rarity;
-				}
-			}
-		}
-		
-		// Filter out all but the lowest rarity that qualifies
+
 		ArrayList<ConfigTradeGood> pickList = new ArrayList<ConfigTradeGood>();
+		//Find goodies that are == generated random value
 		for (ConfigTradeGood good : set) {
-			if (good.rarity == lowest_rarity) {
+			if (good.rarity <= rand + 1) {
 				pickList.add(good);
 			}
 		}
 		
 		// Pick a random good from this list.
 		Random random = new Random();
-		
 		return pickList.get(random.nextInt(pickList.size()));
 		
 	}
@@ -187,7 +173,8 @@ public class TradeGoodPreGenerate {
 		pick.chunkCoord = cCoord;
 		
 		Random random = new Random();
-		int rand = random.nextInt(100);
+		int randRange = 3;
+		int rand = random.nextInt(randRange);
 
 		pick.landPick = pickFromSet(validLandGoods, rand);
 		pick.waterPick = pickFromSet(validWaterGoods, rand);
@@ -213,7 +200,7 @@ public class TradeGoodPreGenerate {
 						return;
 					} else {
 						while (nearby.landPick == pick.landPick) {
-							rand = random.nextInt(100);
+							rand = random.nextInt(randRange);
 							pick.landPick = pickFromSet(validLandGoods, rand);
 						}
 					}
@@ -225,7 +212,7 @@ public class TradeGoodPreGenerate {
 						return;
 					} else {
 						while (nearby.waterPick == pick.waterPick) {
-							rand = random.nextInt(100);
+							rand = random.nextInt(randRange);
 							pick.waterPick = pickFromSet(validWaterGoods, rand);
 						}
 					}

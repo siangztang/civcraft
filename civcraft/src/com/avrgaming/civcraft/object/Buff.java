@@ -32,8 +32,6 @@ public class Buff {
 	public static final String TRADE = "buff_monopoly";
 	public static final String REDUCE_CONSUME = "buff_preservative";	
 	public static final String SCIENCE_RATE = "buff_innovation";
-	public static final String EXTRA_CULTURE = "buff_doesnotexist";
-	public static final String COTTAGE_RATE = "buff_doesnotexist";
 	public static final String ADVANCED_TOOLING = "buff_advanced_tooling";
 	public static final String BARRICADE = "buff_barricade";
 	public static final String BARTER = "buff_barter";
@@ -48,15 +46,15 @@ public class Buff {
 	private String source;
 	private String key;
 	
-	public Buff(String buffkey, String buff_id, String source) {
-		config = CivSettings.buffs.get(buff_id);
+	public Buff(String buffkey, String buffId, String source) {
+		config = CivSettings.buffs.get(buffId);
 		setKey(buffkey);
 		this.source = source;
 	}
 	
 	@Override
 	public int hashCode() {
-		return config.id.toString().hashCode();
+		return config.id.hashCode();
 	}
 	
 	@Override
@@ -106,17 +104,13 @@ public class Buff {
 		return config.id;
 	}
 
-	public Object getParent() {
-		return config.parent;
-	}
-
 	public String getValue() {
 		return config.value;
 	}
 	
 	public String getDisplayDouble() {
 		try {
-			double d = Double.valueOf(config.value);
+			double d = Double.parseDouble(config.value);
 			DecimalFormat df = new DecimalFormat();
 			return df.format(d*100)+"%";
 		} catch (NumberFormatException e) {
@@ -126,7 +120,7 @@ public class Buff {
 	
 	public String getDisplayInt() {
 		try {
-			int i = Integer.valueOf(config.value);
+			int i = Integer.parseInt(config.value);
 			return ""+i;
 		} catch (NumberFormatException e) {
 			return "NAN!";
