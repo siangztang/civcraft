@@ -20,6 +20,7 @@ package com.avrgaming.civcraft.threading.timers;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.avrgaming.civcraft.camp.Camp;
@@ -69,8 +70,10 @@ public class UpdateMinuteEventTimer extends CivAsyncTask {
 							if (!CivGlobal.fisheryEnabled) {
 								continue;
 							}
-							
-							TaskMaster.asyncTask("fishHatchery-"+struct.getCorner().toString(), new FisheryAsyncTask(struct), 0);
+							Random rand = new Random();
+							if (rand.nextInt(5) <= 1) {
+								TaskMaster.asyncTask("fishHatchery-"+struct.getCorner().toString(), new FisheryAsyncTask(struct), 0);
+							}
 						}
 					}
 					

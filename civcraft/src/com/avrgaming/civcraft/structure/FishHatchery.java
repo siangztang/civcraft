@@ -63,19 +63,6 @@ public class FishHatchery extends Structure {
 	}
 	
 	private double modifyChance(Double chance) {
-//		double increase = chance*this.getTown().getBuffManager().getEffectiveDouble(Buff.EXTRACTION);
-//		chance += increase;
-//		
-//		try {
-//			if (this.getTown().getGovernment().id.equals("gov_despotism")) {
-//				chance *= CivSettings.getDouble(CivSettings.structureConfig, "quarry.despotism_rate");
-//			} else if (this.getTown().getGovernment().id.equals("gov_theocracy") || this.getTown().getGovernment().id.equals("gov_monarchy")){
-//				chance *= CivSettings.getDouble(CivSettings.structureConfig, "quarry.penalty_rate");
-//			}
-//		} catch (InvalidConfiguration e) {
-//			e.printStackTrace();
-//		}
-		
 		//No buffs at this time
 		return chance;
 	}
@@ -109,7 +96,6 @@ public class FishHatchery extends Structure {
 	public void updateSignText() {
 		int count = 0;
 		
-	
 		for (count = 0; count < level; count++) {
 			StructureSign sign = getSignFromSpecialId(count);
 			if (sign == null) {
