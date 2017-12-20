@@ -65,9 +65,9 @@ public class ChangeGovernmentTimer implements Runnable {
 						modifier -= t.getBuffManager().getEffectiveDouble("buff_reduced_anarchy");
 					}
 
-					//If the civ has a Notre Dame, reduce the modifer by the buff_noanarchy value 
-					if (t.getBuffManager().hasBuff("buff_noanarchy")) {
-						modifier -= t.getBuffManager().getEffectiveDouble("buff_noanarchy");
+					//If the civ has a Notre Dame, reduce the modifer by the buff_notre_dame_no_anarchy value 
+					if (t.getBuffManager().hasBuff("buff_notre_dame_no_anarchy")) {
+						modifier -= t.getBuffManager().getEffectiveDouble("buff_notre_dame_no_anarchy");
 						noanarchy = true;
 					}
 					//Reduce the number of resident hours by the modifier, then add it to the member hours

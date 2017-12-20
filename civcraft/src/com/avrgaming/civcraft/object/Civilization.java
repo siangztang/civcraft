@@ -1122,7 +1122,7 @@ public class Civilization extends SQLObject {
 		
 		boolean noanarchy = false;
 //		for (Town t : this.getTowns()) {
-//			if (t.getBuffManager().hasBuff("buff_noanarchy")) {
+//			if (t.getBuffManager().hasBuff("buff_notre_dame_no_anarchy")) {
 //				noanarchy = true;
 //				break;
 //			}

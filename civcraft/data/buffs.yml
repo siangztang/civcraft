@@ -131,12 +131,6 @@ buffs:
       value: '3.0'
       stackable: true
 
-    - id: 'buff_noanarchy'
-      name: 'No Anarchy'
-      description: 'Civilization spends 50% less time in anarchy, with a max of 2 hours.<r> <red>Not Stackable<r>'
-      value: '0'
-      stackable: false
-
     - id: 'buff_reduced_anarchy'
       name: 'Reduced Anarchy'
       description: 'Civilization spends 50% less time in anarchy per resident for this town.<r> <red>Not Stackable<r>'
@@ -222,7 +216,7 @@ buffs:
       name: 'Notre Dame Reduced Anarchy'
       description: 'Civilization suffers 1/2 anarchy time during government changes.'
       value: '0.5'
-      stackable: false 'buff_noanarchy'
+      stackable: false
 
     - id: 'buff_notre_dame_coins_from_peace'
       name: 'Notre Dame Peace Coins'

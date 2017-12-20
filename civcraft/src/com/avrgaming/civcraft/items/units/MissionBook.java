@@ -605,7 +605,7 @@ public class MissionBook extends UnitItemMaterial {
 		Town town = tc.getTown();
 		Civilization civ = town.getCiv();
 		
-		if (town.getBuffManager().hasBuff("buff_noanarchy")) {
+		if (town.getBuffManager().hasBuff("buff_notre_dame_no_anarchy")) {
 			throw new CivException(CivSettings.localize.localizedString("var_missionBook_subvert_errorNotreDame",civ.getName()));
 		}
 				
