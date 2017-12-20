@@ -21,7 +21,7 @@ buffs:
       name: 'Innovation'
       description: 'Increases Science rate for town by <lightgreen>10%<r> <gold>Stackable<r>'
       value: '0.1'
-      stackable: false
+      stackable: true
 
     - id: 'buff_monopoly'
       name: 'Monopoly'
