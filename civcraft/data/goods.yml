@@ -304,8 +304,8 @@ land_goods:
 water_goods: 
     - id: 'good_crabs'
       name: Crabs
-      rarity: 2
-      value: 250.0
+      rarity: 1
+      value: 100.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 376 # fermented spider eye
       material_data: 0
@@ -336,8 +336,8 @@ water_goods:
 
     - id: 'good_shrimp'
       name: Shrimp
-      rarity: 2
-      value: 250.0
+      rarity: 1
+      value: 100.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 375 # Spider Eye
       material_data: 0 
