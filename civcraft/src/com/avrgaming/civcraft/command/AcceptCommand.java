@@ -56,11 +56,12 @@ public class AcceptCommand implements CommandExecutor {
 		if (resident.hasTown()) {
 			if (resident.getCiv().getLeaderGroup().hasMember(resident)) {
 				CivLeaderQuestionTask civTask = (CivLeaderQuestionTask) CivGlobal.getQuestionTask("civ:"+resident.getCiv().getName());
-				
-				synchronized(civTask) {
-					civTask.setResponse("accept");
-					civTask.setResponder(resident);
-					civTask.notifyAll();
+				if (civTask != null) {
+					synchronized(civTask) {
+						civTask.setResponse("accept");
+						civTask.setResponder(resident);
+						civTask.notifyAll();
+					}
 				}
 				return true;
 			}
