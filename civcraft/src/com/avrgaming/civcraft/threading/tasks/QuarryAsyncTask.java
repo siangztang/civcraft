@@ -2,7 +2,6 @@ package com.avrgaming.civcraft.threading.tasks;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.ListIterator;
 import java.util.Random;
 
 import org.bukkit.enchantments.Enchantment;
@@ -144,242 +143,234 @@ public class QuarryAsyncTask extends CivAsyncTask {
 		} catch (InterruptedException e) {
 			return;
 		}
+
 		debug(quarry, "Processing quarry:" + quarry.skippedCounter + 1);
+		ItemStack[] contents = source_inv.getContents();
 		for (int i = 0; i < quarry.skippedCounter + 1; i++) {
-			quarrytask: for (Inventory inv : source_inv.invs) {
-				int index = -1;
-				for (ListIterator<ItemStack> iter = inv.iterator(); iter.hasNext();) {
-					index++;
-					ItemStack stack = iter.next();
-					if (stack == null) {
-						continue;
+			for (ItemStack stack : contents) {
+				if (stack == null) {
+					continue;
+				}
+				int modifier = checkDigSpeed(stack);
+
+				if (ItemManager.getId(stack) == CivData.WOOD_PICKAXE) {
+					try {
+						short damage = ItemManager.getData(stack);
+						this.updateInventory(Action.REMOVE, source_inv, stack);
+						damage += modifier;
+						stack.setDurability(damage);
+						if (damage < 59 && stack.getAmount() == 1) {
+							this.updateInventory(Action.ADD, source_inv, stack);
+						}
+					} catch (InterruptedException e) {
+						return;
 					}
-					int modifier = checkDigSpeed(stack);
 
-					if (ItemManager.getId(stack) == CivData.WOOD_PICKAXE) {
-						try {
-							short damage = ItemManager.getData(stack);
-							damage += modifier;
-							stack.setDurability(damage);
-							if (damage < 59 && stack.getAmount() == 1) {
-								this.updateInventory(Action.REPLACE, inv, stack, index);
-							} else {
-								this.updateInventory(Action.REMOVE, source_inv, stack);
-							}
-						} catch (InterruptedException e) {
-							return;
-						}
+					// Attempt to get special resources
+					Random rand = new Random();
+					int randMax = Quarry.MAX_CHANCE;
+					int rand1 = rand.nextInt(randMax);
+					ItemStack newItem;
 
-						// Attempt to get special resources
-						Random rand = new Random();
-						int randMax = Quarry.MAX_CHANCE;
-						int rand1 = rand.nextInt(randMax);
-						ItemStack newItem;
-
-						if (rand1 < ((int) ((quarry.getChance(Mineral.COAL) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COAL, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER) / 2) * randMax))) {
-							newItem = getOther(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
-						} else {
-							newItem = getJunk(modifier);
-						}
-
-						// Try to add the new item to the dest chest, if we
-						// cant, oh well.
-						try {
-							debug(quarry, "Updating inventory:" + newItem);
-							this.updateInventory(Action.ADD, dest_inv, newItem);
-						} catch (InterruptedException e) {
-							return;
-						}
-						break quarrytask;
+					if (rand1 < ((int) ((quarry.getChance(Mineral.COAL) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COAL, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER) / 2) * randMax))) {
+						newItem = getOther(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
+					} else {
+						newItem = getJunk(modifier);
 					}
-					if (this.quarry.getLevel() >= 2 && ItemManager.getId(stack) == CivData.STONE_PICKAXE) {
-						try {
-							short damage = ItemManager.getData(stack);
-							damage += modifier;
-							stack.setDurability(damage);
-							if (damage < 131 && stack.getAmount() == 1) {
-								this.updateInventory(Action.REPLACE, inv, stack, index);
-							} else {
-								this.updateInventory(Action.REMOVE, source_inv, stack);
-							}
-						} catch (InterruptedException e) {
-							return;
-						}
 
-						// Attempt to get special resources
-						Random rand = new Random();
-						int randMax = Quarry.MAX_CHANCE;
-						int rand1 = rand.nextInt(randMax);
-						ItemStack newItem;
-
-						if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COAL, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
-							newItem = getOther(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
-						} else {
-							newItem = getJunk(modifier);
-						}
-
-						// Try to add the new item to the dest chest, if we
-						// cant, oh well.
-						try {
-							debug(quarry, "Updating inventory:" + newItem);
-							this.updateInventory(Action.ADD, dest_inv, newItem);
-						} catch (InterruptedException e) {
-							return;
-						}
-						break quarrytask;
+					// Try to add the new item to the dest chest, if we cant, oh
+					// well.
+					try {
+						debug(quarry, "Updating inventory:" + newItem);
+						this.updateInventory(Action.ADD, dest_inv, newItem);
+					} catch (InterruptedException e) {
+						return;
 					}
-					if (this.quarry.getLevel() >= 3 && ItemManager.getId(stack) == CivData.IRON_PICKAXE) {
-						try {
-							short damage = ItemManager.getData(stack);
-							damage += modifier;
-							stack.setDurability(damage);
-							if (damage < 250 && stack.getAmount() == 1) {
-								this.updateInventory(Action.REPLACE, inv, stack, index);
-							} else {
-								this.updateInventory(Action.REMOVE, source_inv, stack);
-							}
-						} catch (InterruptedException e) {
-							return;
+					break;
+				}
+				if (this.quarry.getLevel() >= 2 && ItemManager.getId(stack) == CivData.STONE_PICKAXE) {
+					try {
+						short damage = ItemManager.getData(stack);
+						this.updateInventory(Action.REMOVE, source_inv, stack);
+						damage += modifier;
+						stack.setDurability(damage);
+						if (damage < 131 && stack.getAmount() == 1) {
+							this.updateInventory(Action.ADD, source_inv, stack);
 						}
-
-						// Attempt to get special resources
-						Random rand = new Random();
-						int randMax = Quarry.MAX_CHANCE;
-						int rand1 = rand.nextInt(randMax);
-						ItemStack newItem;
-
-						if (rand1 < ((int) ((quarry.getChance(Mineral.RARE)) * randMax))) {
-							newItem = getRare(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.TUNGSTEN)) * randMax))) {
-							newItem = LoreMaterial.spawn(LoreMaterial.materialMap.get("mat_tungsten_ore"), modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.REDSTONE)) * randMax))) {
-							int itemRand = rand.nextInt(5) + 1;
-							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand * modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COAL, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
-							newItem = getOther(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
-						} else {
-							newItem = getJunk(modifier);
-						}
-
-						// Try to add the new item to the dest chest, if we
-						// cant, oh well.
-						try {
-							debug(quarry, "Updating inventory:" + newItem);
-							this.updateInventory(Action.ADD, dest_inv, newItem);
-						} catch (InterruptedException e) {
-							return;
-						}
-						break quarrytask;
+					} catch (InterruptedException e) {
+						return;
 					}
-					if (ItemManager.getId(stack) == CivData.GOLD_PICKAXE) {
-						try {
-							short damage = ItemManager.getData(stack);
-							damage += modifier;
-							stack.setDurability(damage);
-							if (damage < 32 && stack.getAmount() == 1) {
-								this.updateInventory(Action.REPLACE, inv, stack, index);
-							} else {
-								this.updateInventory(Action.REMOVE, source_inv, stack);
-							}
-						} catch (InterruptedException e) {
-							return;
-						}
 
-						// Attempt to get special resources
-						Random rand = new Random();
-						int randMax = Quarry.MAX_CHANCE;
-						int rand1 = rand.nextInt(randMax);
-						ItemStack newItem;
+					// Attempt to get special resources
+					Random rand = new Random();
+					int randMax = Quarry.MAX_CHANCE;
+					int rand1 = rand.nextInt(randMax);
+					ItemStack newItem;
 
-						if (rand1 < ((int) ((quarry.getChance(Mineral.COAL) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COAL, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER) / 2) * randMax))) {
-							newItem = getOther(modifier);
-						} else {
-							newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
-						}
-
-						// Try to add the new item to the dest chest, if we
-						// cant, oh well.
-						try {
-							debug(quarry, "Updating inventory:" + newItem);
-							this.updateInventory(Action.ADD, dest_inv, newItem);
-						} catch (InterruptedException e) {
-							return;
-						}
-						break quarrytask;
+					if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COAL, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
+						newItem = getOther(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
+					} else {
+						newItem = getJunk(modifier);
 					}
-					if (this.quarry.getLevel() >= 4 && ItemManager.getId(stack) == CivData.DIAMOND_PICKAXE) {
-						try {
-							short damage = ItemManager.getData(stack);
-							damage += modifier;
-							stack.setDurability(damage);
-							if (damage < 1561 && stack.getAmount() == 1) {
-								this.updateInventory(Action.REPLACE, inv, stack, index);
-							} else {
-								this.updateInventory(Action.REMOVE, source_inv, stack);
-							}
-						} catch (InterruptedException e) {
-							return;
-						}
 
-						// Attempt to get special resources
-						Random rand = new Random();
-						int randMax = Quarry.MAX_CHANCE;
-						int rand1 = rand.nextInt(randMax);
-						ItemStack newItem;
-
-						if (rand1 < ((int) ((quarry.getChance(Mineral.RARE)) * randMax))) {
-							newItem = getRare(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.TUNGSTEN)) * randMax))) {
-							newItem = LoreMaterial.spawn(LoreMaterial.materialMap.get("mat_tungsten_ore"), modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.REDSTONE)) * randMax))) {
-							int itemRand = rand.nextInt(5) + 1;
-							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand * modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COAL, modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
-							newItem = getOther(modifier);
-						} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
-							newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
-						} else {
-							newItem = getJunk(modifier);
-						}
-
-						// Try to add the new item to the dest chest, if we
-						// cant, oh well.
-						try {
-							debug(quarry, "Updating inventory:" + newItem);
-							this.updateInventory(Action.ADD, dest_inv, newItem);
-						} catch (InterruptedException e) {
-							return;
-						}
-						break quarrytask;
+					// Try to add the new item to the dest chest, if we cant, oh
+					// well.
+					try {
+						debug(quarry, "Updating inventory:" + newItem);
+						this.updateInventory(Action.ADD, dest_inv, newItem);
+					} catch (InterruptedException e) {
+						return;
 					}
+					break;
+				}
+				if (this.quarry.getLevel() >= 3 && ItemManager.getId(stack) == CivData.IRON_PICKAXE) {
+					try {
+						short damage = ItemManager.getData(stack);
+						this.updateInventory(Action.REMOVE, source_inv, stack);
+						damage += modifier;
+						stack.setDurability(damage);
+						if (damage < 250 && stack.getAmount() == 1) {
+							this.updateInventory(Action.ADD, source_inv, stack);
+						}
+					} catch (InterruptedException e) {
+						return;
+					}
+
+					// Attempt to get special resources
+					Random rand = new Random();
+					int randMax = Quarry.MAX_CHANCE;
+					int rand1 = rand.nextInt(randMax);
+					ItemStack newItem;
+
+					if (rand1 < ((int) ((quarry.getChance(Mineral.RARE)) * randMax))) {
+						newItem = getRare(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.TUNGSTEN)) * randMax))) {
+						newItem = LoreMaterial.spawn(LoreMaterial.materialMap.get("mat_tungsten_ore"), modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.REDSTONE)) * randMax))) {
+						int itemRand = rand.nextInt(5) + 1;
+						newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand * modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COAL, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
+						newItem = getOther(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
+					} else {
+						newItem = getJunk(modifier);
+					}
+
+					// Try to add the new item to the dest chest, if we cant, oh
+					// well.
+					try {
+						debug(quarry, "Updating inventory:" + newItem);
+						this.updateInventory(Action.ADD, dest_inv, newItem);
+					} catch (InterruptedException e) {
+						return;
+					}
+					break;
+				}
+				if (ItemManager.getId(stack) == CivData.GOLD_PICKAXE) {
+					try {
+						short damage = ItemManager.getData(stack);
+						this.updateInventory(Action.REMOVE, source_inv, stack);
+						damage += modifier;
+						stack.setDurability(damage);
+						if (damage < 32 && stack.getAmount() == 1) {
+							this.updateInventory(Action.ADD, source_inv, stack);
+						}
+					} catch (InterruptedException e) {
+						return;
+					}
+
+					// Attempt to get special resources
+					Random rand = new Random();
+					int randMax = Quarry.MAX_CHANCE;
+					int rand1 = rand.nextInt(randMax);
+					ItemStack newItem;
+
+					if (rand1 < ((int) ((quarry.getChance(Mineral.COAL) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COAL, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER) / 2) * randMax))) {
+						newItem = getOther(modifier);
+					} else {
+						newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
+					}
+
+					// Try to add the new item to the dest chest, if we cant, oh
+					// well.
+					try {
+						debug(quarry, "Updating inventory:" + newItem);
+						this.updateInventory(Action.ADD, dest_inv, newItem);
+					} catch (InterruptedException e) {
+						return;
+					}
+					break;
+				}
+				if (this.quarry.getLevel() >= 4 && ItemManager.getId(stack) == CivData.DIAMOND_PICKAXE) {
+					try {
+						short damage = ItemManager.getData(stack);
+						this.updateInventory(Action.REMOVE, source_inv, stack);
+						damage += modifier;
+						stack.setDurability(damage);
+						if (damage < 1561 && stack.getAmount() == 1) {
+							this.updateInventory(Action.ADD, source_inv, stack);
+						}
+					} catch (InterruptedException e) {
+						return;
+					}
+
+					// Attempt to get special resources
+					Random rand = new Random();
+					int randMax = Quarry.MAX_CHANCE;
+					int rand1 = rand.nextInt(randMax);
+					ItemStack newItem;
+
+					if (rand1 < ((int) ((quarry.getChance(Mineral.RARE)) * randMax))) {
+						newItem = getRare(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.TUNGSTEN)) * randMax))) {
+						newItem = LoreMaterial.spawn(LoreMaterial.materialMap.get("mat_tungsten_ore"), modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.GOLD)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.REDSTONE)) * randMax))) {
+						int itemRand = rand.nextInt(5) + 1;
+						newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand * modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.IRON)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.IRON_INGOT, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COAL)) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COAL, modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.OTHER)) * randMax))) {
+						newItem = getOther(modifier);
+					} else if (rand1 < ((int) ((quarry.getChance(Mineral.COBBLESTONE) / 2) * randMax))) {
+						newItem = ItemManager.createItemStack(CivData.COBBLESTONE, modifier);
+					} else {
+						newItem = getJunk(modifier);
+					}
+
+					// Try to add the new item to the dest chest, if we cant, oh
+					// well.
+					try {
+						debug(quarry, "Updating inventory:" + newItem);
+						this.updateInventory(Action.ADD, dest_inv, newItem);
+					} catch (InterruptedException e) {
+						return;
+					}
+					break;
 				}
 			}
 		}
