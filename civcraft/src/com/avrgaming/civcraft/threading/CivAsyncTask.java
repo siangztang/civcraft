@@ -157,6 +157,38 @@ public abstract class CivAsyncTask implements Runnable {
 //		return true;
 	}
 	
+	public Boolean updateInventory(Action action, Inventory inv, ItemStack stack, int index) throws InterruptedException  {
+		
+		UpdateInventoryRequest request = new UpdateInventoryRequest(SyncUpdateInventory.lock);
+		request.index = index;
+		request.stack = stack;
+		request.inv = inv;
+		request.action = action;
+		
+		this.finished = false;
+		
+		SyncUpdateInventory.lock.lock();
+		try {
+			SyncUpdateInventory.requestQueue.add(request);
+			while(!request.finished) {
+				/* 
+				 * We await for the finished flag to be set, at this
+				 * time the await function will give up the lock above
+				 * and automagically re-lock when its finished.
+				 */
+				request.condition.await(TIMEOUT, TimeUnit.MILLISECONDS);
+				if (!request.finished) {
+					CivLog.warning("Couldn't async update inventory in "+TIMEOUT+" milliseconds! Retrying.");
+				}
+			}
+			
+			return (Boolean)request.result;
+		} finally {
+			this.finished = true;
+			SyncUpdateInventory.lock.unlock();
+		}
+	}
+	
 	public Boolean updateInventory(Action action, MultiInventory inv, ItemStack itemStack) throws InterruptedException {
 
 		UpdateInventoryRequest request = new UpdateInventoryRequest(SyncUpdateInventory.lock);

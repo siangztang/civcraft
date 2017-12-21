@@ -34,11 +34,13 @@ public class UpdateInventoryRequest extends AsyncRequest {
 	public enum Action {
 		ADD,
 		REMOVE,
-		SET
+		SET,
+		REPLACE
 	}
 	
 	public MultiInventory multiInv;
 	public Inventory inv;
+	public int index;
 	public ItemStack[] cont;
 	public ItemStack stack;
 	public Action action;

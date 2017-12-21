@@ -70,6 +70,10 @@ public class SyncUpdateInventory implements Runnable {
 						retBool = true;
 						request.inv.setContents(request.cont);
 						break;
+					case REPLACE:
+						retBool = true;
+						request.inv.setItem(request.index, request.stack);
+						break;
 					}
 					
 					request.result = retBool;

@@ -33,10 +33,11 @@ import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.threading.sync.SyncUpdateInventory;
 import com.avrgaming.civcraft.threading.sync.request.UpdateInventoryRequest;
 import com.avrgaming.civcraft.threading.sync.request.UpdateInventoryRequest.Action;
+import com.google.common.collect.ObjectArrays;
 
 public class MultiInventory {
 	
-	private ArrayList<Inventory> invs = new ArrayList<Inventory>();
+	public ArrayList<Inventory> invs = new ArrayList<Inventory>();
 	
 	public MultiInventory() {
 	}
@@ -334,20 +335,15 @@ public class MultiInventory {
 	}
 	
 	public ItemStack[] getContents() {
-		
 		int size = 0;
 		for (Inventory inv : invs) {
 			size += inv.getContents().length;
 		}
-		
+
 		ItemStack[] array = new ItemStack[size];
-		
-		int i = 0;
+
 		for (Inventory inv : invs) {
-			for (int j = 0; j < inv.getContents().length; j++) {
-				array[i] = inv.getContents()[j];			
-				i++;
-			}
+			array = ObjectArrays.concat(array, inv.getContents(), ItemStack.class);
 		}
 		return array;
 	}
