@@ -252,7 +252,7 @@ public class LoreCraftableMaterial extends LoreMaterial {
 							if (row.charAt(c) == ingred.letter.charAt(0)) {
 								matrix[i] = ingredStack;
 							} else if (row.charAt(c) == ' '){
-								matrix[i] = new ItemStack(Material.AIR, 0, (short)-1);
+								matrix[i] = null;
 							}
 							i++;
 						}
