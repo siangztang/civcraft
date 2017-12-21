@@ -406,14 +406,20 @@ public class BlockListener implements Listener {
 					allowPVP = false;
 					denyMessage = CivSettings.localize.localizedString("var_pvpError3",defender.getName());
 					break;
+				case ATTACKER_PROTECTED:
+					allowPVP = false;
+					denyMessage = CivSettings.localize.localizedString("pvpListenerError");
+					break;
+				case DEFENDER_PROTECTED:
+					allowPVP = false;
+					denyMessage = CivSettings.localize.localizedString("pvpListenerError2");
+					break;
 				}
 			}
 
 			if (!allowPVP) {
 				CivMessage.sendError(attacker, denyMessage);
 				event.setCancelled(true);
-			} else {
-
 			}
 		}
 		}
@@ -1884,6 +1890,14 @@ public class BlockListener implements Listener {
 					CivMessage.send(attacker, CivColor.Rose+CivSettings.localize.localizedString("var_itemUse_potionError3",defender.getName()));
 					event.setCancelled(true);
 					return;
+				case ATTACKER_PROTECTED:
+					CivMessage.send(attacker, CivColor.Rose+CivSettings.localize.localizedString("pvpListenerError"));
+					event.setCancelled(true);
+					return;
+				case DEFENDER_PROTECTED:
+					CivMessage.send(attacker, CivColor.Rose+CivSettings.localize.localizedString("pvpListenerError2"));
+					event.setCancelled(true);
+					return;
 				}
 			}
 		}
@@ -1919,7 +1933,9 @@ public class BlockListener implements Listener {
 		ALLOWED,
 		NON_PVP_ZONE,
 		NOT_AT_WAR,
-		NEUTRAL_IN_WARZONE
+		NEUTRAL_IN_WARZONE,
+		DEFENDER_PROTECTED,
+		ATTACKER_PROTECTED
 	}
 
 	private PVPDenyReason playersCanPVPHere(Player attacker, Player defender, TownChunk tc) {
@@ -1931,6 +1947,13 @@ public class BlockListener implements Listener {
 		if (CivGlobal.isOutlawHere(defenderResident, tc) || 
 			CivGlobal.isOutlawHere(attackerResident, tc)) {
 			return PVPDenyReason.ALLOWED;
+		}
+		
+		if (defenderResident.isProtected()) {
+			return PVPDenyReason.DEFENDER_PROTECTED;
+		}
+		if (attackerResident.isProtected()) {
+			return PVPDenyReason.ATTACKER_PROTECTED;
 		}
 
 		/* 
