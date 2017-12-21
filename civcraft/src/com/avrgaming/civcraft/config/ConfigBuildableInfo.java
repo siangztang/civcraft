@@ -58,6 +58,7 @@ public class ConfigBuildableInfo {
 	public boolean ignore_floating = false;
 	public List<HashMap<String, String>> components = new LinkedList<HashMap<String, String>>();
 	public boolean has_template = true;
+	public boolean requires_capitol = false;
 	
 	public boolean isAvailable(Town town) {
 		if (town.hasTechnology(require_tech)) {
@@ -73,12 +74,9 @@ public class ConfigBuildableInfo {
 						if (id.equals("s_capitol") && !capitol) {
 							return false;
 						}
-						if (id.equals("w_colosseum") || id.equals("w_battledome"))
-						{
-							if (!capitol || town.getStructureTypeCount(id) > 0) {
-								return false;
-							}
-						}
+						if (requires_capitol && (!capitol || town.getStructureTypeCount(id) > 0)) {
+							return false;
+						}		
 						
 						return true;
 					}
@@ -99,7 +97,7 @@ public class ConfigBuildableInfo {
 			if (templateName.contains("capital"))
 			{
 				CivLog.debug("loadConfig - Replacing Capital occurence");
-				templateName = templateName.replace("capital", "capitol");;
+				templateName = templateName.replace("capital", "capitol");
 			}
 			sinfo.template_base_name = templateName;
 			sinfo.templateYShift = (Integer)obj.get("template_y_shift");
@@ -169,6 +167,10 @@ public class ConfigBuildableInfo {
 				sinfo.has_template = has_template;
 			}
 			
+			Boolean requires_capitol = (Boolean)obj.get("requires_capitol");
+			if (requires_capitol != null) {
+				sinfo.requires_capitol = requires_capitol;
+			}
 			
 			if (isWonder) {
 				sinfo.strategic = true;
