@@ -144,14 +144,13 @@ public class QuarryAsyncTask extends CivAsyncTask {
 		} catch (InterruptedException e) {
 			return;
 		}
-
 		debug(quarry, "Processing quarry:" + quarry.skippedCounter + 1);
 		for (int i = 0; i < quarry.skippedCounter + 1; i++) {
 			quarrytask: for (Inventory inv : source_inv.invs) {
-				int index = 0;
+				int index = -1;
 				for (ListIterator<ItemStack> iter = inv.iterator(); iter.hasNext();) {
-					ItemStack stack = iter.next();
 					index++;
+					ItemStack stack = iter.next();
 					if (stack == null) {
 						continue;
 					}
