@@ -164,7 +164,8 @@ public class TrommelAsyncTask extends CivAsyncTask {
 	
 					}
 					else if (rand1 < ((int)((trommel.getGravelChance(Mineral.REDSTONE))*randMax))) {
-						newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, 1);
+						int itemRand = rand.nextInt(5) + 1;
+						newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand);
 	
 					}
 					else if (rand1 < ((int)((trommel.getGravelChance(Mineral.IRON))*randMax))) {
@@ -242,7 +243,8 @@ public class TrommelAsyncTask extends CivAsyncTask {
 						} else if (rand1 < ((int)((trommel.getGraniteChance(Mineral.GOLD))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getGraniteChance(Mineral.REDSTONE))*randMax))) {
-							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, 1);
+							int itemRand = rand.nextInt(5) + 1;
+							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand);
 						} else if (rand1 < ((int)((trommel.getGraniteChance(Mineral.IRON))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getGraniteChance(Mineral.POLISHED))*randMax))) {
@@ -318,7 +320,8 @@ public class TrommelAsyncTask extends CivAsyncTask {
 						} else if (rand1 < ((int)((trommel.getDioriteChance(Mineral.GOLD))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getDioriteChance(Mineral.REDSTONE))*randMax))) {
-							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, 1);
+							int itemRand = rand.nextInt(5) + 1;
+							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand);
 						} else if (rand1 < ((int)((trommel.getDioriteChance(Mineral.IRON))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getDioriteChance(Mineral.POLISHED))*randMax))) {
@@ -394,7 +397,8 @@ public class TrommelAsyncTask extends CivAsyncTask {
 						} else if (rand1 < ((int)((trommel.getAndesiteChance(Mineral.GOLD))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.GOLD_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getAndesiteChance(Mineral.REDSTONE))*randMax))) {
-							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, 1);
+							int itemRand = rand.nextInt(5) + 1;
+							newItem = ItemManager.createItemStack(CivData.REDSTONE_DUST, itemRand);
 						} else if (rand1 < ((int)((trommel.getAndesiteChance(Mineral.IRON))*randMax))) {
 							newItem = ItemManager.createItemStack(CivData.IRON_INGOT, 1);
 						} else if (rand1 < ((int)((trommel.getAndesiteChance(Mineral.POLISHED))*randMax))) {
