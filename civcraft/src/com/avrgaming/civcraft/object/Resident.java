@@ -1197,10 +1197,6 @@ public class Resident extends SQLObject {
 	}
 	
 	public void loadPerks(final Player player) {
-//		if (!PlatinumManager.isEnabled()) {
-//			return;
-//		}
-		
 		class AsyncTask implements Runnable {
 			Resident resident;
 			
@@ -1252,12 +1248,6 @@ public class Resident extends SQLObject {
 				} catch (InvalidConfiguration e) {
 					e.printStackTrace();
 				}
-				
-				/* User was verified, lets see if it was the first time. */
-//				PlatinumManager.givePlatinumOnce(resident,
-//				CivSettings.platinumRewards.get("loginFirstVerified").name, 
-//				CivSettings.platinumRewards.get("loginFirstVerified").amount, 
-//				"Achievement! First time you've logged in while verified! %d");
 			}
 		}
 		

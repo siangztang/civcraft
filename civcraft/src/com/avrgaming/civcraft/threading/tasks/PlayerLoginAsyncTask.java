@@ -216,12 +216,7 @@ public class PlayerLoginAsyncTask implements Runnable {
 			}
 			
 			try {
-				Player p = CivGlobal.getPlayer(resident);
-//				PlatinumManager.givePlatinumDaily(resident,
-//						CivSettings.platinumRewards.get("loginDaily").name, 
-//						CivSettings.platinumRewards.get("loginDaily").amount, 
-//						"Welcome back to CivCraft! Here is %d for logging in today!" );			
-		
+				Player p = CivGlobal.getPlayer(resident);	
 				
 				ArrayList<SessionEntry> deathEvents = CivGlobal.getSessionDB().lookup("pvplogger:death:"+resident.getName());
 				if (deathEvents.size() != 0) {
@@ -249,7 +244,6 @@ public class PlayerLoginAsyncTask implements Runnable {
 					TaskMaster.syncTask(new SyncTask(p.getName()));
 				}	
 			} catch (CivException e1) {
-				//try really hard not to give offline players who were kicked platinum.
 			}
 			
 			if (EndConditionDiplomacy.canPeopleVote()) {
