@@ -1969,7 +1969,7 @@ var_civ_found_civExists: "A Civilization already exists with the name of '[%0]'"
 var_civ_found_townExists: "A town already exists with the name of '[%0]"
 civ_found_mustleavecamp: "You must first leave your camp before founding a civilization."
 var_civ_found_errorTooClose1: "You cannot found a civilization here. You are too close to the culture of [%0]! [%1] is your current distance, needs to be at least [%2]"
-civ_found_databaseException: "We detected and internal inconsistency with the database. Try founding your civ again, if the problem persists, contact an admin."
+civ_found_databaseException: "We detected and internal inconsistency with the database. Try founding your civ again, if the problem persists, contact an admin or try a different name."
 
 var_civ_found_invalidName: "'[%0]' is not a valid name, please choose another."
 var_civ_debtAnnounce: "[%0] is in debt by [%1] [%2]!"
@@ -2896,3 +2896,4 @@ var_cmd_civ_info_victory: "The Civilization of [%0] has won with a [%1] victory!
 cmd_res_showModerator: "Status of Moderators is Hidden"
 
 playerListen_repawnAtName: "You find yourself back at [%0]."
+town_found_databaseException: "We detected and internal inconsistency with the database. Try founding your town again, if the problem persists, contact an admin or try a different name."

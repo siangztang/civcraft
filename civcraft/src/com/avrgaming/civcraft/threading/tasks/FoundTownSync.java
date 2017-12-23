@@ -53,7 +53,7 @@ public class FoundTownSync implements Runnable {
 		} catch (CivException | SQLException e) {
 			CivLog.error("Caught exception:" + e.getMessage());
 			if (e.getMessage().contains("Duplicate entry")) {
-				CivMessage.send(player, CivColor.Rose+CivSettings.localize.localizedString("civ_found_databaseException"));
+				CivMessage.send(player, CivColor.Rose+CivSettings.localize.localizedString("town_found_databaseException"));
 			} else {
 				CivMessage.send(player, CivColor.Rose+e.getMessage());
 			}
