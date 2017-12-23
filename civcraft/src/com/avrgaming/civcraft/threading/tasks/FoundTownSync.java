@@ -18,11 +18,14 @@
  */
 package com.avrgaming.civcraft.threading.tasks;
 
+import java.sql.SQLException;
+
 import org.bukkit.entity.Player;
 
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.main.CivGlobal;
+import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
@@ -47,8 +50,13 @@ public class FoundTownSync implements Runnable {
 		
 		try {
 			Town.newTown(resident, resident.desiredTownName, resident.getCiv(), false, false, resident.desiredTownLocation);
-		} catch (CivException e) {
-			CivMessage.send(player, CivColor.Rose+e.getMessage());
+		} catch (CivException | SQLException e) {
+			CivLog.error("Caught exception:" + e.getMessage());
+			if (e.getMessage().contains("Duplicate entry")) {
+				CivMessage.send(player, CivColor.Rose+CivSettings.localize.localizedString("civ_found_databaseException"));
+			} else {
+				CivMessage.send(player, CivColor.Rose+e.getMessage());
+			}
 			return;
 		}
 

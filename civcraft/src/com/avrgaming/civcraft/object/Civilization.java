@@ -584,14 +584,17 @@ public class Civilization extends SQLObject {
 			civ.setAdviserGroup(adviserGroup);
 			
 			/* Save this civ in the db and hashtable. */
-			try {		
+			try {
 				Town.newTown(resident, capitolName, civ, true, true, loc);
-			} catch (CivException e) {
-				e.printStackTrace();
+			} catch (CivException | SQLException e) {
 				civ.delete();
 				leadersGroup.delete();
 				adviserGroup.delete();
-				throw e;
+				CivLog.error("Caught exception:" + e.getMessage());
+				if (e.getMessage().contains("Duplicate entry")) {
+					SQL.deleteByName(name, TABLE_NAME);
+					throw new CivException(CivSettings.localize.localizedString("civ_found_databaseException"));
+				}
 			}
 			
 			CivGlobal.addCiv(civ);

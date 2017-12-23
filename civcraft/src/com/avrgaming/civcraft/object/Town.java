@@ -828,7 +828,7 @@ public class Town extends SQLObject {
 	}
 	
 	public static Town newTown(Resident resident, String name, Civilization civ, boolean free, boolean capitol, 
-			Location loc) throws CivException {
+			Location loc) throws CivException, SQLException {
 		try {
 			
 			if (War.isWarTime() && !free && civ.getDiplomacyManager().isAtWar()) {
@@ -1009,7 +1009,7 @@ public class Town extends SQLObject {
 			return newTown;
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			throw new CivException(CivSettings.localize.localizedString("internalDatabaseException"));
+			throw e2;
 		}
 	}
 

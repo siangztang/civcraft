@@ -2,8 +2,6 @@ package com.avrgaming.civcraft.lorestorage;
 
 import gpl.AttributeUtil;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
