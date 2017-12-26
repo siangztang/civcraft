@@ -595,6 +595,8 @@ public class Civilization extends SQLObject {
 					SQL.deleteByName(name, TABLE_NAME);
 					throw new CivException(CivSettings.localize.localizedString("town_found_databaseException"));
 				}
+				
+				return;
 			}
 			
 			CivGlobal.addCiv(civ);
