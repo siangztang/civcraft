@@ -2897,3 +2897,4 @@ cmd_res_showModerator: "Status of Moderators is Hidden"
 
 playerListen_repawnAtName: "You find yourself back at [%0]."
 town_found_databaseException: "We detected and internal inconsistency with the database. Try founding your town again, if the problem persists, contact an admin or try a different name."
+town_found_exception: "Error while founding a town: [%0]"
