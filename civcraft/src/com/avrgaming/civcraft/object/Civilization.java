@@ -596,6 +596,7 @@ public class Civilization extends SQLObject {
 					throw new CivException(CivSettings.localize.localizedString("town_found_databaseException"));
 				}
 				
+				CivMessage.sendError(resident, CivSettings.localize.localizedString("town_found_exception", (CivColor.Gold + e.getMessage() + CivColor.Rose)))
 				return;
 			}
 			
