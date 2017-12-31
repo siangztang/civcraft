@@ -2896,5 +2896,4 @@ var_cmd_civ_info_victory: "The Civilization of [%0] has won with a [%1] victory!
 cmd_res_showModerator: "Status of Moderators is Hidden"
 
 playerListen_repawnAtName: "You find yourself back at [%0]."
-town_found_databaseException: "We detected and internal inconsistency with the database. Try founding your town again, if the problem persists, contact an admin or try a different name."
-town_found_exception: "Error while founding a town: [%0]"
+town_found_databaseException: "We detected an internal inconsistency with the database. Try founding your town again, if the problem persists, contact an admin or try a different name."
