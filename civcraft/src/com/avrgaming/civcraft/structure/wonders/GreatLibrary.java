@@ -120,7 +120,7 @@ public class GreatLibrary extends Wonder {
 			return;
 		}
 		
-		if (!resident.hasTown() || resident.getCiv() != this.getCiv()) {
+		if (resident.getCiv() != this.getCiv()) {
 			CivMessage.sendError(player, CivSettings.localize.localizedString("var_greatLibrary_nonMember",this.getCiv().getName()));
 			return;
 		}
