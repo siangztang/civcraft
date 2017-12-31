@@ -593,8 +593,8 @@ public class Civilization extends SQLObject {
 				CivLog.error("Caught exception:" + e.getMessage());
 				if (e.getMessage().contains("Duplicate entry")) {
 					SQL.deleteByName(name, TABLE_NAME);
-					throw new CivException(CivSettings.localize.localizedString("town_found_databaseException"));
 				}
+				throw new CivException(CivSettings.localize.localizedString("town_found_databaseException"));				return;
 			}
 			
 			CivGlobal.addCiv(civ);
