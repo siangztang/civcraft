@@ -1829,6 +1829,7 @@ public class Town extends SQLObject {
 		}
 		
 		try {
+			for (StructureChest structureChest : struct.getChests()) CivGlobal.removeStructureChest(structureChest);
 			struct.onDemolish();
 			this.removeStructure(struct);
 			struct.deleteSkipUndo();
