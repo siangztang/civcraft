@@ -223,10 +223,9 @@ public class Bank extends Structure {
 		}
 		
 		try {
-			
-			if (LoreMaterial.isCustom(player.getInventory().getItemInMainHand())) {
+			ItemStack itemStack = player.getInventory().getItemInMainHand();
+			if (LoreMaterial.isCustom(itemStack) || CivGlobal.isBonusGoodie(itemStack))
 				throw new CivException(CivSettings.localize.localizedString("bank_invalidItem"));
-			}
 			
 			switch (sign.getAction()) {
 			case "iron":
