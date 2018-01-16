@@ -1024,16 +1024,16 @@ public class BlockListener implements Listener {
 			}
 		}
 
-		Block soilBlock = event.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
-
 		// prevent players trampling crops
+		Block soilBlock1 = event.getPlayer().getLocation().getBlock().getRelative(0, 0, 0);
+		Block soilBlock2 = event.getPlayer().getLocation().getBlock().getRelative(0, -1, 0);
 		if ((event.getAction() == Action.PHYSICAL)) {
-			if ((soilBlock.getType() == Material.SOIL) || (soilBlock.getType() == Material.CROPS)) {
-				//CivLog.debug("no crop cancel.");
+			if (ItemManager.getId(soilBlock1) == CivData.FARMLAND || ItemManager.getId(soilBlock2) == CivData.FARMLAND) {
 				event.setCancelled(true);
-				return;	
+				return;
 			}
 		}
+		
 		/* 
 		 * Right clicking causes some dupe bugs for some reason with items that have "actions" such as swords.
 		 * It also causes block place events on top of signs. So we'll just only allow signs to work with left click.
