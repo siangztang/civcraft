@@ -230,7 +230,7 @@ public class BuildAsyncTask extends CivAsyncTask {
 
 		tpl.deleteInProgessTemplate(buildable.getCorner().toString(), buildable.getTown());
 		buildable.getTown().build_tasks.remove(this);
-		TaskMaster.syncTask(new PostBuildSyncTask(tpl, buildable));
+		TaskMaster.syncTask(new PostBuildSyncTask(tpl, buildable), 10);
 		CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completed",buildable.getTown().getName(), buildable.getDisplayName()));
 		buildable.onComplete();
 		return false;

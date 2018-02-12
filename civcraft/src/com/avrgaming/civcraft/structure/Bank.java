@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.avrgaming.civcraft.components.NonMemberFeeComponent;
 import com.avrgaming.civcraft.config.CivSettings;
@@ -223,10 +224,9 @@ public class Bank extends Structure {
 		}
 		
 		try {
-			
-			if (LoreMaterial.isCustom(player.getInventory().getItemInMainHand())) {
+			ItemStack itemStack = player.getInventory().getItemInMainHand();
+			if (LoreMaterial.isCustom(itemStack) || CivGlobal.isBonusGoodie(itemStack))
 				throw new CivException(CivSettings.localize.localizedString("bank_invalidItem"));
-			}
 			
 			switch (sign.getAction()) {
 			case "iron":
