@@ -1772,7 +1772,7 @@ public class CivGlobal {
 			walls = new HashSet<Wall>();
 		}
 		walls.remove(wall);
-		wallChunks.put(coord, walls);
+		wallChunks.remove(coord);
 	}
 
 	public static void addWonder(Wonder wonder) {
