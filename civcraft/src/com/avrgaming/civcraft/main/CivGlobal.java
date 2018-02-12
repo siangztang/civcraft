@@ -1766,12 +1766,6 @@ public class CivGlobal {
 	}
 
 	public static void removeWallChunk(Wall wall, ChunkCoord coord) {
-		HashSet<Wall> walls = wallChunks.get(coord);
-		
-		if (walls == null) {
-			walls = new HashSet<Wall>();
-		}
-		walls.remove(wall);
 		wallChunks.remove(coord);
 	}
 
