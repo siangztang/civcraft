@@ -30,8 +30,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.avrgaming.civcraft.arena.Arena;
-import com.avrgaming.civcraft.arena.ArenaTeam;
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
@@ -561,26 +559,4 @@ public class CivMessage {
 			return;
 		}
 	}
-
-	public static void sendTeam(ArenaTeam team, String message) {
-		for (Resident resident : team.teamMembers) {
-			CivMessage.send(resident, CivColor.Blue+CivSettings.localize.localizedString("civMsg_teamchatPrefix")+" ("+team.getName()+")] "+CivColor.RESET+message);
-		}
-	}
-	
-	public static void sendTeamHeading(ArenaTeam team, String message) {
-		for (Resident resident : team.teamMembers) {
-			CivMessage.sendHeading(resident, message);
-		}
-	}
-	
-	public static void sendArena(Arena arena, String message) {
-		CivLog.info("[Arena] "+message);
-		for (ArenaTeam team : arena.getTeams()) {
-			for (Resident resident : team.teamMembers) {
-				CivMessage.send(resident, CivColor.LightBlue+CivSettings.localize.localizedString("civMsg_arenaPrefix")+" "+CivColor.RESET+message);
-			}
-		}
-	}
-	
 }

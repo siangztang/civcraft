@@ -260,7 +260,7 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		if (War.isWarTime() && !resident.isInsideArena()) {
+		if (War.isWarTime()) {
 			if (resident.getTown().getCiv().getDiplomacyManager().isAtWar()) {
 				Capitol capitol = resident.getCiv().getCapitolStructure();
 				if (capitol != null) {

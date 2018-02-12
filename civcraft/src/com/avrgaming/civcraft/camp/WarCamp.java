@@ -545,6 +545,20 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 	public List<BlockCoord> getRespawnPoints() {
 		return this.getRespawnPoints();
 	}
+	
+	@Override
+	public boolean isTeleportReal() {
+		if (this.getTown().isCapitol()) {
+			return true;
+		}
+		for (final ControlPoint c : this.controlPoints.values()) {
+			if (c.isDestroyed()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	    
 
 	@Override
 	public BlockCoord getRandomRevivePoint() {

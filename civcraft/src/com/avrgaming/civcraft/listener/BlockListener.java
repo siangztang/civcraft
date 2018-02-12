@@ -121,7 +121,6 @@ import com.avrgaming.civcraft.structure.Stable;
 //import com.avrgaming.civcraft.structure.Temple;
 import com.avrgaming.civcraft.structure.Wall;
 import com.avrgaming.civcraft.structure.farm.FarmChunk;
-import com.avrgaming.civcraft.structure.wonders.Battledome;
 import com.avrgaming.civcraft.structure.wonders.GrandShipIngermanland;
 import com.avrgaming.civcraft.threading.CivAsyncTask;
 import com.avrgaming.civcraft.threading.TaskMaster;
@@ -479,22 +478,6 @@ public class BlockListener implements Listener {
 			return;
 		}
 
-		if (tc.perms.isMobs() == false) {
-			if (event.getSpawnReason().equals(SpawnReason.CUSTOM)) {
-				return;
-			}
-			ChunkCoord coord = new ChunkCoord(event.getEntity().getLocation());
-			Battledome battledome = Battledome.battledomeChunks.get(coord);
-
-			if (battledome != null) {
-				return;
-			}
-
-			if (CivSettings.restrictedSpawns.containsKey(event.getEntityType())) {
-				event.setCancelled(true);
-				return;
-			}
-		}		
 	}
 
 
@@ -1456,11 +1439,7 @@ public class BlockListener implements Listener {
 		if (pasture != null) {
 			pasture.onEntityDeath(event.getEntity());
 		}
-		
-		Battledome battledome = Battledome.battledomeEntities.get(event.getEntity().getUniqueId());
-		if (battledome != null) {
-			battledome.onEntityDeath(event.getEntity());
-		}
+
 		return;
 	}
 

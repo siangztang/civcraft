@@ -155,7 +155,7 @@ public class CivCommand extends CommandBase {
 		Town town = getSelectedTown();
 		
 		if (War.isWarTime() || War.isWithinWarDeclareDays()) {
-			throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_revolutionErrorWar1",War.getTimeDeclareDays()));
+			throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_revolutionErrorWar1",War.time_declare_days));
 		}
 		
 		if (town.getMotherCiv() == null) {

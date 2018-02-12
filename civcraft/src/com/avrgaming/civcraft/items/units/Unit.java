@@ -45,6 +45,27 @@ public abstract class Unit {
 	public static MissionBook SPY_POISON_GRANARY;
 	public static MissionBook SPY_PIRATE;
 	public static MissionBook SPY_SABOTAGE;
+    public static Archer ARCHER_ARTIFACT;
+    public static Warrior WARRIOR_ARTIFACT;
+    public static Berserker BERSERKER_ARTIFACT;
+    public static BootsOfTravel BOOTSOFTRAVEL;
+    public static RabbitFeet RABBITFEET_ARTIFACT;
+    public static HeroesShield HEROESSHIELD_ARTIFACT;
+    public static AssasinsStigma ASSASINSSTIGMA_ARTIFACT;
+    public static MinersAmulet MINERSAMULET_ARTIFACT;
+    public static Diver DIVER_ARTIFACT;
+    public static CacheOfGluttons CACHEOFGLUTTONS_ARTIFACT;
+    public static WitchTrick WITCHTRICK_ARTIFACT;
+    public static Archer2 ARCHER2_ARTIFACT;
+    public static Engineer ENGINEER_ARTIFACT;
+    public static AdvancedTools ADVANCED_TOOLS_ARTIFACT;
+    public static Invader Invader_ARTIFACT;
+    public static Crossbowman CROSSBOWMAN_ARTIFACT;
+    public static Swordsman SWORDSMAN_ARTIFACT;
+    public static SpearMan SPEAR_ARTIFACT;
+    public static Slinger SLINGER_ARTIFACT;
+    public static Musketman MUSKETMAN_ARTIFACT;
+    public static Knight KNIGHT_ARTIFACT;
 	
 	public static void init() {
 		
@@ -63,6 +84,27 @@ public abstract class Unit {
 		}
 		
 		SETTLER_UNIT = new Settler("u_settler", CivSettings.units.get("u_settler"));
+		ARCHER_ARTIFACT = new Archer("a_archer", CivSettings.units.get("a_archer"));
+        WARRIOR_ARTIFACT = new Warrior("a_warrior", CivSettings.units.get("a_warrior"));
+        BERSERKER_ARTIFACT = new Berserker("a_berserker", CivSettings.units.get("a_berserker"));
+        BOOTSOFTRAVEL = new BootsOfTravel("a_bootsOfTravel", CivSettings.units.get("ax_bootsOfTravel"));
+        RABBITFEET_ARTIFACT = new RabbitFeet("a_rabbitFeet", CivSettings.units.get("ax_rabbitFeet"));
+        HEROESSHIELD_ARTIFACT = new HeroesShield("a_heroesShield", CivSettings.units.get("a_heroesShield"));
+        ASSASINSSTIGMA_ARTIFACT = new AssasinsStigma("a_assasinsStigma", CivSettings.units.get("a_assasinsStigma"));
+        MINERSAMULET_ARTIFACT = new MinersAmulet("a_minersAmulet", CivSettings.units.get("ax_minersAmulet"));
+        DIVER_ARTIFACT = new Diver("a_diver", CivSettings.units.get("ax_diver"));
+        CACHEOFGLUTTONS_ARTIFACT = new CacheOfGluttons("a_cacheOfGluttons", CivSettings.units.get("ax_cacheOfGluttons"));
+        WITCHTRICK_ARTIFACT = new WitchTrick("a_witchTrick", CivSettings.units.get("ax_witchTrick"));
+        ARCHER2_ARTIFACT = new Archer2("ax_archer2", CivSettings.units.get("ax_archer2"));
+        ENGINEER_ARTIFACT = new Engineer("ax_engineer", CivSettings.units.get("ax_engineer"));
+        ADVANCED_TOOLS_ARTIFACT = new AdvancedTools("ax_advanced_tools", CivSettings.units.get("ax_advanced_tools"));
+        Invader_ARTIFACT = new Invader("ax_invader", CivSettings.units.get("ax_invader"));
+        CROSSBOWMAN_ARTIFACT = new Crossbowman("a_crossbowman", CivSettings.units.get("a_crossbowman"));
+        SWORDSMAN_ARTIFACT = new Swordsman("a_swordsman", CivSettings.units.get("a_swordsman"));
+        SPEAR_ARTIFACT = new SpearMan("a_spearman", CivSettings.units.get("a_spearman"));
+        SLINGER_ARTIFACT = new Slinger("a_slinger", CivSettings.units.get("a_slinger"));
+        MUSKETMAN_ARTIFACT = new Musketman("a_musketman", CivSettings.units.get("a_musketman"));
+        KNIGHT_ARTIFACT = new Knight("a_knight", CivSettings.units.get("a_knight"));
 	}
 	
 	public Unit() {
@@ -345,4 +387,92 @@ public abstract class Unit {
 		
 		return false;
 	}
+	
+	  public static boolean canTakeUnit(final Player player, final String id) {
+	        int unitCount = 0;
+	        for (final ItemStack stack : player.getInventory().getContents()) {
+	            if (stack != null) {
+	                final LoreMaterial material = LoreMaterial.getMaterial(stack);
+	                if (material != null && material instanceof UnitMaterial) {
+	                    if (((UnitMaterial)material).getUnit().id.equalsIgnoreCase(id)) {
+	                        return false;
+	                    }
+	                    if (UnitMaterial.validateUnitUse(player, stack)) {
+	                        unitCount += stack.getAmount();
+	                    }
+	                }
+	            }
+	        }
+	        return unitCount < 3;
+	    }
+	    
+	    public static String getUnitString(final Player player) {
+	        int unitCount = 0;
+	        String units = "";
+	        for (final ItemStack stack : player.getInventory().getContents()) {
+	            if (stack != null) {
+	                final LoreMaterial material = LoreMaterial.getMaterial(stack);
+	                if (material != null && material instanceof UnitMaterial) {
+	                    if (UnitMaterial.validateUnitUse(player, stack)) {
+	                        units += ((UnitMaterial)material).getUnit().name;
+	                        if (unitCount != 2) {
+	                            units += ", ";
+	                        }
+	                        ++unitCount;
+	                    }
+	                }
+	            }
+	        }
+	        return units;
+	    }
+	    
+	    public static String getUnitStringIds(final Player player) {
+	        int unitCount = 0;
+	        String units = "";
+	        for (final ItemStack stack : player.getInventory().getContents()) {
+	            if (stack != null) {
+	                final LoreMaterial material = LoreMaterial.getMaterial(stack);
+	                if (material != null && material instanceof UnitMaterial) {
+	                    if (UnitMaterial.validateUnitUse(player, stack)) {
+	                        units += ((UnitMaterial)material).getUnit().id;
+	                        if (unitCount != 2) {
+	                            units += ", ";
+	                        }
+	                        ++unitCount;
+	                    }
+	                }
+	            }
+	        }
+	        return units;
+	    }
+	    
+	    public static boolean canTakeUnitCloseEvent(final Player player) {
+	        int unitCount = 0;
+	        for (final ItemStack stack : player.getInventory().getContents()) {
+	            if (stack != null) {
+	                final LoreMaterial material = LoreMaterial.getMaterial(stack);
+	                if (material != null && material instanceof UnitMaterial) {
+	                    if (UnitMaterial.validateUnitUse(player, stack)) {
+	                        unitCount += stack.getAmount();
+	                    }
+	                }
+	            }
+	        }
+	        return unitCount < 4;
+	    }
+	    
+	    public static boolean isWearingFullHell(final Player player) {
+	        ItemStack[] armorContents;
+	        for (int length = (armorContents = player.getInventory().getArmorContents()).length, i = 0; i < length; ++i) {
+	            final ItemStack stack = armorContents[i];
+	            final LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(stack);
+	            if (craftMat == null) {
+	                return false;
+	            }
+	            if (!craftMat.getConfigId().contains("mat_hell_")) {
+	                return false;
+	            }
+	        }
+	        return true;
+	    }
 }

@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.md_5.itag.iTag;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,6 +54,7 @@ import com.avrgaming.civcraft.config.ConfigGovernment;
 import com.avrgaming.civcraft.config.ConfigHappinessState;
 import com.avrgaming.civcraft.config.ConfigTownLevel;
 import com.avrgaming.civcraft.config.ConfigTownUpgrade;
+import com.avrgaming.civcraft.config.ConfigTradeGood;
 import com.avrgaming.civcraft.config.ConfigUnit;
 import com.avrgaming.civcraft.database.SQL;
 import com.avrgaming.civcraft.database.SQLUpdate;
@@ -67,7 +71,9 @@ import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.permission.PermissionGroup;
 import com.avrgaming.civcraft.randomevents.RandomEvent;
 import com.avrgaming.civcraft.road.Road;
+import com.avrgaming.civcraft.sessiondb.SessionEntry;
 import com.avrgaming.civcraft.structure.Buildable;
+import com.avrgaming.civcraft.structure.Capitol;
 import com.avrgaming.civcraft.structure.Mine;
 import com.avrgaming.civcraft.structure.ResearchLab;
 import com.avrgaming.civcraft.structure.School;
@@ -167,10 +173,12 @@ public class Town extends SQLObject {
 	public int saved_trommel_level = 1;
 	public int saved_tradeship_upgrade_levels = 1;
 	public int saved_grocer_levels = 1;
+    public int saved_alch_levels = 1;
 	public int saved_quarry_level = 1;
 	public int saved_fish_hatchery_level = 1;
 	public double saved_bank_interest_amount = 0;
-	
+    public int saved_stock_exchange_level = 1;
+
 	/* Happiness Stuff */
 	private double baseHappy = 0.0;
 	private double baseUnhappy = 0.0;
@@ -180,6 +188,11 @@ public class Town extends SQLObject {
 	/* Last time someone used /build refreshblocks, make sure they can do it only so often.	 */
 	private Date lastBuildableRefresh = null;
 	private Date created_date;
+	
+    public String tradeGoods = "";
+    private String talents = "";
+    private long conquered_date = 0L;
+    private String quarryPickaxes = "0:0:0:0:0:0:0:0";
 	
 	/* 
 	 * Time it takes before a new attribute is calculated
@@ -218,6 +231,10 @@ public class Town extends SQLObject {
 					"`created_date` long," +
 					"`outlaws` mediumtext DEFAULT NULL,"+
 					"`dbg_civ_name` mediumtext DEFAULT NULL,"+
+			        "`talents` mediumtext,"+
+			        "`tradeGoods` mediumtext DEFAULT NULL,"+
+			        "`conquered_date` mediumtext,"+
+			        "`quarryPickaxes` mediumtext,"+
 				"UNIQUE KEY (`name`), " +
 				"PRIMARY KEY (`id`)" + ")";
 			
@@ -225,13 +242,6 @@ public class Town extends SQLObject {
 			CivLog.info("Created "+TABLE_NAME+" table");
 		} else {
 			CivLog.info(TABLE_NAME+" table OK!");
-			
-			//Check for new columns and update the table if we dont have them.
-			SQL.makeCol("outlaws", "mediumtext", TABLE_NAME);
-			SQL.makeCol("daysInDebt", "int(11)", TABLE_NAME);
-			SQL.makeCol("mother_civ_id", "int(11)", TABLE_NAME);
-			SQL.makeCol("dbg_civ_name", "mediumtext", TABLE_NAME);
-			SQL.makeCol("created_date", "long", TABLE_NAME);
 		}
 	}
 	
@@ -270,6 +280,14 @@ public class Town extends SQLObject {
 		//this.setHomeChunk(rs.getInt("homechunk_id"));
 		this.setExtraHammers(rs.getDouble("extra_hammers"));
 		this.setAccumulatedCulture(rs.getInt("culture"));
+        this.talents = rs.getString("talents");
+        this.conquered_date = rs.getLong("conquered_date");
+		if (rs.getString("quarryPickaxes") != null && !rs.getString("quarryPickaxes").equalsIgnoreCase("")) {
+            this.quarryPickaxes = rs.getString("quarryPickaxes");
+        }
+        else {
+            this.quarryPickaxes = "0:0:0:0:0:0:0:0";
+        }
 		
 		defaultGroupName = "residents";
 		mayorGroupName = "mayors";
@@ -278,6 +296,12 @@ public class Town extends SQLObject {
 		this.setTreasury(CivGlobal.createEconObject(this));
 		this.getTreasury().setBalance(rs.getDouble("coins"), false);
 		this.setDebt(rs.getDouble("debt"));
+        if (rs.getString("tradeGoods") != null) {
+            this.tradeGoods = rs.getString("tradeGoods");
+        }
+        else {
+            this.tradeGoods = "";
+        }
 		
 		String outlawRaw = rs.getString("outlaws");
 		if (outlawRaw != null) {
@@ -296,6 +320,8 @@ public class Town extends SQLObject {
 		}
 		
 		this.getCiv().addTown(this);	
+        this.setTalentsFromString(this.talents);
+        this.processTradeLoad();
 	}
 
 	@Override
@@ -329,6 +355,10 @@ public class Town extends SQLObject {
 		hashmap.put("upgrades", this.getUpgradesString());
 		hashmap.put("coins", this.getTreasury().getBalance());
 		hashmap.put("dbg_civ_name", this.getCiv().getName());
+        hashmap.put("talents", this.talents);
+        hashmap.put("conquered_date", this.conquered_date);
+        hashmap.put("quarryPickaxes", this.quarryPickaxes);
+        hashmap.put("tradeGoods", this.tradeGoods);
 		
 		if (this.created_date != null) {
 			hashmap.put("created_date", this.created_date.getTime());
@@ -433,13 +463,6 @@ public class Town extends SQLObject {
 		try {
 			this.baseHammers = CivSettings.getDouble(CivSettings.townConfig, "town.base_hammer_rate");
 			this.setBaseGrowth(CivSettings.getDouble(CivSettings.townConfig, "town.base_growth_rate"));
-			
-//			this.happyCoinRate = new AttributeComponent();
-//			this.happyCoinRate.setSource("Happiness");
-//			this.happyCoinRate.setAttrKey(Attribute.TypeKeys.COINS.name());
-//			this.happyCoinRate.setType(AttributeType.RATE);
-//			this.happyCoinRate.setOwnerKey(this.getName());
-//			this.happyCoinRate.registerComponent();
 			
 		} catch (InvalidConfiguration e) {
 			e.printStackTrace();
@@ -1200,6 +1223,16 @@ public class Town extends SQLObject {
 			return clevel.title;
 		}
 	}
+	
+	public void addUpgrade(ConfigTownUpgrade upgrade) {
+
+		try {
+			upgrade.processAction(this);
+		} catch (CivException e) {
+		}
+		this.upgrades.put(upgrade.id, upgrade);
+		this.save();
+	}
 
 	public void purchaseUpgrade(ConfigTownUpgrade upgrade) throws CivException {
 		if (!this.hasUpgrade(upgrade.require_upgrade)) {
@@ -1565,6 +1598,10 @@ public class Town extends SQLObject {
 	}
 	
 	public void buildWonder(Player player, String id, Location center, Template tpl) throws CivException {
+		
+		if (this.wonders.size() >= 2) {
+			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorLimit2"));
+		}
 
 		if (!center.getWorld().getName().equals("world")) {
 			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_NotOverworld"));
@@ -1765,6 +1802,15 @@ public class Town extends SQLObject {
 		}
 		
 	}
+	
+	public Wonder getWonderByType(final String id) {
+        for (final Wonder wonder : this.wonders.values()) {
+            if (wonder.getConfigId().equalsIgnoreCase(id)) {
+                return wonder;
+            }
+        }
+        return null;
+    }
 
 	public Structure getStructureByType(String id) {
 		for (Structure struct : this.structures.values()) {
@@ -1850,6 +1896,24 @@ public class Town extends SQLObject {
 		
 		return false;
 	}
+	
+    public boolean hasWonder(final String require_wonder) {
+        if (require_wonder == null || require_wonder.equals("")) {
+            return true;
+        }
+       
+        Wonder wonder = this.findWonderByConfigId(require_wonder);
+        return wonder != null && wonder.isActive();
+    }
+    
+    public Wonder findWonderByConfigId(final String require_wonder) {
+        for (Wonder wonder : this.wonders.values()) {
+            if (wonder.getConfigId().equals(require_wonder)) {
+                return wonder;
+            }
+        }
+        return null;
+    }
 	
 	public AttrSource getGrowthRate() {
 		double rate = 1.0;
@@ -3333,6 +3397,244 @@ public class Town extends SQLObject {
 		return this.disabledBuildables.values();
 	}
 
-
-
+	public int getArtifactTypeCount(final String id) {
+        return 0;
+    }
+    
+    public boolean hasCapitol() {
+        return this.hasStructure("s_capitol");
+    }
+    
+    public Double getHammersFromTalent() {
+        double hammers = 0.0;
+        for (final CultureChunk cultureChunk : this.cultureChunks.values()) {
+            if (cultureChunk.getHammers() < 0.75) {
+                hammers += 0.25;
+            }
+        }
+        return hammers;
+    }
+    
+    public Capitol getCapitol() {
+        for (final Structure structure : this.structures.values()) {
+            if (structure instanceof Capitol) {
+                return (Capitol)structure;
+            }
+        }
+        return null;
+    }
+    
+    public String getTalents() {
+        return this.talents;
+    }
+    
+    public void addTalent(final String talent) {
+        (this.talents = this.talents + "," + talent).replace("null", "");
+        for (final Structure structure : this.getStructures()) {
+            structure.onBonusGoodieUpdate();
+        }
+    }
+    
+    private void setTalentsFromString(final String talentshString) throws CivException {
+        String[] split = talentshString.split(",");
+        for (final String talentId : split) {
+            if (talentId != null) {
+                if (!talentId.equals("")) {
+                    try {
+                        if (!this.getBuffManager().hasBuff(talentId) && talentId != null) {
+                            this.getBuffManager().addBuff(talentId, talentId, "capitol in " + this.getName());
+                        }
+                    }
+                    catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    
+    public ArrayList<ConfigUnit> getAvailableArtifacts() {
+        final ArrayList<ConfigUnit> unitList = new ArrayList<ConfigUnit>();
+        for (final ConfigUnit unit : CivSettings.units.values()) {
+            if (unit.isAvailable(this) && !unit.id.contains("u_") && !unit.id.contains("ax_")) {
+                unitList.add(unit);
+            }
+        }
+        return unitList;
+    }
+    
+    public long getConqueredDate() {
+        return this.conquered_date;
+    }
+    
+    public void setConqueredDate(final long conqueredDate) {
+        this.conquered_date = conqueredDate;
+    }
+    
+    public String[] getQuarryPickaxes() {
+        return this.quarryPickaxes.split(":");
+    }
+    
+    public void updateQuarryPickaxes(final int cobble, final int iron, final int diamond, final int gold, final int effCobble, final int effIron, final int effDiamond, final int effGold) {
+        final String newQuarryPickaxes = cobble + ":" + iron + ":" + diamond + ":" + gold + ":" + ((effCobble == -1) ? 0 : effCobble) + ":" + ((effIron == -1) ? 0 : effIron) + ":" + ((effDiamond == -1) ? 0 : effDiamond) + ":" + ((effGold == -1) ? 0 : effGold);
+        this.quarryPickaxes = newQuarryPickaxes;
+        this.save();
+    }
+    
+    public void depositTradeGood(final String id) throws CivException {
+        if (StringUtils.isBlank(this.tradeGoods)) {
+            this.tradeGoods = id + ", ";
+        }
+        else {
+            if (this.tradeGoods.split(", ").length >= 8) {
+                throw new CivException(CivSettings.localize.localizedString("var_virtualTG_townFullGoods", "§6" + this.getName() + "§c"));
+            }
+            this.tradeGoods = this.tradeGoods + id + ", ";
+        }
+        final ConfigTradeGood configTradeGood = CivSettings.goods.get(id);
+        for (final ConfigBuff configBuff : configTradeGood.buffs.values()) {
+            final String key = "tradegood:" + this.tradeGoods.split(", ").length + ":" + configBuff.id;
+            if (this.buffManager.hasBuffKey(key)) {
+                continue;
+            }
+            try {
+                this.buffManager.addBuff(key, configBuff.id, configTradeGood.name);
+            }
+            catch (CivException e) {
+                e.printStackTrace();
+            }
+        }
+        for (final Structure structure : this.getStructures()) {
+            structure.onBonusGoodieUpdate();
+        }
+    }
+    
+    public int getTradeGoodCount(final String id) {
+        if (!this.tradeGoods.contains(id)) {
+            return 0;
+        }
+        int count = 0;
+        for (final String good : this.tradeGoods.split(", ")) {
+            if (good.equals(id)) {
+                ++count;
+            }
+        }
+        return count;
+    }
+    
+    public void processTradeLoad() {
+        if (StringUtils.isBlank(this.tradeGoods)) {
+            return;
+        }
+        int iterate = 1;
+        for (final String id : this.tradeGoods.split(", ")) {
+            final ConfigTradeGood configTradeGood = CivSettings.goods.get(id);
+            for (final ConfigBuff configBuff : configTradeGood.buffs.values()) {
+                final String key = "tradegood:" + iterate + ":" + configBuff.id;
+                if (this.buffManager.hasBuffKey(key)) {
+                    continue;
+                }
+                try {
+                    this.buffManager.addBuff(key, configBuff.id, configTradeGood.name);
+                    ++iterate;
+                }
+                catch (CivException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        for (final Structure structure : this.getStructures()) {
+            structure.onBonusGoodieUpdate();
+        }
+    }
+    
+    public boolean hasTradeGood(final String id) {
+        return this.tradeGoods.contains(id);
+    }
+    
+    public void withdrawTradeGood(final String id) throws CivException {
+        if (!this.hasTradeGood(id)) {
+            throw new CivException(CivSettings.localize.localizedString("var_virtualTG_townHasNoGood", "§6" + this.getName() + "§c", "§6" + CivSettings.goods.get(id).name + "§c"));
+        }
+        final String[] goods = this.tradeGoods.split(", ");
+        final ArrayList<String> newGoods = new ArrayList<String>();
+        boolean withdrawed = false;
+        for (int i = 0; i < goods.length; ++i) {
+            final String goodID = goods[i];
+            if (!withdrawed && goodID.equals(id)) {
+                withdrawed = true;
+            }
+            else {
+                newGoods.add(goodID);
+            }
+        }
+        String goodies = "";
+        for (final String goodie : newGoods) {
+            goodies = goodies + goodie + ", ";
+        }
+        this.tradeGoods = goodies;
+        final ArrayList<String> keysToRemove = new ArrayList<String>();
+        for (final Buff buff : this.buffManager.getAllBuffs()) {
+            if (buff.getKey().contains("tradegood")) {
+                keysToRemove.add(buff.getKey());
+            }
+        }
+        for (final String key : keysToRemove) {
+            this.buffManager.removeBuff(key);
+        }
+        this.processTradeLoad();
+    }
+    
+    public boolean hasScroll() {
+        final String key = "scrollHammers_" + this.getId();
+        final ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(key);
+        if (entries == null || entries.size() < 1) {
+            return false;
+        }
+        final SessionEntry cd = entries.get(0);
+        final long till = Long.parseLong(cd.value);
+        if (till > Calendar.getInstance().getTimeInMillis()) {
+            return true;
+        }
+        this.removeScroll();
+        return false;
+    }
+    
+    public String getScrollTill() {
+        final String key = "scrollHammers_" + this.getId();
+        final ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(key);
+        if (entries == null || entries.size() < 1) {
+            return null;
+        }
+        final SessionEntry cd = entries.get(0);
+        long till = Long.parseLong(cd.value);
+        SimpleDateFormat sdf = new SimpleDateFormat("M/dd h:mm:ss a z");  
+        return sdf.format(till);
+    }
+    
+    public void addScroll(final long time) {
+        final String key = "scrollHammers_" + this.getId();
+        final String value = Calendar.getInstance().getTimeInMillis() + time + "";
+        final ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(key);
+        if (entries == null || entries.size() < 1) {
+    		CivGlobal.getSessionDB().add(key, value, 0, 0, 0);
+            return;
+        }
+        CivGlobal.getSessionDB().update(entries.get(0).request_id, key, value);
+    }
+    
+    public void removeScroll() {
+        final String key = "scrollHammers_" + this.getId();
+        CivGlobal.getSessionDB().delete_all(key);
+        CivMessage.sendTown(this, CivSettings.localize.localizedString("var_scrollEnded"));
+    }
+    
+    @Override
+    public boolean equals(final Object another) {
+        if (!(another instanceof Town)) {
+            return false;
+        }
+        final Town anther = (Town)another;
+        return anther.getName().equals(this.getName()) && anther.getId() == this.getId();
+    }
 }

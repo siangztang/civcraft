@@ -32,6 +32,7 @@ import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.LibraryEnchantment;
 import com.avrgaming.civcraft.object.StoreMaterial;
 import com.avrgaming.civcraft.object.Town;
+import com.avrgaming.civcraft.structure.Alch;
 import com.avrgaming.civcraft.structure.Bank;
 import com.avrgaming.civcraft.structure.FishHatchery;
 import com.avrgaming.civcraft.structure.Grocer;
@@ -41,6 +42,8 @@ import com.avrgaming.civcraft.structure.Store;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.TradeShip;
 import com.avrgaming.civcraft.structure.Trommel;
+import com.avrgaming.civcraft.structure.wonders.StockExchange;
+import com.avrgaming.civcraft.structure.wonders.Wonder;
 
 public class ConfigTownUpgrade {
 	public String id;
@@ -50,6 +53,7 @@ public class ConfigTownUpgrade {
 	public String require_upgrade = null;
 	public String require_tech = null;
 	public String require_structure = null;
+    public String require_wonder = null;
 	public String category = null;
 	
 	public static HashMap<String, Integer> categories = new HashMap<String, Integer>();
@@ -66,6 +70,7 @@ public class ConfigTownUpgrade {
 			town_upgrade.action = (String)level.get("action");
 			town_upgrade.require_upgrade = (String)level.get("require_upgrade");
 			town_upgrade.require_tech = (String)level.get("require_tech");
+			town_upgrade.require_wonder = (String)level.get("require_wonder");
 			town_upgrade.require_structure = (String)level.get("require_structure");
 			town_upgrade.category = (String)level.get("category");
 		
@@ -126,6 +131,29 @@ public class ConfigTownUpgrade {
 				}
 			}
 			break;
+        case "set_stock_exchange_level":
+            if (town.saved_stock_exchange_level < Integer.valueOf(args[1].trim())) {
+                town.saved_stock_exchange_level = Integer.valueOf(args[1].trim());
+            }
+            Wonder wonder = town.getWonderByType("w_stock_exchange");
+            struct = town.getStructureByType("s_bank");
+            if (wonder != null && wonder instanceof StockExchange) {
+                final StockExchange stock = (StockExchange)wonder;
+                if (stock.getLevel() < town.saved_stock_exchange_level) {
+                    stock.setLevel(town.saved_stock_exchange_level);
+                    if (stock.getLevel() != 6) {
+                        CivMessage.global(CivSettings.localize.localizedString("var_townUpgrade_stockexchange", stock.getLevel(), town.getName()));
+                    }
+                    else {
+                        CivMessage.global(CivSettings.localize.localizedString("var_townUpgrade_stockexchangeWinStart", town.getName(), town.getCiv().getName()));
+                    }
+                }
+            }
+            if (struct != null && (struct instanceof Bank)) {
+                struct.updateSignText();
+                break;
+            }
+            break;
 		case "set_store_level":
 			if (town.saved_store_level < Integer.valueOf(args[1].trim()))
 			{
@@ -238,6 +266,22 @@ public class ConfigTownUpgrade {
 				}
 			}
 			break;
+		case "set_alch_level": 
+			if (town.saved_alch_levels < Integer.valueOf(args[1].trim())) {
+				town.saved_alch_levels = Integer.valueOf(args[1].trim());
+			}
+			for (Structure structure : town.getStructures()) {
+				if (structure != null && structure instanceof Alch) {
+					final Alch alch = (Alch)structure;
+					if (alch.getLevel() < town.saved_alch_levels) {
+						alch.setLevel(town.saved_alch_levels);
+						alch.updateSignText();
+						CivMessage.sendTown(town, CivSettings.localize.localizedString("var_townupgrade_alch", alch.getLevel()));
+					}
+					break;
+				}
+			}
+            break;
 		case "set_trommel_level":
 			boolean didUpgrade = false;
 			if (town.saved_trommel_level < Integer.valueOf(args[1].trim()))
@@ -296,8 +340,10 @@ public class ConfigTownUpgrade {
 		if (town.hasUpgrade(this.require_upgrade)) {
 			if (town.getCiv().hasTechnology(this.require_tech)) {
 				if (town.hasStructure(require_structure)) {
-					if (!town.hasUpgrade(this.id)) {
-						return true;
+					if (town.hasWonder(require_wonder)) {
+						if (!town.hasUpgrade(this.id)) {
+							return true;
+						}
 					}
 				}
 			}

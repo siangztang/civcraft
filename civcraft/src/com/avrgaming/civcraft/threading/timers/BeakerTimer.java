@@ -66,8 +66,6 @@ public class BeakerTimer extends CivAsyncTask {
 				 */
 				if (civ.getResearchTech() != null) {
 					civ.addBeakers(civ.getBeakers() / BEAKER_PERIOD);
-				} else {
-					civ.processUnusedBeakers();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

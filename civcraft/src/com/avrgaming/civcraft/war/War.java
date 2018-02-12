@@ -46,7 +46,8 @@ import com.avrgaming.civcraft.util.CivColor;
 public class War {
 
 	/* If true, WarTime is on. */
-	private static boolean warTime;
+	private static boolean warTime;   
+	public static int time_declare_days = 3;
 
 	private static Date start = null;
 	private static Date end = null;
@@ -120,6 +121,13 @@ public class War {
 	}
 	
 	public static void init() {
+		try {
+			time_declare_days = CivSettings.getInteger(CivSettings.warConfig, "war.time_declare_days");
+		} catch (InvalidConfiguration e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		loadDefeatedTowns();
 		loadDefeatedCivs();
 		processDefeated();
@@ -222,7 +230,6 @@ public class War {
 			War.repositionPlayers(CivSettings.localize.localizedString("war_wartimeBeginOutOfPosition"));
 			//War.vassalTownsWithNoTownHalls();
 			War.resetTownClaimFlags();
-			WarAntiCheat.kickUnvalidatedPlayers();
 			
 			/* Put a flag on the filesystem to prevent cron reboots. */
 			File file = new File("wartime");
@@ -443,7 +450,6 @@ public class War {
 	public static boolean isWithinWarDeclareDays() {
 		Date nextWar = War.getNextWarTime();
 		Date now = new Date();
-		int time_declare_days = getTimeDeclareDays();
 		
 		if ((now.getTime() + time_declare_days*(1000*60*60*24)) >= nextWar.getTime()) {
 			return true;
@@ -464,16 +470,6 @@ public class War {
 		}
 		
 		return false;	
-	}
-	
-	public static int getTimeDeclareDays() {
-		try {
-			int time_declare_days = CivSettings.getInteger(CivSettings.warConfig, "war.time_declare_days");
-			return time_declare_days;
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			return 0;
-		}
 	}
 	
 	public static int getAllyDeclareHours() {

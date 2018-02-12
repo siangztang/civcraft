@@ -257,10 +257,6 @@ public class Camp extends Buildable {
 			CivLog.info("Created "+TABLE_NAME+" table");
 		} else {
 			CivLog.info(TABLE_NAME+" table OK!");
-			SQL.makeCol("name", "VARCHAR(64) NOT NULL", TABLE_NAME);
-			SQL.makeCol("upgrades", "mediumtext", TABLE_NAME);
-			SQL.makeCol("template_name", "mediumtext", TABLE_NAME);
-			SQL.makeCol("next_raid_date", "long", TABLE_NAME);
 		}
 	}
 	

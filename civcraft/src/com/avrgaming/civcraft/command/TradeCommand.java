@@ -28,10 +28,6 @@ public class TradeCommand extends CommandBase {
 		Resident resident = getNamedResident(0);
 		Resident trader = getResident();
 		
-		if (resident.isInsideArena() || trader.isInsideArena()) {
-			throw new CivException(CivSettings.localize.localizedString("cmd_trade_ArenaError"));
-		}
-		
 		double max_trade_distance;
 		try {
 			max_trade_distance = CivSettings.getDouble(CivSettings.civConfig, "global.max_trade_distance");

@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,6 +37,7 @@ import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.Resident;
+import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.ItemManager;
 
@@ -60,8 +60,23 @@ public class ResidentCommand extends CommandBase {
 		commands.put("refresh", CivSettings.localize.localizedString("cmd_res_refreshDesc"));
 		commands.put("timezone", CivSettings.localize.localizedString("cmd_res_timezoneDesc"));
 		commands.put("pvptimer", CivSettings.localize.localizedString("cmd_res_pvptimerDesc"));
+        commands.put("outlawed", CivSettings.localize.localizedString("cmd_res_outlawedDesc"));
+
 		//commands.put("switchtown", "[town] - Allows you to instantly change your town to this town, if this town belongs to your civ.");
 	}
+	
+    public void outlawed_cmd() throws CivException {
+        Resident resident = this.getResident();
+        StringBuilder outlaws = new StringBuilder();
+        for (Town town : CivGlobal.getTowns()) {
+            if (!town.isOutlaw(resident)) continue;
+            outlaws.append("\u00a7c").append(town.getName()).append(" [").append(town.getCiv().getName()).append("] ").append("\n");
+        }
+        if (outlaws.toString().equals("")) {
+            throw new CivException(CivSettings.localize.localizedString("cmd_res_outlawed_noOne"));
+        }
+        CivMessage.send((Object)this.sender, CivSettings.localize.localizedString("cmd_res_outlawed_list", outlaws.toString()));
+    }
 	
 	public void pvptimer_cmd() throws CivException {
 		Resident resident = getResident();
@@ -345,21 +360,6 @@ public class ResidentCommand extends CommandBase {
 		}
 		
 		CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Groups")+" "+resident.getGroupsString());
-		
-		Player player = Bukkit.getPlayer(resident.getUUID());
-		if (player.hasPermission(CivSettings.MODERATOR) || player.hasPermission(CivSettings.MINI_ADMIN)) {
-			CivMessage.send(sender, CivColor.Rose+CivSettings.localize.localizedString("cmd_res_showModerator"));
-			return;
-		}
-		try {
-			if (resident.isUsesAntiCheat()) {
-				CivMessage.send(sender, CivColor.LightGreen+CivSettings.localize.localizedString("cmd_res_showAC1"));
-			} else {
-				CivMessage.send(sender, CivColor.Rose+CivSettings.localize.localizedString("cmd_res_showAC2"));
-			}
-		} catch (CivException e) {
-			CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("cmd_res_showOffline"));
-		}	
 	}
 	
 	@Override

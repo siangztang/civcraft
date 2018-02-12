@@ -312,6 +312,14 @@ public class BonusGoodie extends LoreItem {
 
 			@Override
 			public void run() {
+				if (item == null) {
+					// Stack failed to be found, don't find it
+		            try {
+						createGoodieAtOutpost();
+					} catch (CivException e) {
+						e.printStackTrace();
+					}
+				}
 				if (holderStore != null) {
 					try {
 						replenish(findStack(), null, holderStore.getHolder().getInventory(), null);

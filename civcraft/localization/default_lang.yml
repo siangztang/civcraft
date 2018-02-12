@@ -346,7 +346,6 @@ cmd_report_5: "Type [cancel] to cancel this report."
 
 #---- Trade Command ----
 cmd_trade_Name: "Trade"
-cmd_trade_ArenaError: "You cannot trade items when a player is inside a PvP Arena."
 cmd_trade_YourselfError: "You cannot trade with yourself."
 var_cmd_trade_tooFarError: "[%0] is too far away to trade with."
 var_cmd_trade_alreadyTradingError: "[%0] is already trading with someone. Please wait."
@@ -568,7 +567,6 @@ adcmd_reloadacDesc: "Reload NoCheat data config"
 adcmd_heartbeatDesc: "Send the heartbeat"
 
 adcmd_reloadgovSuccess: "Reloaded Governments"
-adcmd_reloadacSuccess: "Reloaded NoCheat Config"
 adcmd_endworldOn: "It's the end of the world as we know it."
 adcmd_endworldOff: "I feel fine."
 adcmd_clearEndGameNoKey: "No end games by that key."
@@ -1045,7 +1043,6 @@ cmd_civ_info_help: "Subcommands available: See /civ info help"
 var_cmd_civ_info_showHeading: "Civilization of [%0]"
 cmd_civ_info_showTax: "Income Tax Rate:"
 cmd_civ_info_showScience: "Science Percentage:"
-var_cmd_civ_info_showBeakersTowardEnlight: "[%0] has [%1] beakers on The Enlightenment."
 
 #---- Civ MOTD Command ----
 cmd_civ_motd_name: "Civ Motd"
@@ -1222,9 +1219,6 @@ cmd_res_showTaxes: "Taxes Owed:"
 cmd_res_showSelected: "Selected Town:"
 cmd_res_showDebt: "In Debt"
 cmd_res_showEviction: "Days till Eviction:"
-cmd_res_showAC1: "Online and currently using CivCraft's Anti-Cheat"
-cmd_res_showAC2: "Online but NOT validated by CivCraft's Anti-Cheat"
-cmd_res_showOffline: "Resident is not currently online."
 
 #---- Resident Friend Command ----
 cmd_res_friend_name: "Resident Friend"
@@ -2893,7 +2887,61 @@ cmd_res_exchangeNoTradeGoods: "You Cannot Exchange Trade Goods"
 # 1.8
 
 var_cmd_civ_info_victory: "The Civilization of [%0] has won with a [%1] victory!"
-cmd_res_showModerator: "Status of Moderators is Hidden"
 
 playerListen_repawnAtName: "You find yourself back at [%0]."
 town_found_databaseException: "We detected and internal inconsistency with the database. Try founding your town again, if the problem persists, contact an admin or try a different name."
+
+town_buildwonder_errorLimit2: "Can only have at most two wonders in a town."
+var_townupgrade_alch: ""
+cmd_build_calc_result: ""
+adcmd_find_xrayers: "Query all players to find ones at Diamond xray level"
+cmd_res_outlawedDesc: ""
+cmd_res_outlawed_noOne: ""
+cmd_res_outlawed_list: ""
+var_virtualTG_civHasNoGood: ""
+
+#Interactive Scrolls
+interactive_scroll_cancel: ""
+# var_processScroll_interactive1
+# var_processScroll_interactive2
+# var_processScroll_takeStroll
+# var_processScroll_noCiv
+# var_processScroll_addedCulture
+# var_processScroll_arleadyActivated
+# var_processScroll_addedHammers
+# var_processScroll_noBarracks
+# var_processScroll_noBarracksInProgress
+# var_processScroll_noBarracksNotSettler
+# var_processScroll_addedHammersSettler
+# var_processScroll_noTechInPrg
+# var_processScroll_notThisTech
+# var_processScroll_addedTech
+# var_processScroll_upgradeBankArleadyNo
+# var_processScroll_upgradeBankArleady
+# var_processScroll_proceedBank
+# var_processScroll_upgradeTownArleady
+# var_processScroll_proceedTown
+
+
+# researchSpaceShuttle_lore1
+# researchSpaceShuttle_lore2
+# researchSpaceShuttle_lore3
+# researchSpaceShuttle_lore4
+# researchSpaceShuttle_lore5
+# researchSpaceShuttle_lore6
+# researchSpaceShuttle_lore7
+# researchSpaceShuttle_lore8
+
+# var_arrtifacts_errorBarracksFull
+# var_artifact_useSuccusess
+# var_artifact_useSuccusessButNot
+# var_artifact_useFailure
+# var_arrtifacts_Break
+# var_artifact_useFailureSinceWar
+
+# cmd_civ_talent_choose_sucusses
+# cmd_civ_talent_choose_interactiveConfirmationHeading
+# cmd_civ_talent_choose_interactiveConfirmationTypeSth
+
+adcmd_talent_total: "Total talents from [%0] Civilizations"
+cmd_space_future: "Future Missions"

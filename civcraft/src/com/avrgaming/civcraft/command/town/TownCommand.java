@@ -698,7 +698,7 @@ public class TownCommand extends CommandBase {
 		}
 
 		if (War.isWithinWarDeclareDays() && town.getCiv().getDiplomacyManager().isAtWar()) {
-			throw new CivException(CivSettings.localize.localizedString("cmd_town_addCloseToWar")+" "+War.getTimeDeclareDays()+" "+CivSettings.localize.localizedString("cmd_civ_dip_declareTooCloseToWar4"));
+			throw new CivException(CivSettings.localize.localizedString("cmd_town_addCloseToWar")+" "+War.time_declare_days+" "+CivSettings.localize.localizedString("cmd_civ_dip_declareTooCloseToWar4"));
 		}
 		
 		if (newResident.hasCamp()) {

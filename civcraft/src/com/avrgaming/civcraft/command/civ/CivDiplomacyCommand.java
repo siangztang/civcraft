@@ -263,7 +263,7 @@ public class CivDiplomacyCommand extends CommandBase {
 				
 				if (War.isWithinWarDeclareDays()) {
 					if (ourCiv.getDiplomacyManager().isAtWar() || otherCiv.getDiplomacyManager().isAtWar()) {
-						throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_dip_requestErrorWar1",War.getTimeDeclareDays()));
+						throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_dip_requestErrorWar1",War.time_declare_days));
 					}
 				}
 				break;
@@ -348,7 +348,7 @@ public class CivDiplomacyCommand extends CommandBase {
 							//aidingAlly = true;
 						}
 					} else {		
-						throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_dip_declareTooCloseToWar2",War.getTimeDeclareDays()));
+						throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_dip_declareTooCloseToWar2",War.time_declare_days));
 					}
 				}
 				

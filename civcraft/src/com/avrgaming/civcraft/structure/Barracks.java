@@ -601,5 +601,20 @@ public class Barracks extends Structure {
 			
 		}
 	}
+
+    public void addHammers(double hammers) {
+        if (this.trainingUnit != null) {
+            this.currentHammers += hammers;
+            this.updateProgressBar();
+            Date now = new Date();
+            if (this.lastSave == null || this.lastSave.getTime() + 60000L < now.getTime()) {
+                TaskMaster.asyncTask(new UnitSaveAsyncTask(this), 0L);
+            }
+            if (this.currentHammers >= this.trainingUnit.hammer_cost) {
+                this.currentHammers = this.trainingUnit.hammer_cost;
+                this.createUnit(this.trainingUnit);
+            }
+        }
+    }
 	
 }

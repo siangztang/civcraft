@@ -1,138 +1,140 @@
+
 package com.avrgaming.civcraft.endgame;
 
 import java.util.ArrayList;
-
+import java.util.Calendar;
+import java.util.Date;
+import org.bukkit.Bukkit;
 import com.avrgaming.civcraft.config.CivSettings;
+import com.avrgaming.civcraft.endgame.EndGameCondition;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.sessiondb.SessionEntry;
 import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Town;
-import com.avrgaming.civcraft.sessiondb.SessionEntry;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
+import com.avrgaming.civcraft.war.War;
 
-public class EndConditionScience extends EndGameCondition {
+public class EndConditionScience
+extends EndGameCondition {
+    public static boolean check = false;
+    String wonderId;
+    int daysAfterStart;
+    Date startDate = null;
 
-	String techname;
-	
-	@Override
-	public void onLoad() {		
-		techname = this.getString("tech");
-	}
+    public static String getBeakerSessionKey(Civilization civ) {
+        return "endgame:sciencebeakers:" + civ.getId();
+    }
 
-	@Override
-	public boolean check(Civilization civ) {
-		
-		if (!civ.hasTechnology(techname)) {
-			return false;
-		}
+    public static Double getBeakersFor(Civilization civ) {
+        ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(EndConditionScience.getBeakerSessionKey(civ));
+        if (entries.size() == 0) {
+            return 0.0;
+        }
+        return Double.valueOf(entries.get((int)0).value);
+    }
 
-		if (civ.isAdminCiv()) {
-			return false;
-		}
-		
-		boolean hasGreatLibrary = false;
-		for (Town town : civ.getTowns()) {
-			if (town.getMotherCiv() != null) {
-				continue;
-			}
-			
-			for (Wonder wonder :town.getWonders()) {
-				if (wonder.isActive()) {
-					if (wonder.getConfigId().equals("w_greatlibrary")) {
-						hasGreatLibrary = true;
-						break;
-					}
-				}
-			}
-			
-			if (hasGreatLibrary) {
-				break;
-			}
-		}
-		
-		if (!hasGreatLibrary) {
-			return false;
-		}
-	
-		return true;
-	}
-	
-	@Override
-	public boolean finalWinCheck(Civilization civ) {
-		Civilization rival = getMostAccumulatedBeakers();
-		if (rival != civ) {
-			CivMessage.global(CivSettings.localize.localizedString("var_end_scienceError",civ.getName(),rival.getName()));
-			return false;
-		}
-		
-		return true;
-	}
+    @Override
+    public void onLoad() {
+        this.wonderId = this.getString("wonder");
+        this.daysAfterStart = Integer.valueOf(this.getString("days_after_start"));
+        this.getStartDate();
+    }
 
-	public Civilization getMostAccumulatedBeakers() {
-		double most = 0;
-		Civilization mostCiv = null;
-		
-		for (Civilization civ : CivGlobal.getCivs()) {
-			double beakers = getExtraBeakersInCiv(civ);
-			if (beakers > most) {
-				most = beakers;
-				mostCiv = civ;
-			}
-		}
-		
-		return mostCiv;
-	}
-	
-	@Override
-	public String getSessionKey() {
-		return "endgame:science";
-	}
+    private void getStartDate() {
+        String key = "endcondition:science:startdate";
+        ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(key);
+        if (entries.size() == 0) {
+            this.startDate = new Date();
+            CivGlobal.getSessionDB().add(key, "" + this.startDate.getTime(), 0, 0, 0);
+        } else {
+            long time = Long.valueOf(entries.get((int)0).value);
+            this.startDate = new Date(time);
+        }
+    }
 
-	@Override
-	protected void onWarDefeat(Civilization civ) {
-		/* remove any extra beakers we might have. */
-		CivGlobal.getSessionDB().delete_all(getBeakerSessionKey(civ));
-		civ.removeTech(techname);
-		CivMessage.sendCiv(civ, CivSettings.localize.localizedString("end_scienceWarDefeat"));
-		
-		civ.save();
-		this.onFailure(civ);
-	}
+    private boolean isAfterStartupTime() {
+        if (Bukkit.getServerName().equalsIgnoreCase("Test")) {
+            return true;
+        }
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(this.startDate);
+        Calendar now = Calendar.getInstance();
+        startCal.add(5, this.daysAfterStart);
+        return now.after(startCal);
+    }
 
-	public static String getBeakerSessionKey(Civilization civ) {
-		return "endgame:sciencebeakers:"+civ.getId();
-	}
-	
-	public double getExtraBeakersInCiv(Civilization civ) {
-		ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(getBeakerSessionKey(civ));
-		if (entries.size() == 0) {
-			return 0;
-		}
-		return Double.valueOf(entries.get(0).value);
-	}
-	
-	public void addExtraBeakersToCiv(Civilization civ, double beakers) {
-		ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(getBeakerSessionKey(civ));
-		double current = 0;
-		if (entries.size() == 0) {
-			CivGlobal.getSessionDB().add(getBeakerSessionKey(civ), ""+beakers, civ.getId(), 0, 0);
-			current += beakers;
-		} else {
-			current = Double.valueOf(entries.get(0).value);
-			current += beakers;
-			CivGlobal.getSessionDB().update(entries.get(0).request_id, entries.get(0).key, ""+current);
-		}
-		//DecimalFormat df = new DecimalFormat("#.#");
-		//CivMessage.sendCiv(civ, "Added "+df.format(beakers)+" beakers to our scientific victory! We now have "+df.format(current)+" beakers saved up.");
-	}
+    @Override
+    public boolean check(Civilization civ) {
+        if (!this.isAfterStartupTime()) {
+            return false;
+        }
+        if (civ.isAdminCiv()) {
+            return false;
+        }
+        boolean hasSpaceShuttle = false;
+        for (Town town : civ.getTowns()) {
+            if (town.getMotherCiv() != null) continue;
+            for (Wonder wonder : town.getWonders()) {
+                if (!wonder.isActive() || !wonder.getConfigId().equals(this.wonderId)) continue;
+                hasSpaceShuttle = true;
+                break;
+            }
+            if (!hasSpaceShuttle) continue;
+            break;
+        }
+        if (!hasSpaceShuttle) {
+            return false;
+        }
+        if (civ.getCurrentMission() < 8) {
+            return false;
+        }
+        check = true;
+        War.time_declare_days = 1;
+        return true;
+    }
 
-	public static Double getBeakersFor(Civilization civ) {
-		ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(getBeakerSessionKey(civ));
-		if (entries.size() == 0) {
-			return 0.0;
-		} else {
-			return Double.valueOf(entries.get(0).value);
-		}
-	}
+    @Override
+    public boolean finalWinCheck(Civilization civ) {
+        if (civ.getCurrentMission() < 8) {
+            return false;
+        }
+        boolean hasSpaceShuttle = false;
+        for (Town town : civ.getTowns()) {
+            if (town.getMotherCiv() != null) continue;
+            for (Wonder wonder : town.getWonders()) {
+                if (!wonder.isActive() || !wonder.getConfigId().equals(this.wonderId)) continue;
+                hasSpaceShuttle = true;
+                break;
+            }
+            if (!hasSpaceShuttle) continue;
+            break;
+        }
+        return hasSpaceShuttle;
+    }
 
+    @Override
+    public String getSessionKey() {
+        return "endgame:science";
+    }
+
+    @Override
+    protected void onWarDefeat(Civilization civ) {
+        CivGlobal.getSessionDB().delete_all(EndConditionScience.getBeakerSessionKey(civ));
+        CivMessage.sendCiv(civ, CivSettings.localize.localizedString("end_scienceWarDefeat"));
+        civ.save();
+        this.onFailure(civ);
+    }
+
+    public void addExtraBeakersToCiv(Civilization civ, double beakers) {
+        ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(EndConditionScience.getBeakerSessionKey(civ));
+        double current = 0.0;
+        if (entries.size() == 0) {
+            CivGlobal.getSessionDB().add(EndConditionScience.getBeakerSessionKey(civ), "" + beakers, civ.getId(), 0, 0);
+        } else {
+            current = Double.valueOf(entries.get((int)0).value);
+            CivGlobal.getSessionDB().update(entries.get((int)0).request_id, entries.get((int)0).key, "" + (current += beakers));
+        }
+    }
 }
+

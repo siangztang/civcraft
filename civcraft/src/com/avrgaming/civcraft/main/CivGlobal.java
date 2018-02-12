@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,7 +54,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.avrgaming.civcraft.arena.ArenaTeam;
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.camp.CampBlock;
 import com.avrgaming.civcraft.camp.WarCamp;
@@ -65,8 +63,6 @@ import com.avrgaming.civcraft.endgame.EndGameCondition;
 import com.avrgaming.civcraft.event.EventTimer;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
-import com.avrgaming.civcraft.exception.InvalidNameException;
-import com.avrgaming.civcraft.exception.InvalidObjectException;
 import com.avrgaming.civcraft.items.BonusGoodie;
 import com.avrgaming.civcraft.object.Relation.Status;
 import com.avrgaming.civcraft.permission.PermissionGroup;
@@ -103,6 +99,8 @@ import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.war.War;
 import com.avrgaming.civcraft.war.WarRegen;
 import com.avrgaming.global.perks.PerkManager;
+
+import gpl.AttributeUtil;
 
 public class CivGlobal {
 
@@ -200,6 +198,8 @@ public class CivGlobal {
 	public static boolean installMode = false;
 	
 	public static int highestCivEra = 0;
+
+	public static int ruinsGenerated = 0;
 		
 	public static void loadGlobals() throws SQLException, CivException {
 
@@ -230,7 +230,6 @@ public class CivGlobal {
 		loadTradeGoodies();
 		loadRandomEvents();
 		loadProtectedBlocks();
-		loadTeams();
 		EventTimer.loadGlobalEvents();
 		EndGameCondition.init();
 		War.init();
@@ -259,24 +258,6 @@ public class CivGlobal {
 			}
 			
 		}
-	/*	ScoreboardManager manager = Bukkit.getScoreboardManager();
-		CivGlobal.globalBoard = manager.getNewScoreboard();
-		Team team = globalBoard.registerNewTeam("everybody");
-		team.setPrefix(":PREFIX:");
-		team.setSuffix(":SUFFIX:");
-		team.setDisplayName("EveryBody");
-		team.setCanSeeFriendlyInvisibles(false);
-		team.setAllowFriendlyFire(false);
-		
-		globalBoard.registerNewObjective("showciv", "dummy");
-		Objective objective = globalBoard.getObjective("showciv");
-		objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
-		objective.setDisplayName("OBJECTIVE NAME HERE");
-		
-		globalBoard.registerNewObjective("showciv2", "dummy");
-		Objective objective2 = globalBoard.getObjective("showciv2");
-		objective2.setDisplaySlot(DisplaySlot.BELOW_NAME);
-		objective2.setDisplayName("OBJECTIVE2 NAME HERE");*/
 		
 		checkForInvalidStructures();
 		
@@ -314,34 +295,6 @@ public class CivGlobal {
 	
 	private static void loadTradeGoods() {
 		
-	}
-	
-	private static void loadTeams() throws SQLException {
-		Connection context = null;
-		ResultSet rs = null;
-		PreparedStatement ps = null;
-		
-		try {
-			context = SQL.getGameConnection();		
-			ps = context.prepareStatement("SELECT * FROM "+SQL.tb_prefix+ArenaTeam.TABLE_NAME);
-			rs = ps.executeQuery();
-	
-			while(rs.next()) {
-				try {
-					new ArenaTeam(rs);
-				} catch (InvalidNameException | InvalidObjectException
-						| CivException e) {
-					e.printStackTrace();
-				}
-			}
-	
-			Collections.sort(ArenaTeam.teamRankings);
-			Collections.reverse(ArenaTeam.teamRankings); //Lazy method.
-			
-			CivLog.info("Loaded "+ArenaTeam.arenaTeams.size()+" Arena Teams");
-		} finally {
-			SQL.close(rs, ps, context);
-		}
 	}
 	
 	private static void loadMobSpawners() throws SQLException {
@@ -2184,4 +2137,44 @@ public class CivGlobal {
 		}
 		return new EconObject(holder);
 	}
+
+	public static long getUnitCooldown(Class<?> unit, Player user) {
+        long cooldown = 0L;
+        final String key = "unitCooldown_" + unit.getSimpleName() + "_" + user.getUniqueId();
+        final ArrayList<SessionEntry> entries = getSessionDB().lookup(key);
+        if (entries == null || entries.size() < 1) {
+            return cooldown;
+        }
+        final SessionEntry cd = entries.get(0);
+        cooldown = Long.parseLong(cd.value);
+        return cooldown;
+    }
+
+	public static void setUnitCooldown(Class<?> unit, int minutes, Player user) {
+        final String key = "unitCooldown_" + unit.getSimpleName() + "_" + user.getUniqueId();
+        final String value = Calendar.getInstance().getTimeInMillis() + 60000 * minutes + "";
+        final ArrayList<SessionEntry> entries = getSessionDB().lookup(key);
+        if (entries == null || entries.size() < 1) {
+        	CivGlobal.getSessionDB().add(key, value, 0, 0, 0);
+            return;
+        }
+        CivGlobal.getSessionDB().update(entries.get(0).request_id, key, value);
+    }
+	
+	public static boolean isOneUseArtifact(final ItemStack itemStack) {
+        if (itemStack == null) {
+            return false;
+        }
+        final AttributeUtil attr = new AttributeUtil(itemStack);
+        final String[] lores = attr.getLore();
+        if (lores == null) {
+            return false;
+        }
+        for (final String lore : lores) {
+            if (!lore.contains("Single Use")) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

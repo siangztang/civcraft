@@ -22,7 +22,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
@@ -42,24 +44,33 @@ import com.avrgaming.civcraft.config.ConfigMaterial;
 import com.avrgaming.civcraft.config.ConfigMaterialCategory;
 import com.avrgaming.civcraft.config.ConfigUnit;
 import com.avrgaming.civcraft.endgame.EndGameCondition;
+import com.avrgaming.civcraft.event.GoodieRepoEvent;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
+import com.avrgaming.civcraft.items.BonusGoodie;
+import com.avrgaming.civcraft.listener.WorldListener;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.lorestorage.LoreGuiItem;
 import com.avrgaming.civcraft.lorestorage.LoreGuiItemListener;
 import com.avrgaming.civcraft.lorestorage.LoreMaterial;
+import com.avrgaming.civcraft.main.CivCraft;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.object.Buff;
 import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
+import com.avrgaming.civcraft.object.Relation;
 import com.avrgaming.civcraft.sessiondb.SessionEntry;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.util.ChunkCoord;
 import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.ItemManager;
+import com.avrgaming.civcraft.util.Schematic;
 import com.avrgaming.sls.SLSManager;
+
+import com.avrgaming.civcraft.config.ConfigLevelTalent;
 
 public class AdminCommand extends CommandBase {
 
@@ -93,12 +104,198 @@ public class AdminCommand extends CommandBase {
 		commands.put("road", CivSettings.localize.localizedString("adcmd_roadDesc"));
 		commands.put("clearendgame", CivSettings.localize.localizedString("adcmd_clearEndGameDesc"));
 		commands.put("endworld", CivSettings.localize.localizedString("adcmd_endworldDesc"));
-		commands.put("arena", CivSettings.localize.localizedString("adcmd_arenaDesc"));
 		commands.put("perk", CivSettings.localize.localizedString("adcmd_perkDesc"));
 		commands.put("reloadgov", CivSettings.localize.localizedString("adcmd_reloadgovDesc"));
-		commands.put("reloadac", CivSettings.localize.localizedString("adcmd_reloadacDesc"));
 		commands.put("heartbeat", CivSettings.localize.localizedString("adcmd_heartbeatDesc"));
+        commands.put("goodierepo", CivSettings.localize.localizedString("cmd_servak"));
+        commands.put("buildconquer", CivSettings.localize.localizedString("clogan"));
+        commands.put("clearchat", CivSettings.localize.localizedString("clearchat"));
+        commands.put("newspaper", "\u041f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u0442 \u0433\u0430\u0437\u0435\u0442\u0443");
+        commands.put("startMission", "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u0434\u043b\u044f \u0442\u0435\u0441\u0442\u0430");
+        commands.put("replenish", "\u0420\u0435\u0444\u0440\u0435\u0448\u0438\u0442 ");
+        commands.put("count", CivSettings.localize.localizedString("adcmd_count"));
+        commands.put("globalwar", "\u0423\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u0442 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0439 \u0432\u0430\u0440.");
+        commands.put("talentcount", CivSettings.localize.localizedString("adcmd_talentcount"));
+        commands.put("anyonehasmarket", CivSettings.localize.localizedString("cmd_civka_anyonehasmarket"));
+        commands.put("gc", CivSettings.localize.localizedString("cmd_gc"));
+        commands.put("pasteruin", CivSettings.localize.localizedString("cmd_pasteruin"));
 	}
+	
+    public void pasteruin_cmd() throws CivException {
+        final Schematic schem = WorldListener.schematics.get(CivCraft.civRandom.nextInt(WorldListener.schematics.size() - 1));
+        schem.paste(((Player)this.sender).getLocation());
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_pasteruin_success"));
+    }
+    
+    public void gc_cmd() {
+        final long start = System.nanoTime();
+        System.gc();
+        CivMessage.sendSuccess(this.sender, CivColor.LightGreenBold + CivSettings.localize.localizedString("cmd_gc_result", CivColor.GoldBold + this.formatFloat((System.nanoTime() - start) / 1000000L, 2) + CivColor.LightGreenBold));
+    }
+    
+    public String formatFloat(float num, final int pr) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append((int)num);
+        sb.append('.');
+        for (int i = 0; i < pr; ++i) {
+            num *= 10.0f;
+            sb.append((int)num % 10);
+        }
+        return sb.toString();
+    }
+    
+    public void anyonehasmarket_cmd() throws CivException {
+        boolean has = false;
+        Town owner = null;
+        for (final Town town : CivGlobal.getTowns()) {
+            if (town.getCiv().isAdminCiv()) {
+                continue;
+            }
+            if (town.getStructureByType("s_market") != null) {
+                has = true;
+                owner = town;
+                break;
+            }
+        }
+        throw new CivException(CivSettings.localize.localizedString("cmd_civka_anyonehasmarket_result", has ? ("§a\u0435\u0441\u0442\u044c §6" + owner.getName() + "§b" + " (" + owner.getCiv().getName() + ")") : "§6\u043d\u0435\u0442"));
+    }
+    
+    public void talentcount_cmd() {
+        final HashMap<String, Integer> talents = new HashMap<String, Integer>();
+        int count = 0;
+        for (final Civilization civ : CivGlobal.getCivs()) {
+            final Town capitol = civ.getCapitol();
+            if (capitol == null) {
+                continue;
+            }
+            for (final Buff buff : capitol.getBuffManager().getAllBuffs()) {
+                if (buff.getId().contains("level")) {
+                    final int talentLevel = Integer.parseInt(buff.getId().replaceAll("[^\\d]", ""));
+                    final ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(talentLevel);
+                    String description = "\u0421\u043b\u043e\u043c\u0430\u043b\u043e\u0441\u044c =(";
+                    if (configLevelTalent.levelBuff1.equals(buff.getId())) {
+                        description = talentLevel + " " + configLevelTalent.levelName + " " + configLevelTalent.levelBuffDesc1;
+                    }
+                    else if (configLevelTalent.levelBuff2.equals(buff.getId())) {
+                        description = talentLevel + " " + configLevelTalent.levelName + " " + configLevelTalent.levelBuffDesc2;
+                    }
+                    else if (configLevelTalent.levelBuff3.equals(buff.getId())) {
+                        description = talentLevel + " " + configLevelTalent.levelName + " " + configLevelTalent.levelBuffDesc3;
+                    }
+                    Integer choosen = talents.get(description);
+                    if (choosen == null) {
+                        choosen = 1;
+                    }
+                    else {
+                        ++choosen;
+                    }
+                    talents.put(description, choosen);
+                    ++count;
+                }
+            }
+        }
+        CivMessage.sendHeading(this.sender, CivSettings.localize.localizedString("adcmd_talent_total", count));
+        for (final String talent : talents.keySet()) {
+            final int choosenCount = talents.get(talent);
+            CivMessage.sendError(this.sender, talent + " " + choosenCount + " times");
+        }
+    }
+    
+    public void count_cmd() {
+        CivMessage.send(this.sender, CivColor.RoseBold + "Total Residents: " + CivGlobal.getResidents().size());
+        CivMessage.send(this.sender, CivColor.RoseBold + "Total Camps: " + CivGlobal.getCamps().size());
+        CivMessage.send(this.sender, CivColor.RoseBold + "Total Towns: " + CivGlobal.getTowns().size());
+        CivMessage.send(this.sender, CivColor.RoseBold + "Total Civs: " + CivGlobal.getCivs().size());
+    }
+    
+    public void globalwar_cmd() {
+        for (final Civilization civ : CivGlobal.getCivs()) {
+            for (final Civilization civ2 : CivGlobal.getCivs()) {
+                if (!civ.getDiplomacyManager().atWarWith(civ2)) {
+                    CivGlobal.setRelation(civ, civ2, Relation.Status.WAR);
+                    CivGlobal.setAggressor(civ, civ2, civ);
+                    CivGlobal.setAggressor(civ2, civ, civ);
+                }
+            }
+        }
+        Bukkit.dispatchCommand(this.sender, "ad war start");
+    }
+    
+    public void replenish_cmd() {
+        for (final Civilization civ : CivGlobal.getCivs()) {
+            if (civ.tradeGoods.isEmpty()) {
+                civ.tradeGoods = "";
+                try {
+                    civ.saveNow();
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            for (final Town town : civ.getTowns()) {
+                if (!civ.tradeGoods.isEmpty()) {
+                    town.tradeGoods = "";
+                    try {
+                        town.saveNow();
+                    }
+                    catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                    final ArrayList<String> keysToRemove = new ArrayList<String>();
+                    for (final Buff buff : town.getBuffManager().getAllBuffs()) {
+                        if (buff.getKey().contains("tradegood")) {
+                            keysToRemove.add(buff.getKey());
+                        }
+                    }
+                    for (final String key : keysToRemove) {
+                        town.getBuffManager().removeBuff(key);
+                    }
+                }
+            }
+        }
+        for (final BonusGoodie goodie : CivGlobal.getBonusGoodies()) {
+            try {
+                goodie.replenish();
+            }
+            catch (Exception e3) {
+                e3.printStackTrace();
+            }
+        }
+        CivMessage.global(CivSettings.localize.localizedString("goodieRepoBroadcast"));
+        CivMessage.globalTitle(CivSettings.localize.localizedString("goodieRepoBroadcast"), "");
+    }
+    
+    public void newspaper_cmd() throws IOException, InvalidConfigurationException {
+        CivSettings.reloadNewspaperConfigFiles();
+        CivMessage.send(this.sender, "§6\u0413\u0430\u0437\u0435\u0442\u0430 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u0430");
+        CivMessage.global("\u0412\u044b\u043f\u0443\u0448\u0435\u0449\u0435\u043d\u0430 \u043d\u043e\u0432\u0430\u044f CivCraft \u0433\u0430\u0437\u0435\u0442\u0430!");
+    }
+    
+    public void clearchat_cmd() throws CivException {
+        for (int i = 0; i < 200; ++i) {
+            Bukkit.broadcastMessage("");
+        }
+        final Player player = this.getPlayer();
+        CivMessage.global(CivSettings.localize.localizedString("chatcleared", player.getName()));
+    }
+    
+    public void buildconquer_cmd() {
+        String title = "";
+        String subTitle = "";
+        title = CivColor.Yellow + CivSettings.localize.localizedString("conquer");
+        subTitle = CivColor.LightGray + CivSettings.localize.localizedString("build");
+        if (!title.equals("")) {
+            for (final Player player : Bukkit.getOnlinePlayers()) {
+                CivMessage.sendTitle(player, title, subTitle);
+            }
+        }
+    }
+    
+    public void goodierepo_cmd() {
+        CivLog.info("TimerEvent: GoodieRepo -------------------------------------");
+        GoodieRepoEvent.repoProcess();
+        CivMessage.globalTitle(CivSettings.localize.localizedString("goodieRepoBroadcast"), "");
+    }
 	
 	public void reloadgov_cmd() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
 		CivSettings.reloadGovConfigFiles();
@@ -114,12 +311,6 @@ public class AdminCommand extends CommandBase {
 	public void heartbeat_cmd() {
 		SLSManager.sendHeartbeat();
 	}
-	
-	public void reloadac_cmd() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
-		CivSettings.reloadNoCheat();
-		CivMessage.send(sender, CivColor.Gold+CivSettings.localize.localizedString("adcmd_reloadacSuccess"));
-	}
-	
 	
 	public void perk_cmd() {
 		AdminPerkCommand cmd = new AdminPerkCommand();	
@@ -216,11 +407,6 @@ public class AdminCommand extends CommandBase {
 		}
 		
 		player.openInventory(spawnInventory);
-	}
-	
-	public void arena_cmd() {
-		AdminArenaCommand cmd = new AdminArenaCommand();	
-		cmd.onCommand(sender, null, "arena", this.stripArgs(args, 1));
 	}
 	
 	public void road_cmd() {

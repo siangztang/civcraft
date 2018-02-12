@@ -97,6 +97,14 @@ public class Structure extends Buildable {
 			}
 			break;	
 
+        case "s_castle": 
+            if (rs == null) {
+                struct = new Castle(center, id, town);
+                break;
+            }
+            struct = new Castle(rs);
+            break;
+        
 		case "ti_fish_hatchery":
 			if (rs == null) {
 				struct = (Structure) new FishHatchery(center, id, town);
@@ -104,7 +112,23 @@ public class Structure extends Buildable {
 				struct = (Structure) new FishHatchery(rs);
 			}
 			break;	
-
+			
+        case "s_alch":
+            if (rs == null) {
+                struct = new Alch(center, id, town);
+                break;
+            }
+            struct = new Alch(rs);
+            break;
+            
+        case "s_portal": 
+            if (rs == null) {
+                struct = new Portal(center, id, town);
+                break;
+            }
+            struct = new Portal(rs);
+            break;
+            
 		case "ti_trade_ship":
 			if (rs == null) {
 				struct = (Structure) new TradeShip(center, id, town);
@@ -129,6 +153,14 @@ public class Structure extends Buildable {
 			}
 			break;	
 			
+		case "ti_factory":
+            if (rs == null) {
+                struct = new Factory(center, id, town);
+                break;
+            }
+            struct = new Factory(rs);
+            break;
+            
 		case "s_store":
 			if (rs == null) {
 				struct = (Structure) new Store(center, id, town);
@@ -137,6 +169,14 @@ public class Structure extends Buildable {
 			}
 			break;
 			
+        case "s_stable2":
+            if (rs == null) {
+                struct = new Stable2(center, id, town);
+                break;
+            }
+            struct = new Stable2(rs);
+            break;
+            
 		case "s_stadium":
 			if (rs == null) {
 				struct = (Structure) new Stadium(center, id, town);
@@ -152,7 +192,15 @@ public class Structure extends Buildable {
 				struct = (Structure) new Hospital(rs);
 			}
 			break;
-		
+			
+        case "ti_pasture2":
+            if (rs == null) {
+                struct = new Pasture2(center, id, town);
+                break;
+            }
+            struct = new Pasture2(rs);
+            break;
+            
 		case "s_grocer":
 			if (rs == null) {
 				struct = (Structure) new Grocer(center, id, town);
@@ -168,6 +216,15 @@ public class Structure extends Buildable {
 				struct = (BroadcastTower) new BroadcastTower(rs);
 			}
 			break;
+			
+        case "s_spoil":
+            if (rs == null) {
+                struct = new Spoil(center, id, town);
+                break;
+            }
+            struct = new Spoil(rs);
+            break;
+            
 		case "s_library":
 			if (rs == null) {
 				struct = (Structure) new Library(center, id, town);
@@ -192,6 +249,13 @@ public class Structure extends Buildable {
 			}
 			break;
 			
+		case "s_hotel": 
+            if (rs == null) {
+                struct = new Hotel(center, id, town);
+                break;
+            }
+            struct = new Hotel(rs);
+            break;
 		case "s_research_lab":
 			if (rs == null) {
 				struct = (Structure) new ResearchLab(center, id, town);
@@ -237,6 +301,13 @@ public class Structure extends Buildable {
 				struct = (Structure) new Temple(rs);
 			}
 			break;
+		case "ti_lab":
+            if (rs == null) {
+                struct = new Lab(center, id, town);
+                break;
+            }
+            struct = new Lab(rs);
+            break;
 		case "ti_mine":
 			if (rs == null) {
 				struct = (Structure) new Mine(center, id, town);
@@ -272,6 +343,13 @@ public class Structure extends Buildable {
 				struct = (Structure) new TownHall(rs);
 			}
 			break;
+		case "s_ordinary":
+            if (rs == null) {
+                struct = new Ordinary(center, id, town);
+                break;
+            }
+            struct = new Ordinary(rs);
+            break;
 		// Just for backwards compatibility with old typos on existing servers:
 		case "s_capital":
 			if (rs == null) {
@@ -378,6 +456,27 @@ public class Structure extends Buildable {
 				struct = (Museum) new Museum(rs);
 			}
 			break;
+        case "s_shopingcenter":
+            if (rs == null) {
+                struct = new ShopingCenter(center, id, town);
+                break;
+            }
+            struct = new ShopingCenter(rs);
+            break;
+        case "s_theatre":
+            if (rs == null) {
+                struct = new Theatre(center, id, town);
+                break;
+            }
+            struct = new Theatre(rs);
+            break;
+        case "s_powerstation":
+            if (rs == null) {
+                struct = new PowerStation(center, id, town);
+                break;
+            }
+            struct = new PowerStation(rs);
+            break;
 		case "s_market":
 			if (rs == null) {
 				struct = (Market) new Market(center, id, town);
@@ -413,6 +512,54 @@ public class Structure extends Buildable {
 				struct = (TeslaTower) new TeslaTower(rs);
 			}
 			break;
+		case "s_teslaship": {
+            if (rs == null) {
+                struct = new TeslaShip(center, id, town);
+                break;
+            }
+            struct = new TeslaShip(rs);
+            break;
+        }
+        case "s_magictower": {
+            if (rs == null) {
+                struct = new MagicTower(center, id, town);
+                break;
+            }
+            struct = new MagicTower(rs);
+            break;
+        }
+        case "s_magicship": {
+            if (rs == null) {
+                struct = new MagicShip(center, id, town);
+                break;
+            }
+            struct = new MagicShip(rs);
+            break;
+        }
+        case "s_bemine": {
+            if (rs == null) {
+                struct = new BeMine(center, id, town);
+                break;
+            }
+            struct = new BeMine(rs);
+            break;
+        }
+        case "ti_silkwormfarm": {
+            if (rs == null) {
+                struct = new SilkWorkFarm(center, id, town);
+                break;
+            }
+            struct = new SilkWorkFarm(rs);
+            break;
+        }
+        case "s_warehouse": {
+            if (rs == null) {
+                struct = new WareHouse(center, id, town);
+                break;
+            }
+            struct = new WareHouse(rs);
+            break;
+        }
 		default:
 			// This structure is generic, just create a structure type. 
 			// TODO should ANY structure be generic?
@@ -653,11 +800,7 @@ public class Structure extends Buildable {
 			struct_hm.put("complete", this.isComplete());
 			struct_hm.put("builtBlockCount", this.savedBlockCount);
 	
-			try {
-				SQL.updateNamedObjectAsync(this, struct_hm, TABLE_NAME);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	
+			SQL.updateNamedObjectAsync(this, struct_hm, TABLE_NAME);	
 		} 
 	}
 

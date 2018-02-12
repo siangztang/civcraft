@@ -46,7 +46,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.avrgaming.civcraft.camp.Camp;
-import com.avrgaming.civcraft.endgame.ConfigEndCondition;
+import com.avrgaming.civcraft.config.ConfigEndCondition;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.items.units.Unit;
@@ -107,6 +107,7 @@ public class CivSettings {
 	public static FileConfiguration structureConfig; /* structures.yml */
 	public static Map<String, ConfigBuildableInfo> structures = new HashMap<String, ConfigBuildableInfo>();
 	public static Map<Integer, ConfigGrocerLevel> grocerLevels = new HashMap<Integer, ConfigGrocerLevel>();
+    public static Map<Integer, ConfigAlchLevel> alchLevels = new HashMap<Integer, ConfigAlchLevel>();
 	public static Map<Integer, ConfigCottageLevel> cottageLevels = new HashMap<Integer, ConfigCottageLevel>();
 	public static Map<Integer, ConfigMineLevel> mineLevels = new HashMap<Integer, ConfigMineLevel>();
 	public static Map<Integer, ConfigTempleLevel> templeLevels = new HashMap<Integer, ConfigTempleLevel>();
@@ -187,12 +188,6 @@ public class CivSettings {
 	public static HashMap<String, ConfigRandomEvent> randomEvents = new HashMap<String, ConfigRandomEvent>();
 	public static ArrayList<String> randomEventIDs = new ArrayList<String>();
 	
-	public static FileConfiguration nocheatConfig; /* nocheatConfig.yml */
-	public static HashMap<String, ConfigValidMod> validMods = new HashMap<String, ConfigValidMod>();
-	
-	public static FileConfiguration arenaConfig; /* arenas.yml */
-	public static HashMap<String, ConfigArena> arenas = new HashMap<String, ConfigArena>();
-	
 	public static FileConfiguration fishingConfig; /* fishing.yml */
 	public static ArrayList<ConfigFishing> fishingDrops = new ArrayList<ConfigFishing>();
 		
@@ -233,7 +228,16 @@ public class CivSettings {
 
 	public static Material previewMaterial = Material.GLASS;
 	public static Boolean showPreview = true;
-	
+    public static Map<Integer, ConfigLevelTalent> talentLevels = new HashMap<Integer, ConfigLevelTalent>();
+
+    public static Map<String, ConfigNewspaper> newspapers = new HashMap<String, ConfigNewspaper>();
+
+    public static FileConfiguration missionsConfig;
+    public static Map<Integer, ConfigSpaceMissions> spacemissions_levels = new HashMap<Integer, ConfigSpaceMissions>();
+    public static Map<Integer, ConfigSpaceRocket> spaceRocket_name = new HashMap<Integer, ConfigSpaceRocket>();
+    public static Map<String, ConfigSpaceCraftMat> space_crafts = new HashMap<String, ConfigSpaceCraftMat>();
+    public static Map<Integer, ConfigLabLevel> labLevels = new HashMap<Integer, ConfigLabLevel>();
+    
 	public static void init(JavaPlugin plugin) throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
 		CivSettings.plugin = (CivCraft)plugin;
 
@@ -347,6 +351,12 @@ public class CivSettings {
 		}
 
 	}
+
+	public static void reloadNewspaperConfigFiles() throws IOException, InvalidConfigurationException {
+		CivSettings.newspapers.clear();
+		ConfigNewspaper.loadConfig(CivSettings.civConfig = loadCivConfig("civ.yml"), CivSettings.newspapers);
+	}
+	    
 	
 	private static void initRestrictedUndoBlocks() {
 		restrictedUndoBlocks.add(Material.CROPS);
@@ -467,9 +477,8 @@ public class CivSettings {
 		happinessConfig = loadCivConfig("happiness.yml");
 		materialsConfig = loadCivConfig("materials.yml");
 		randomEventsConfig = loadCivConfig("randomevents.yml");
-		nocheatConfig = loadCivConfig("nocheat.yml");
-		arenaConfig = loadCivConfig("arena.yml");
 		fishingConfig = loadCivConfig("fishing.yml");
+        missionsConfig = loadCivConfig("missions.yml");
 	}
 	
 	public static void reloadPerks() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
@@ -478,12 +487,6 @@ public class CivSettings {
 		ConfigPerk.loadTemplates(perkConfig, templates);
 	}
 	
-	public static void reloadNoCheat() throws FileNotFoundException, IOException, InvalidConfigurationException, InvalidConfiguration {
-
-		nocheatConfig = loadCivConfig("nocheat.yml");
-		ConfigValidMod.loadConfig(nocheatConfig, validMods);
-	}
-
 	private static void loadConfigObjects() throws InvalidConfiguration {
 		ConfigTownLevel.loadConfig(townConfig, townLevels);
 		ConfigTownUpgrade.loadConfig(townConfig, townUpgrades);
@@ -499,9 +502,11 @@ public class CivSettings {
 		ConfigMobSpawner.loadConfig(spawnersConfig, spawners, landSpawners, waterSpawners);
 		ConfigTradeGood.loadConfig(goodsConfig, goods, landGoods, waterGoods);
 		ConfigGrocerLevel.loadConfig(structureConfig, grocerLevels);
+        ConfigAlchLevel.loadConfig(structureConfig, alchLevels);
 		ConfigCottageLevel.loadConfig(structureConfig, cottageLevels);
 		ConfigTempleLevel.loadConfig(structureConfig, templeLevels);
 		ConfigMineLevel.loadConfig(structureConfig, mineLevels);
+        ConfigLabLevel.loadConfig(structureConfig, labLevels);
 		ConfigGovernment.loadConfig(governmentConfig, governments);
 		ConfigEnchant.loadConfig(enchantConfig, enchants);
 		ConfigUnit.loadConfig(unitConfig, units);
@@ -519,11 +524,13 @@ public class CivSettings {
 		ConfigMaterial.loadConfig(materialsConfig, materials);
 		ConfigRandomEvent.loadConfig(randomEventsConfig, randomEvents, randomEventIDs);
 		ConfigEndCondition.loadConfig(civConfig, endConditions);
-		ConfigValidMod.loadConfig(nocheatConfig, validMods);
-		ConfigArena.loadConfig(arenaConfig, arenas);
 		ConfigFishing.loadConfig(fishingConfig, fishingDrops);
 		ConfigTradeShipLevel.loadConfig(structureConfig, tradeShipLevels);
-	
+		ConfigLevelTalent.loadConfig(cultureConfig, talentLevels);
+        ConfigNewspaper.loadConfig(civConfig, newspapers);
+        ConfigSpaceMissions.loadConfig(missionsConfig, spacemissions_levels);
+        ConfigSpaceRocket.loadConfig(missionsConfig, spaceRocket_name);
+        ConfigSpaceCraftMat.loadConfig(missionsConfig, space_crafts);
 		ConfigRemovedRecipes.removeRecipes(materialsConfig, removedRecipies );
 		CivGlobal.tradeGoodPreGenerator.preGenerate();
 		CivGlobal.mobSpawnerPreGenerator.preGenerate();
@@ -771,6 +778,15 @@ public class CivSettings {
 	public static ConfigTownUpgrade getUpgradeByName(String name) {
 		for (ConfigTownUpgrade upgrade : townUpgrades.values()) {
 			if (upgrade.name.equalsIgnoreCase(name)) {
+				return upgrade;
+			}
+		}
+		return null;
+	}
+	
+	public static ConfigTownUpgrade getUpgradeById(String id) {
+		for (ConfigTownUpgrade upgrade : townUpgrades.values()) {
+			if (upgrade.id.equalsIgnoreCase(id)) {
 				return upgrade;
 			}
 		}

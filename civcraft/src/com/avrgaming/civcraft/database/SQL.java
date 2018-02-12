@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.avrgaming.civcraft.arena.ArenaTeam;
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigMarketItem;
@@ -167,7 +166,6 @@ public class SQL {
 		Camp.init();
 		ConfigMarketItem.init();
 		RandomEvent.init();
-		ArenaTeam.init();
 		StructureSign.init();
 					
 		CivLog.heading("Building Global Tables!!");
@@ -365,7 +363,7 @@ public class SQL {
 		}
 	}
 	
-	public static void updateNamedObjectAsync(NamedObject obj, HashMap<String, Object> hashmap, String tablename) throws SQLException {
+	public static void updateNamedObjectAsync(NamedObject obj, HashMap<String, Object> hashmap, String tablename) {
 		TaskMaster.asyncTask("", new SQLUpdateNamedObjectTask(obj, hashmap, tablename), 0);
 	}
 	

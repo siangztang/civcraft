@@ -43,20 +43,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-//import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-//import org.bukkit.potion.PotionEffect;
-//import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.avrgaming.civcraft.arena.Arena;
-import com.avrgaming.civcraft.arena.ArenaTeam;
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigBuildableInfo;
@@ -105,9 +100,8 @@ public class Resident extends SQLObject {
 	private boolean adminChat = false;
 	private boolean combatInfo = false;
 	private boolean titleAPI = true;
-	
-	private boolean usesAntiCheat = false;
-	
+	private int languageCode = 1033;
+		
 	public static HashSet<String> allchatters = new HashSet<String>();
 	
 	/* Town or civ to chat in besides your own. */
@@ -168,7 +162,6 @@ public class Resident extends SQLObject {
 	private boolean showInfo = false;
 	private String itemMode = "all";
 	private String savedInventory = null;
-	private boolean insideArena = false;
 	private boolean isProtected = false;
 	
 	public ConcurrentHashMap<BlockCoord, SimpleBlock> previewUndo = null;
@@ -179,6 +172,8 @@ public class Resident extends SQLObject {
 	private double walkingModifier = CivSettings.normal_speed;
 	private boolean onRoad = false;
 	public String debugTown;
+	public boolean isTeleporting = false;
+	private long nextTeleport;
 	
 	public Resident(UUID uid, String name) throws InvalidNameException {
 		this.setName(name);
@@ -218,12 +213,13 @@ public class Resident extends SQLObject {
 					"`banned` bool NOT NULL DEFAULT '0'," +
 					"`bannedMessage` mediumtext DEFAULT NULL,"+
 					"`savedInventory` mediumtext DEFAULT NULL,"+
-					"`insideArena` bool NOT NULL DEFAULT '0',"+
 					"`isProtected` bool NOT NULL DEFAULT '0',"+
 					"`flags` mediumtext DEFAULT NULL,"+
 					"`last_ip` mediumtext DEFAULT NULL,"+
 					"`debug_town` mediumtext DEFAULT NULL,"+
 					"`debug_civ` mediumtext DEFAULT NuLL,"+
+					"`language_id` int(11) DEFAULT '1033',"+
+					"`nextTeleport` BIGINT NOT NULL DEFAULT '0',"+
 					"UNIQUE KEY (`name`), " +
 					"PRIMARY KEY (`id`)" + ")";
 			
@@ -276,10 +272,13 @@ public class Resident extends SQLObject {
 				CivLog.info("\tCouldn't find `debug_town` for resident.");
 				SQL.addColumn(TABLE_NAME, "`debug_town` mediumtext default null");
 			}
-			
+		
+			if (!SQL.hasColumn(TABLE_NAME, "language_id")) {
+				CivLog.info("\tCouldn't find `language_id` for resident.");
+				SQL.addColumn(TABLE_NAME, "`language_id` int(11) default '1033'");
+			}
 			SQL.makeCol("flags", "mediumtext", TABLE_NAME);
 			SQL.makeCol("savedInventory", "mediumtext", TABLE_NAME);
-			SQL.makeCol("insideArena", "bool NOT NULL DEFAULT '0'", TABLE_NAME);
 			SQL.makeCol("isProtected", "bool NOT NULL DEFAULT '0'", TABLE_NAME);
 		}		
 	}
@@ -305,8 +304,9 @@ public class Resident extends SQLObject {
 		this.setTimezone(rs.getString("timezone"));
 		this.loadFlagSaveString(rs.getString("flags"));
 		this.savedInventory = rs.getString("savedInventory");
-		this.insideArena = rs.getBoolean("insideArena");
 		this.isProtected = rs.getBoolean("isProtected");
+		this.languageCode = rs.getInt("language_id");
+        this.nextTeleport = rs.getLong("nextTeleport");
 		
 		if (this.getTimezone() == null) {
 			this.setTimezoneToServerDefault();
@@ -483,8 +483,9 @@ public class Resident extends SQLObject {
 		hashmap.put("flags", this.getFlagSaveString());
 		hashmap.put("last_ip", this.getLastIP());
 		hashmap.put("savedInventory", this.savedInventory);
-		hashmap.put("insideArena", this.insideArena);
 		hashmap.put("isProtected", this.isProtected);
+		hashmap.put("language_id", this.languageCode);
+        hashmap.put("nextTeleport", this.nextTeleport);
 		
 		if (this.getTown() != null) {
 			hashmap.put("debug_town", this.getTown().getName());
@@ -1493,10 +1494,6 @@ public class Resident extends SQLObject {
 	}
 	
 	public boolean hasTechForItem(ItemStack stack) {
-		if (this.isInsideArena()) {
-			return true;
-		}
-		
 		LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(stack);
 		if (craftMat == null) {
 			return true;
@@ -1601,44 +1598,6 @@ public class Resident extends SQLObject {
 		return true;
 	}
 
-	public boolean isUsesAntiCheat() throws CivException {
-		CivGlobal.getPlayer(this);
-		return usesAntiCheat;
-	}
-
-	public void setUsesAntiCheat(boolean usesAntiCheat) {
-		this.usesAntiCheat = usesAntiCheat;
-	}
-	
-	public boolean hasTeam() {
-		ArenaTeam team = ArenaTeam.getTeamForResident(this);
-		if (team == null) {
-			return false;
-		}
-		return true;
-	}
-	
-	public ArenaTeam getTeam() {
-		ArenaTeam team = ArenaTeam.getTeamForResident(this);
-		if (team == null) {
-			return null;
-		}
-		return team;
-	}
-
-	public boolean isTeamLeader() {
-		ArenaTeam team = ArenaTeam.getTeamForResident(this);
-		if (team == null) {
-			return false;
-		}
-		
-		if (team.getLeader() == this) {
-			return true;
-		}
-		
-		return false;		
-	}
-	
 	public void saveInventory() {
 		try {
 			Player player = CivGlobal.getPlayer(this);			
@@ -1683,40 +1642,6 @@ public class Resident extends SQLObject {
 
 	public void setSavedInventory(String savedInventory) {
 		this.savedInventory = savedInventory;
-	}
-
-	public Arena getCurrentArena() {
-		if (this.getTeam() == null) {
-			return null;
-		}
-		
-		return this.getTeam().getCurrentArena();
-	}
-	
-	public boolean isInsideArena() {
-		
-		if (!hasTeam()) {
-			this.insideArena = false;
-			return false;
-		}
-		
-		try {
-			Player player = CivGlobal.getPlayer(this);
-			
-			if (player.getWorld().getName().equals("world")) {
-				this.insideArena = false;
-				return false;
-			}
-			
-		} catch (CivException e) {
-			return false;
-		}
-		
-		return this.insideArena;
-	}
-	
-	public void setInsideArena(boolean inside) {
-		this.insideArena = inside;
 	}
 	
 	public boolean isProtected() {
@@ -1850,4 +1775,22 @@ public class Resident extends SQLObject {
 	public void setTitleAPI(boolean titleAPI) {
 		this.titleAPI = titleAPI;
 	}
+	
+	public int getLanguage() {
+		return languageCode;
+	}
+	
+	public void setLanguageCode(int code) {
+		// TO-DO: Need to validate if language code is supported.
+		this.languageCode = code;
+	}
+
+	public long getNextTeleport() {
+        return this.nextTeleport;
+    }
+    
+    public void setNextTeleport(final long nextTeleport) {
+        this.nextTeleport = nextTeleport;
+    }
+
 }

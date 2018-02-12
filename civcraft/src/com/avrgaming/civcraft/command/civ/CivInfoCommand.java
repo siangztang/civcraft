@@ -18,7 +18,6 @@
  */
 package com.avrgaming.civcraft.command.civ;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,6 @@ import org.bukkit.entity.Player;
 import com.avrgaming.civcraft.command.CommandBase;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.endgame.EndConditionDiplomacy;
-import com.avrgaming.civcraft.endgame.EndConditionScience;
 import com.avrgaming.civcraft.endgame.EndGameCondition;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.main.CivGlobal;
@@ -239,13 +237,6 @@ public class CivInfoCommand extends CommandBase {
 		if (votes > 0) {
 			CivMessage.send(sender, CivSettings.localize.localizedString("var_cmd_civ_votesHeading",CivColor.LightBlue+CivColor.BOLD+civ.getName()+CivColor.White,
 					CivColor.LightPurple+CivColor.BOLD+votes+CivColor.White));
-		}
-		
-		Double beakers = EndConditionScience.getBeakersFor(civ);
-		if (beakers > 0) {
-			DecimalFormat df = new DecimalFormat("#.#");
-			CivMessage.send(sender, CivSettings.localize.localizedString("var_cmd_civ_info_showBeakersTowardEnlight",CivColor.LightBlue+CivColor.BOLD+civ.getName()+CivColor.White,
-					CivColor.LightPurple+CivColor.BOLD+df.format(beakers)+CivColor.White));			
 		}
 		
 		String out = CivColor.Green+CivSettings.localize.localizedString("Towns")+" ";

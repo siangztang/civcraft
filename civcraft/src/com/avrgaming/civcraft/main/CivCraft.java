@@ -20,6 +20,8 @@ package com.avrgaming.civcraft.main;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Random;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
@@ -29,10 +31,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pvptimer.PvPListener;
 import pvptimer.PvPTimer;
 
-import com.avrgaming.anticheat.ACManager;
-import com.avrgaming.civcraft.arena.ArenaListener;
-import com.avrgaming.civcraft.arena.ArenaManager;
-import com.avrgaming.civcraft.arena.ArenaTimer;
 import com.avrgaming.civcraft.command.AcceptCommand;
 import com.avrgaming.civcraft.command.BuildCommand;
 import com.avrgaming.civcraft.command.DenyCommand;
@@ -44,6 +42,7 @@ import com.avrgaming.civcraft.command.ReportCommand;
 import com.avrgaming.civcraft.command.SelectCommand;
 import com.avrgaming.civcraft.command.TradeCommand;
 import com.avrgaming.civcraft.command.admin.AdminCommand;
+import com.avrgaming.civcraft.command.admin.XrayCheckCommand;
 import com.avrgaming.civcraft.command.camp.CampCommand;
 import com.avrgaming.civcraft.command.civ.CivChatCommand;
 import com.avrgaming.civcraft.command.civ.CivCommand;
@@ -51,7 +50,6 @@ import com.avrgaming.civcraft.command.debug.DebugCommand;
 import com.avrgaming.civcraft.command.market.MarketCommand;
 import com.avrgaming.civcraft.command.plot.PlotCommand;
 import com.avrgaming.civcraft.command.resident.ResidentCommand;
-import com.avrgaming.civcraft.command.team.TeamCommand;
 import com.avrgaming.civcraft.command.town.TownChatCommand;
 import com.avrgaming.civcraft.command.town.TownCommand;
 import com.avrgaming.civcraft.config.CivSettings;
@@ -73,10 +71,8 @@ import com.avrgaming.civcraft.listener.MarkerPlacementManager;
 import com.avrgaming.civcraft.listener.PlayerListener;
 import com.avrgaming.civcraft.listener.TagAPIListener;
 import com.avrgaming.civcraft.listener.armor.ArmorListener;
-import com.avrgaming.civcraft.loreenhancements.LoreEnhancementArenaItem;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterialListener;
 import com.avrgaming.civcraft.lorestorage.LoreGuiItemListener;
-import com.avrgaming.civcraft.nocheat.NoCheatPlusSurvialFlyHandler;
 import com.avrgaming.civcraft.populators.MobSpawnerPopulator;
 import com.avrgaming.civcraft.populators.TradeGoodPopulator;
 import com.avrgaming.civcraft.randomevents.RandomEventSweeper;
@@ -121,6 +117,7 @@ public final class CivCraft extends JavaPlugin {
 	private boolean isError = false;	
 	private static JavaPlugin plugin;	
 	public static boolean isDisable = false;
+	public static Random civRandom = new Random();
 	
 	private void startTimers() {
 		
@@ -194,10 +191,6 @@ public final class CivCraft extends JavaPlugin {
 		TaskMaster.asyncTimer("StructureValidationPunisher", new StructureValidationPunisher(), TimeTools.toTicks(3600));
 		TaskMaster.asyncTimer("SessionDBAsyncTimer", new SessionDBAsyncTimer(), 10);
 		TaskMaster.asyncTimer("pvptimer", new PvPTimer(), TimeTools.toTicks(30));
-		
-		TaskMaster.syncTimer("ArenaTimer", new ArenaManager(), TimeTools.toTicks(30));
-		TaskMaster.syncTimer("ArenaTimeoutTimer", new ArenaTimer(), TimeTools.toTicks(1));
-
 	}
 	
 	private void registerEvents() {
@@ -226,12 +219,10 @@ public final class CivCraft extends JavaPlugin {
 			pluginManager.registerEvents(new DisableXPListener(), this);
 		}
 		pluginManager.registerEvents(new TradeInventoryListener(), this);
-		pluginManager.registerEvents(new ArenaListener(), this);
 		pluginManager.registerEvents(new CannonListener(), this);
 		pluginManager.registerEvents(new WarListener(), this);
 		pluginManager.registerEvents(new FishingListener(), this);	
 		pluginManager.registerEvents(new PvPListener(), this);
-		pluginManager.registerEvents(new LoreEnhancementArenaItem(), this);
 
 		if ((hasPlugin("iTag") || hasPlugin("TagAPI")) && hasPlugin("ProtocolLib")) {
 			CivSettings.hasITag = true;
@@ -249,14 +240,11 @@ public final class CivCraft extends JavaPlugin {
 		pluginManager.registerEvents(new ArmorListener(getConfig().getStringList("blocked")), this);
 	}
 	
-	private void registerNPCHooks() {
-		NoCheatPlusSurvialFlyHandler.init();
-	}
-	
 	@Override
 	public void onEnable() {
 		setPlugin(this);
-		
+        civRandom.setSeed(Calendar.getInstance().getTimeInMillis());
+
 		this.saveDefaultConfig();
 		
 		CivLog.init(this);
@@ -274,7 +262,6 @@ public final class CivCraft extends JavaPlugin {
 			ChunkCoord.buildWorldList();
 			CivGlobal.loadGlobals();
 			
-			ACManager.init();
 			try {
 				SLSManager.init();
 			} catch (CivException e1) {
@@ -313,19 +300,9 @@ public final class CivCraft extends JavaPlugin {
 		getCommand("report").setExecutor(new ReportCommand());
 		getCommand("trade").setExecutor(new TradeCommand());
 		getCommand("kill").setExecutor(new KillCommand());
-		getCommand("team").setExecutor(new TeamCommand());
-	
-		registerEvents();
-		
-		if (hasPlugin("NoCheatPlus")) {
-			registerNPCHooks();
-		} else {
-			CivLog.warning("NoCheatPlus not found, not registering NCP hooks. This is fine if you're not using NCP.");
-		}
-		
-		startTimers();
-				
-		//creativeInvPacketManager.init(this);		
+
+		registerEvents();		
+		startTimers();		
 	}
 	
 	@Override

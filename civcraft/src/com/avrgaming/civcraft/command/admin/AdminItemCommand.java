@@ -9,7 +9,6 @@ import com.avrgaming.civcraft.command.CommandBase;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.loreenhancements.LoreEnhancement;
-import com.avrgaming.civcraft.loreenhancements.LoreEnhancementArenaItem;
 import com.avrgaming.civcraft.loreenhancements.LoreEnhancementAttack;
 import com.avrgaming.civcraft.loreenhancements.LoreEnhancementDefense;
 import com.avrgaming.civcraft.loreenhancements.LoreEnhancementSoulBound;
@@ -63,7 +62,6 @@ public class AdminItemCommand extends CommandBase {
 		enhancements.put("soulbound", new LoreEnhancementSoulBound());
 		enhancements.put("attack", new LoreEnhancementAttack());
 		enhancements.put("defence", new LoreEnhancementDefense());
-		enhancements.put("arena", new LoreEnhancementArenaItem());
 
 		if (inHand == null || ItemManager.getId(inHand) == CivData.AIR) {
 			throw new CivException(CivSettings.localize.localizedString("adcmd_item_enhanceNoItem"));

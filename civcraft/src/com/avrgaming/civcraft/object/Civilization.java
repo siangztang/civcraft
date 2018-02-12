@@ -43,7 +43,6 @@ import com.avrgaming.civcraft.config.ConfigGovernment;
 import com.avrgaming.civcraft.config.ConfigTech;
 import com.avrgaming.civcraft.database.SQL;
 import com.avrgaming.civcraft.database.SQLUpdate;
-import com.avrgaming.civcraft.endgame.EndConditionScience;
 import com.avrgaming.civcraft.endgame.EndGameCondition;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
@@ -58,14 +57,17 @@ import com.avrgaming.civcraft.structure.Capitol;
 import com.avrgaming.civcraft.structure.RespawnLocationHolder;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.TownHall;
+import com.avrgaming.civcraft.structure.wonders.Neuschwanstein;
+import com.avrgaming.civcraft.structure.wonders.StockExchange;
+import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.UpdateTechBar;
-import com.avrgaming.civcraft.threading.timers.BeakerTimer;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.ChunkCoord;
 import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.DateUtil;
 import com.avrgaming.civcraft.util.ItemManager;
+import org.apache.commons.lang.StringUtils;
 
 public class Civilization extends SQLObject {
 
@@ -120,6 +122,13 @@ public class Civilization extends SQLObject {
 	public String messageOfTheDay = "";
 	
 	private LinkedList<WarCamp> warCamps = new LinkedList<WarCamp>();
+    private ConfigTech techQueue = null;
+    private double settlerCost = 25000.0;
+    private boolean talentIsUsed;
+    int currentMission = 1;
+    boolean missionActive = false;
+    String missionProgress = "0:0";
+    public String tradeGoods = "";
 	
 	public Civilization(String name, String capitolName, Resident leader) throws InvalidNameException {
 		this.setName(name);
@@ -158,7 +167,8 @@ public class Civilization extends SQLObject {
 					"`debt` float NOT NULL DEFAULT '0',"+
 					"`coins` double DEFAULT 0,"+
 					"`daysInDebt` int NOT NULL DEFAULT '0',"+
-					"`techs` mediumtext DEFAULT NULL," +
+					"`techs` mediumtext DEFAULT NULL,"+
+					"`techQueue` mediumtext DEFAULT NULL,"+
 					"`motd` mediumtext DEFAULT NULL,"+
 					"`researchTech` mediumtext DEFAULT NULL,"+
 					"`researchProgress` float NOT NULL DEFAULT 0,"+
@@ -175,6 +185,12 @@ public class Civilization extends SQLObject {
 					"`conquered` boolean DEFAULT false,"+
 					"`conquered_date` long,"+
 				    "`created_date` long," +
+				    "`settlerCost` double DEFAULT 25000,"+
+				    "`talentIsUsed` boolean DEFAULT false,"+
+				    "`currentMission` int(11) DEFAULT 0,"+
+				    "`missionActive` boolean DEFAULT false,"+
+				    "`missionProgress` mediumtext,"+
+				    "`tradeGoods` mediumtext DEFAULT NULL,"+
 					"UNIQUE KEY (`name`), " +
 				"PRIMARY KEY (`id`)" + ")";
 			
@@ -250,6 +266,16 @@ public class Civilization extends SQLObject {
 				this.setCurrentEra(tech.era);
 			}
 		}
+		this.talentIsUsed = rs.getBoolean("talentIsUsed");
+        this.currentMission = rs.getInt("currentMission");
+        this.missionActive = rs.getBoolean("missionActive");
+        this.missionProgress = rs.getString("missionProgress");
+        if (rs.getString("tradeGoods") != null) {
+            this.tradeGoods = rs.getString("tradeGoods");
+        }
+        else {
+            this.tradeGoods = "";
+        }
 	}
 
 	@Override
@@ -272,6 +298,12 @@ public class Civilization extends SQLObject {
 		hashmap.put("income_tax_rate", this.getIncomeTaxRate());
 		hashmap.put("science_percentage", this.getSciencePercentage());
 		hashmap.put("color", this.getColor());
+		if (this.getTechQueued() != null) {
+            hashmap.put("techQueue", this.getTechQueued().id);
+        }
+        else {
+            hashmap.put("techQueue", null);
+        }
 		if (this.getResearchTech() != null) {
 			hashmap.put("researchTech", this.getResearchTech().id);
 		} else {
@@ -284,6 +316,12 @@ public class Civilization extends SQLObject {
 		hashmap.put("researched", this.saveResearchedTechs());
 		hashmap.put("adminCiv", this.adminCiv);
 		hashmap.put("conquered", this.conquered);
+        hashmap.put("settlerCost", this.settlerCost);
+        hashmap.put("talentIsUsed", this.talentIsUsed);
+        hashmap.put("currentMission", this.currentMission);
+        hashmap.put("missionActive", this.missionActive);
+        hashmap.put("missionProgress", this.missionProgress);
+        hashmap.put("tradeGoods", this.tradeGoods);
 		if (this.conquer_date != null) {
 			hashmap.put("conquered_date", this.conquer_date.getTime());
 		} else {
@@ -1199,21 +1237,6 @@ public class Civilization extends SQLObject {
 
 		if (this.researchTech != null) {	
 			this.addBeakers(totalBeakers);
-		} else {
-			EndGameCondition scienceVictory = EndGameCondition.getEndCondition("end_science");
-			if (scienceVictory == null) {
-				CivLog.error("Couldn't find science victory, not configured?");
-			} else {
-				if (scienceVictory.isActive(this)) {
-					/* 
-					 * We've got an active science victory, lets add these beakers
-					 * to the total stored on "the enlightenment"
-					 */
-					double beakerTotal = totalBeakers;
-					((EndConditionScience)scienceVictory).addExtraBeakersToCiv(this, beakerTotal);
-					return;
-				}
-			}		
 		}
 	}
 
@@ -1692,28 +1715,6 @@ public class Civilization extends SQLObject {
 		return percent;
 	}
 
-	public void processUnusedBeakers() {
-		
-		EndGameCondition scienceVictory = EndGameCondition.getEndCondition("end_science");
-		if (scienceVictory == null) {
-			CivLog.error("Couldn't find science victory, not configured?");
-		} else {
-			if (scienceVictory.isActive(this)) {
-				/* 
-				 * We've got an active science victory, lets add these beakers
-				 * to the total stored on "the enlightenment"
-				 */
-				double beakerTotal = this.getBeakers()/BeakerTimer.BEAKER_PERIOD;
-				((EndConditionScience)scienceVictory).addExtraBeakersToCiv(this, beakerTotal);
-				return;
-			}
-		}
-		
-		for (Town town : this.towns.values()) {
-			town.addUnusedBeakers(town.getBeakers().total / BeakerTimer.BEAKER_PERIOD);
-		}
-	}
-
 	public boolean areLeadersInactive() {
 		try {
 			int leader_inactive_days = CivSettings.getInteger(CivSettings.civConfig, "civ.leader_inactive_days");
@@ -1762,6 +1763,12 @@ public class Civilization extends SQLObject {
 		
 		CivMessage.global(CivSettings.localize.localizedString("var_civ_rename_success1",oldName,this.getName()));
 	}
+	
+    public void updateReviveSigns() {
+    	Capitol capitol = this.getCapitolStructure();
+    	capitol.updateRespawnSigns();
+        
+    }
 
 	public ArrayList<RespawnLocationHolder> getAvailableRespawnables() {
 		ArrayList<RespawnLocationHolder> respawns = new ArrayList<RespawnLocationHolder>();
@@ -1776,10 +1783,15 @@ public class Civilization extends SQLObject {
 
 				respawns.add(townhall);
 			}
+            if (town.hasWonder("w_neuschwanstein")) {
+                respawns.add((Neuschwanstein)town.getWonderByType("w_neuschwanstein"));
+            }
 		}
 		
 		for (WarCamp camp : this.warCamps) {
-			respawns.add(camp);
+			if (camp.isTeleportReal()) {
+				respawns.add(camp);
+			}
 		}
 		
 		return respawns;
@@ -1907,4 +1919,147 @@ public class Civilization extends SQLObject {
 		}
 	}
 	
+	public Town getCapitol() {
+        for (final Town town : this.getTowns()) {
+            if (town.isCapitol()) {
+                return town;
+            }
+        }
+        return null;
+    }
+	
+	public ConfigTech getTechQueued() {
+        return this.techQueue;
+    }
+    
+    public void setTechQueued(final ConfigTech techQueue) {
+        this.techQueue = techQueue;
+    }
+    
+    public double getSettlerCost() {
+        return this.settlerCost;
+    }
+    
+    public void setSettlerCost(final double settlerCost) {
+        this.settlerCost = settlerCost;
+    }
+    
+    public boolean isTalentIsUsed() {
+        return this.talentIsUsed;
+    }
+    
+    public void setIsUsedTalent(final Boolean bool) {
+        this.talentIsUsed = bool;
+    }
+    
+    public int getStockExchangeLevel() {
+        StockExchange stockExchange = null;
+        for (Town town : this.getTowns()) {
+            for (Wonder wonder : town.getWonders()) {
+                if (wonder.isActive() && !this.isConquered() && wonder.getConfigId().equalsIgnoreCase("w_stock_exchange")) {
+                    stockExchange = (StockExchange)wonder;
+                }
+            }
+            if (stockExchange != null) {
+                break;
+            }
+        }
+        if (stockExchange == null) {
+            return 0;
+        }
+        return stockExchange.getLevel();
+    }
+    
+    public int getCurrentMission() {
+        return this.currentMission;
+    }
+    
+    public void setCurrentMission(int newMission) {
+        this.currentMission = newMission;
+    }
+    
+    public boolean getMissionActive() {
+        return this.missionActive;
+    }
+    
+    public void setMissionActive(boolean missionActive) {
+        this.missionActive = missionActive;
+    }
+    
+    public void updateMissionProgress(double beakers, double hammers) {
+        this.missionProgress = Double.toString(beakers) + ":" + Double.toString(hammers);
+    }
+    
+    public void restoreMissionProgress() {
+        this.missionProgress = "";
+    }
+    
+    public String getMissionProgress() {
+        return this.missionProgress;
+    }
+	
+    public void depositTradeGood(final String id) throws CivException {
+        if (StringUtils.isBlank(this.tradeGoods)) {
+            this.tradeGoods = id + ", ";
+        }
+        else {
+            if (this.tradeGoods.split(", ").length >= 53) {
+                throw new CivException(CivSettings.localize.localizedString("var_virtualTG_civFullSlots"));
+            }
+            this.tradeGoods = this.tradeGoods + id + ", ";
+        }
+    }
+    
+    public boolean hasTradeGood(final String id) {
+        return this.tradeGoods.contains(id);
+    }
+    
+    public void withdrawTradeGood(final String id) throws CivException {
+        if (!this.hasTradeGood(id)) {
+            throw new CivException(CivSettings.localize.localizedString("var_virtualTG_civHasNoGood", "§6" + CivSettings.goods.get(id).name + "§c"));
+        }
+        final String[] goods = this.tradeGoods.split(", ");
+        final ArrayList<String> newGoods = new ArrayList<String>();
+        boolean withdrawed = false;
+        for (final String goodID : goods) {
+            if (!withdrawed && goodID.equals(id)) {
+                withdrawed = true;
+            }
+            else {
+                newGoods.add(goodID);
+            }
+        }
+        String goodies = "";
+        for (final String goodie : newGoods) {
+            goodies = goodies + goodie + ", ";
+        }
+        this.tradeGoods = goodies;
+    }
+
+    public boolean hasNotre() {
+        for (final Town town : this.getTowns()) {
+            if (town.hasWonder("w_notre_dame")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean hasWonder(final String id) {
+        for (final Town town : this.getTowns()) {
+            if (town.hasWonder(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public Town getStatueTown() {
+        for (final Town town : this.getTowns()) {
+            if (town.hasWonder("w_statue_of_zeus")) {
+                return town;
+            }
+        }
+        return null;
+    }
 }

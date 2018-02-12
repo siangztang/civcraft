@@ -251,6 +251,20 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		return this.respawnPoints.get(rand.nextInt(this.respawnPoints.size()));
 		
 	}
+	
+	@Override
+	public boolean isTeleportReal() {
+		if (this.getTown().isCapitol()) {
+			return true;
+		}
+		for (final ControlPoint c : this.controlPoints.values()) {
+			if (c.isDestroyed()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	   
 
 	public int getRespawnTime() {
 		try {

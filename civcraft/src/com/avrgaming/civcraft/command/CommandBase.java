@@ -33,7 +33,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.avrgaming.civcraft.arena.ArenaTeam;
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
@@ -667,48 +666,5 @@ public abstract class CommandBase implements CommandExecutor {
 		
 		return potentialMatches.get(0);
 	}
-	
-	protected ArenaTeam getNamedTeam(int index) throws CivException {
-		if (args.length < (index+1)) {
-			throw new CivException(CivSettings.localize.localizedString("EnterTeamName"));
-		}
 		
-		String name = args[index].toLowerCase();
-		name = name.replace("%", "(\\w*)");
-				
-		ArrayList<ArenaTeam> potentialMatches = new ArrayList<ArenaTeam>();
-		for (ArenaTeam team : ArenaTeam.arenaTeams.values()) {
-			String str = team.getName().toLowerCase();
-			try {
-				if (str.matches(name)) {
-					potentialMatches.add(team);
-				}
-			} catch (Exception e) {
-				throw new CivException(CivSettings.localize.localizedString("cmd_invalidPattern"));
-			}
-			
-			if (potentialMatches.size() > MATCH_LIMIT) {
-				throw new CivException(CivSettings.localize.localizedString("cmd_TooManyResults"));
-			}
-		}
-		
-		if (potentialMatches.size() == 0) {
-			throw new CivException(CivSettings.localize.localizedString("cmd_NameNoResults"));
-		}
-		
-		if (potentialMatches.size() != 1) {
-			CivMessage.send(sender, CivColor.LightPurple+ChatColor.UNDERLINE+CivSettings.localize.localizedString("cmd_NameMoreThan1"));
-			CivMessage.send(sender, " ");
-			String out = "";
-			for (ArenaTeam team : potentialMatches) {
-				out += team.getName()+", ";
-			}
-		
-			CivMessage.send(sender, CivColor.LightBlue+ChatColor.ITALIC+out);
-			throw new CivException(CivSettings.localize.localizedString("cmd_NameMoreThan2"));
-		}
-		
-		return potentialMatches.get(0);
-	}
-	
 }

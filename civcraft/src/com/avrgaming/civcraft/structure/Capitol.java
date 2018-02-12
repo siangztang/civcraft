@@ -286,4 +286,10 @@ public class Capitol extends TownHall {
 	public String getRespawnName() {
 		return "Capitol\n"+this.getTown().getName();
 	}
+
+
+	public void updateRespawnSigns() {
+		// TODO Auto-generated method stub
+		
+	}
 }

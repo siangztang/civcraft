@@ -178,12 +178,7 @@ public abstract class Wonder extends Buildable {
 			struct_hm.put("type_id", this.getConfigId());
 			struct_hm.put("complete", this.isComplete());
 			struct_hm.put("builtBlockCount", this.savedBlockCount);
-	
-			try {
-				SQL.updateNamedObjectAsync(this, struct_hm, TABLE_NAME);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	
+			SQL.updateNamedObjectAsync(this, struct_hm, TABLE_NAME);
 		} 
 	}
 
@@ -194,7 +189,7 @@ public abstract class Wonder extends Buildable {
 		
 		for (Wonder wonder : CivGlobal.getWonders()) {
 			if (wonder.getConfigId().equals(configId)) {
-				if (wonder.getConfigId().equals("w_colosseum") || wonder.getConfigId().equals("w_battledome"))
+				if (wonder.getConfigId().equals("w_battledome"))
 				{
 					return true;
 				}
@@ -237,7 +232,7 @@ public abstract class Wonder extends Buildable {
 
 	@Override
 	public void build(Player player, Location centerLoc, Template tpl) throws Exception {
-
+        this.autoClaim = true;
 		// We take the player's current position and make it the 'center' by moving the center location
 		// to the 'corner' of the structure.
 		Location savedLocation = centerLoc.clone();
@@ -400,13 +395,57 @@ public abstract class Wonder extends Buildable {
 				wonder = new GrandShipIngermanland(rs);
 			}
 			break;
-		case "w_battledome":
-			if (rs == null) {
-				wonder = new Battledome(center, id, town);
-			} else {
-				wonder = new Battledome(rs);
-			}
-			break;
+		case "w_stock_exchange": 
+            if (rs == null) {
+                wonder = new StockExchange(center, id, town);
+                break;
+            }
+            wonder = new StockExchange(rs);
+            break;
+        case "w_burj": 
+            if (rs == null) {
+                wonder = new Burj(center, id, town);
+                break;
+            }
+            wonder = new Burj(rs);
+            break;
+        case "w_grandcanyon": 
+            if (rs == null) {
+                wonder = new GrandCanyon(center, id, town);
+                break;
+            }
+            wonder = new GrandCanyon(rs);
+            break;
+        case "w_statue_of_zeus": 
+            if (rs == null) {
+                wonder = new StatueOfZeus(center, id, town);
+                break;
+            }
+            wonder = new StatueOfZeus(rs);
+            break;
+        case "w_space_shuttle": 
+            if (rs == null) {
+                wonder = new SpaceShuttle(center, id, town);
+                break;
+            }
+            wonder = new SpaceShuttle(rs);
+            break;
+        case "w_moscow_state_uni": 
+            if (rs == null) {
+                wonder = new MoscowStateUni(center, id, town);
+                break;
+            }
+            wonder = new MoscowStateUni(rs);
+            break;
+        case "w_neuschwanstein": 
+            if (rs == null) {
+                wonder = new Neuschwanstein(center, id, town);
+                break;
+            }
+            wonder = new Neuschwanstein(rs);
+            break;
+        
+        
 		default:
 			throw new CivException(CivSettings.localize.localizedString("wonder_unknwon_type")+" "+id);
 		}
@@ -511,5 +550,19 @@ public abstract class Wonder extends Buildable {
 		
 		CivMessage.sendCiv(this.getCiv(), CivColor.LightGreen+CivSettings.localize.localizedString("var_colosseum_generatedCoins",(CivColor.Yellow+total+CivColor.LightGreen),CivSettings.CURRENCY_NAME,townCount));
 	}
+    public void processCoinsFromNeuschwanstein() {
+        int castleCount = 0;
+        for (Civilization civ : CivGlobal.getCivs()) {
+            for (Town town : civ.getTowns()) {
+                if (town.hasStructure("s_castle")) {
+                    ++castleCount;
+                }
+            }
+        }
+        double coinsPerTown = 2000.0;
+        double total = coinsPerTown * castleCount;
+        this.getCiv().getTreasury().deposit(total);
+        CivMessage.sendCiv(this.getCiv(), CivColor.LightGreen+CivSettings.localize.localizedString("var_neuschwanstein_generatedCoins", "§e" + total + "§a", CivSettings.CURRENCY_NAME, castleCount, "§b" + this.getTown().getName()));
+    }
 	
 }

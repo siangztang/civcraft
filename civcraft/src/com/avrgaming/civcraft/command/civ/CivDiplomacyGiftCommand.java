@@ -83,7 +83,7 @@ public class CivDiplomacyGiftCommand extends CommandBase {
 		}
 		
 		if (War.isWithinWarDeclareDays()) {
-			throw new CivException(CivSettings.localize.localizedString("cmd_civ_dipgift_entirecivClostToWar1")+" "+War.getTimeDeclareDays()+" "+CivSettings.localize.localizedString("cmd_civ_dip_declareTooCloseToWar4"));
+			throw new CivException(CivSettings.localize.localizedString("cmd_civ_dipgift_entirecivClostToWar1")+" "+War.time_declare_days+" "+CivSettings.localize.localizedString("cmd_civ_dip_declareTooCloseToWar4"));
 		}
 		
 		
