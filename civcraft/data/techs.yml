@@ -318,6 +318,14 @@ techs:
       points: 2500
       require_techs: 'tech_commerce:tech_exploration'
       era: 2
+      
+    - id: 'tech_monopoly'
+      name: 'Monopoly'
+      beaker_cost: 10000.0
+      cost: 100000.0
+      points: 2500
+      require_techs: 'tech_global_trade'
+      era: 2      
 
     - id: 'tech_currency'
       name: 'Currency'
@@ -424,6 +432,14 @@ techs:
       require_techs: 'tech_economics:tech_machinery'
       era: 3
 
+    - id: 'tech_republic'
+      name: 'Republic'
+      beaker_cost: 50000.0
+      cost: 175000.0
+      points: 8750
+      require_techs: 'tech_construction'
+      era: 3
+
 #Industrial era
     - id: 'tech_electricity'
       name: 'Electricity'
@@ -448,6 +464,22 @@ techs:
       points: 50000
       require_techs: 'tech_construction:tech_nationalism:tech_electricity'
       era: 4
+
+    - id: 'tech_powerhouse'
+      name: 'Electrodynamics'
+      beaker_cost: 175000.0
+      cost: 2500000.0
+      points: 60000
+      require_techs: 'tech_innovation'
+      era: 4
+      
+    - id: 'tech_art'
+      name: 'Art'
+      beaker_cost: 75000.0
+      cost: 500000.0
+      points: 60000
+      require_techs: 'tech_innovation'
+      era: 4          
 
     - id: 'tech_archaeology'
       name: 'Archaeology'
@@ -543,6 +575,14 @@ techs:
       era: 7
 
 #Wonders
+    - id: 'tech_statue_of_zeus'
+      name: 'Statue of Zeus'
+      beaker_cost: 70000.0
+      cost: 70000.0
+      points: 15500
+      require_techs: 'tech_metal_casting:tech_advanced_masonry:tech_automation'
+      era: 1
+
     - id: 'tech_great_pyramid'
       name: 'Great Pyramid'
       beaker_cost: 75000.0
@@ -588,7 +628,7 @@ techs:
       beaker_cost: 175000.0
       cost: 175000.0
       points: 43750
-      require_techs: 'tech_construction:tech_global_trade:tech_productivity'
+      require_techs: 'tech_republic:tech_construction:tech_global_trade:tech_productivity'
       era: 0
 
     - id: 'tech_council_of_eight'
@@ -638,3 +678,51 @@ techs:
       points: 80000
       require_techs: 'tech_exploration:tech_economics:tech_nationalism'
       era: 0
+
+    - id: 'tech_grand_canyon'
+      name: 'Grand Canyon'
+      beaker_cost: 110000.0
+      cost: 110000.0
+      points: 12500
+      require_techs: 'tech_exploration:tech_education:tech_artillery'
+      era: 3
+
+    - id: 'tech_burj'
+      name: 'Burj Kalifa'
+      beaker_cost: 120000.0
+      cost: 120000.0
+      points: 12500
+      require_techs: 'tech_global_trade:tech_automation:tech_currency'
+      era: 3
+
+    - id: 'tech_stock_exchange'
+      name: 'Global Stock Exchange'
+      beaker_cost: 100000.0
+      cost: 70000.0
+      points: 25000
+      require_techs: 'tech_global_trade:tech_innovation:tech_advanced_efficiency'
+      era: 4
+
+    - id: 'tech_moscow_state_university'
+      name: 'Moscow State University'
+      beaker_cost: 150000.0
+      cost: 150000.0
+      points: 12500
+      require_techs: 'tech_biology:tech_republic'
+      era: 5
+
+    - id: 'tech_space_shuttle'
+      name: 'Space Shuttle'
+      beaker_cost: 9999999.0
+      cost: 999999.0
+      points: 25000
+      require_techs: 'tech_enlightenment'
+      era: 3
+
+    - id: 'tech_neuschwanstein'
+      name: 'Neuschwanstein Castle'
+      beaker_cost: 100000.0
+      cost: 250000.0
+      points: 25000
+      require_techs: 'tech_archaeology'
+      era: 4

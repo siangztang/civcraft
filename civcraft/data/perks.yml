@@ -172,6 +172,240 @@ perks:
       components:
           - name: 'CustomTemplate'
 
+    - id: 'template_slavic'
+      display_name: 'Slavic Templates'
+      simple_name: "slavic"
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+          
+    - id: 'template_turkish'
+      display_name: 'Turkish Templates'
+      simple_name: "turkish"
+      item_id: 179
+      data: 2
+      components:
+          - name: 'CustomTemplate'
+############ turkish THEME
+    #- id: 'tpl_turkish_arrow_tower'
+    #  display_name: 'Турецкий стиль башни лучников'
+    #  item_id: 179
+    #  data: 1
+    #  components:
+    #      - name: 'CustomTemplate'
+    #        theme: 'turkish'
+    #        template: 'arrow_tower'
+
+    - id: 'tpl_turkish_bank'
+      display_name: 'Turkish Bank Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'bank'
+
+    - id: 'tpl_turkish_barracks'
+      display_name: 'Turkish Barracks Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'barracks'
+
+    - id: 'tpl_turkish_capitol'
+      display_name: 'Turkish Capitol Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomPersonalTemplate'
+            theme: 'turkish'
+            template: 'capitol' 
+            id: 's_capitol'
+    
+    - id: 'tpl_turkish_cottage'
+      display_name: 'Turkish Cottage Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'cottage'
+    
+    - id: 'tpl_turkish_granary'
+      display_name: 'Тurkish Granary Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'granary'
+
+    - id: 'tpl_turkish_grocer'
+      display_name: 'Turkish Grocer Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'grocer'
+
+    - id: 'tpl_turkish_library'
+      display_name: 'Turkish Library Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'library'
+    
+    - id: 'tpl_turkish_mine'
+      display_name: 'Turkish Mine Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'mine'
+
+    - id: 'tpl_turkish_monument'
+      display_name: 'Турецкий стиль монумента'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'monument'
+
+    - id: 'tpl_turkish_scout_tower'
+      display_name: 'Turkish Scout Tower Templare'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'scout_tower'
+    
+    - id: 'tpl_turkish_temple'
+      display_name: 'Turkish Temple Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'temple'
+
+    #- id: 'tpl_turkish_trommel'
+    #  display_name: 'Турецкий стиль дробилки'
+    #  item_id: 179
+    #  data: 1
+    #  components:
+    #      - name: 'CustomTemplate'
+    #        theme: 'turkish'
+    #        template: 'trommel'
+    
+    - id: 'tpl_turkish_town_hall'
+      display_name: 'Turkish Town Hall Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomPersonalTemplate'
+            theme: 'turkish'
+            template: 'town_hall'
+            id: 's_townhall'
+    
+    - id: 'tpl_turkish_fortified_wall'
+      display_name: 'Turkish Foritfied Wall Template'
+      item_id: 179
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'turkish'
+            template: 'fortified_wall'
+############ DEVELOPMENT THEME
+    - id: 'tpl_slavic_bank'
+      display_name: 'Slavic Bank Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'bank'
+
+    - id: 'tpl_slavic_blacksmith'
+      display_name: 'Slavic Blacksmith Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'blacksmith'
+
+    #- id: 'tpl_slavic_cannon_tower'
+    #  display_name: 'Slavic Cannon Tower'
+    #  item_id: 322
+    #  data: 1
+    #  components:
+    #      - name: 'CustomTemplate'
+    #        theme: 'slavic'
+    #        template: 'cannon_tower'
+
+    - id: 'tpl_slavic_grocer'
+      display_name: 'Slavic Grocer Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'grocer'
+
+    - id: 'tpl_slavic_mine'
+      display_name: 'Slavic Mine Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'mine'
+
+    - id: 'tpl_slavic_monument'
+      display_name: 'Slavic Monument Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'monument'
+
+    - id: 'tpl_slavic_town_hall'
+      display_name: 'Slavic Town Hall Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomPersonalTemplate'
+            theme: 'slavic'
+            template: 'town_hall'
+            id: 's_townhall'
+
+    - id: 'tpl_slavic_trade_outpost'
+      display_name: 'Slavic Trade Outpost Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'trade_outpost'
+
+    - id: 'tpl_slavic_trommel'
+      display_name: 'Slavic Trommel Template'
+      item_id: 322
+      data: 1
+      components:
+          - name: 'CustomTemplate'
+            theme: 'slavic'
+            template: 'trommel'
 ############ ARCTIC THEME
     - id: 'tpl_arctic_camp'
       display_name: 'Arctic Camp'
@@ -292,15 +526,6 @@ perks:
             theme: 'arctic'
             template: 'monument'
 
-    - id: 'tpl_arctic_pasture'
-      display_name: 'Arctic Pasture Template'
-      item_id: 79
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'arctic'
-            template: 'pasture'
-
     - id: 'tpl_arctic_scout_tower'
       display_name: 'Arctic Scout Tower Template'
       item_id: 79
@@ -318,15 +543,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'arctic'
             template: 'shipyard'
-    
-    - id: 'tpl_arctic_stable'
-      display_name: 'Arctic Stable Template'
-      item_id: 79
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'arctic'
-            template: 'stable'
     
     - id: 'tpl_arctic_temple'
       display_name: 'Arctic Temple Template'
@@ -523,15 +739,6 @@ perks:
             theme: 'aztec'
             template: 'monument'
 
-    - id: 'tpl_aztec_pasture'
-      display_name: 'Aztec Pasture Template'
-      item_id: 98
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'aztec'
-            template: 'pasture'
-
     - id: 'tpl_aztec_scout_tower'
       display_name: 'Aztec Scout Tower Template'
       item_id: 98
@@ -549,15 +756,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'aztec'
             template: 'shipyard'
-    
-    - id: 'tpl_aztec_stable'
-      display_name: 'Aztec Stable Template'
-      item_id: 98
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'aztec'
-            template: 'stable'
     
     - id: 'tpl_aztec_temple'
       display_name: 'Aztec Temple Template'
@@ -736,15 +934,6 @@ perks:
             theme: 'egyptian'
             template: 'monument'
 
-    - id: 'tpl_egyptian_pasture'
-      display_name: 'Egyptian Pasture Template'
-      item_id: 24
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'egyptian'
-            template: 'pasture'
-
     - id: 'tpl_egyptian_scout_tower'
       display_name: 'Egyptian Scout Tower Template'
       item_id: 24
@@ -762,15 +951,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'egyptian'
             template: 'shipyard'
-    
-    - id: 'tpl_egyptian_stable'
-      display_name: 'Egyptian Stable Template'
-      item_id: 24
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'egyptian'
-            template: 'stable'
     
     - id: 'tpl_egyptian_temple'
       display_name: 'Egyptian Temple Template'
@@ -957,15 +1137,6 @@ perks:
             theme: 'roman'
             template: 'monument'
 
-    - id: 'tpl_roman_pasture'
-      display_name: 'Roman Pasture Template'
-      item_id: 155
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'roman'
-            template: 'pasture'
-
     - id: 'tpl_roman_scout_tower'
       display_name: 'Roman Scout Tower Template'
       item_id: 155
@@ -983,15 +1154,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'roman'
             template: 'shipyard'
-    
-    - id: 'tpl_roman_stable'
-      display_name: 'Roman Stable Template'
-      item_id: 155
-      data: 2
-      components:
-          - name: 'CustomTemplate'
-            theme: 'roman'
-            template: 'stable'
     
     - id: 'tpl_roman_temple'
       display_name: 'Roman Temple Template'
@@ -1195,15 +1357,6 @@ perks:
             theme: 'hell'
             template: 'monument'
 
-    - id: 'tpl_hell_pasture'
-      display_name: 'Hell Pasture Template'
-      item_id: 87
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'hell'
-            template: 'pasture'
-
     - id: 'tpl_hell_scout_tower'
       display_name: 'Hell Scout Tower Template'
       item_id: 87
@@ -1221,15 +1374,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'hell'
             template: 'shipyard'
-    
-    - id: 'tpl_hell_stable'
-      display_name: 'Hell Stable Template'
-      item_id: 87
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'hell'
-            template: 'stable'
     
     - id: 'tpl_hell_temple'
       display_name: 'Hell Temple Template'
@@ -1425,15 +1569,6 @@ perks:
             theme: 'elven'
             template: 'monument'
 
-    - id: 'tpl_elven_pasture'
-      display_name: 'Elven Pasture Template'
-      item_id: 18
-      data: 3
-      components:
-          - name: 'CustomTemplate'
-            theme: 'elven'
-            template: 'pasture'
-
     - id: 'tpl_elven_scout_tower'
       display_name: 'Elven Scout Tower Template'
       item_id: 18
@@ -1451,15 +1586,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'elven'
             template: 'shipyard'
-
-    - id: 'tpl_elven_stable'
-      display_name: 'Elven Stable Template'
-      item_id: 18
-      data: 3
-      components:
-          - name: 'CustomTemplate'
-            theme: 'elven'
-            template: 'stable'
 
     - id: 'tpl_elven_temple'
       display_name: 'Elven Temple Template'
@@ -1654,15 +1780,6 @@ perks:
             theme: 'cultist'
             template: 'monument'
 
-    - id: 'tpl_cultist_pasture'
-      display_name: 'Cultist Pasture Template'
-      item_id: 397
-      data: 1
-      components:
-          - name: 'CustomTemplate'
-            theme: 'cultist'
-            template: 'pasture'
-
     - id: 'tpl_cultist_scout_tower'
       display_name: 'Cultist Scout Tower Template'
       item_id: 397
@@ -1680,15 +1797,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'cultist'
             template: 'shipyard'
-
-    - id: 'tpl_cultist_stable'
-      display_name: 'Cultist Stable Template'
-      item_id: 397
-      data: 1
-      components:
-          - name: 'CustomTemplate'
-            theme: 'cultist'
-            template: 'stable'
 
     - id: 'tpl_cultist_temple'
       display_name: 'Cultist Temple Template'
@@ -1883,15 +1991,6 @@ perks:
             theme: 'atlantean'
             template: 'monument'
 
-    - id: 'tpl_atlantean_pasture'
-      display_name: 'Atlantean Pasture Template'
-      item_id: 169
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'atlantean'
-            template: 'pasture'
-
     - id: 'tpl_atlantean_scout_tower'
       display_name: 'Atlantean Scout Tower Template'
       item_id: 169
@@ -1909,15 +2008,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'atlantean'
             template: 'shipyard'
-
-    - id: 'tpl_atlantean_stable'
-      display_name: 'Atlantean Stable Template'
-      item_id: 169
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'atlantean'
-            template: 'stable'
 
     - id: 'tpl_atlantean_temple'
       display_name: 'Atlantean Temple Template'
@@ -2133,15 +2223,6 @@ perks:
           - name: 'CustomTemplate'
             theme: 'medieval'
             template: 'monument'
-
-    - id: 'tpl_medieval_pasture'
-      display_name: 'Medieval Pasture Template'
-      item_id: 267
-      data: 0
-      components:
-          - name: 'CustomTemplate'
-            theme: 'medieval'
-            template: 'pasture'
 
     - id: 'tpl_medieval_quarry'
       display_name: 'Medieval Quarry Template'

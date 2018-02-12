@@ -2592,7 +2592,212 @@ materials:
               - "t t"
               - "   "
 
+# Hell Gear Recipes
+ # Checked 25/1/18
+        - id: 'mat_hell_leather_helmet'
+          item_id: 298
+          item_data: 0
+          name: 'Hell Helmet'
+          craftable: false
+          required_techs: 'tech_leather_refinement'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'Defense'
+                value: '4'
+              - name: 'LeatherColor'
+                color: 'B85933'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+              - name: 'NoCauldronWash'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_feathered_lining'
+                letter: 'f'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_crafted_leather'
+                letter: 'l'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_clay_tungsten_casting'
+                letter: 'c'
+          shape:
+              - "cfc"
+              - "l l"
+              - "   "
 
+        # Checked 25/1/18
+        - id: 'mat_hell_leather_chestplate'
+          item_id: 299
+          item_data: 0
+          name: 'Hell Chestplate'
+          craftable: false
+          required_techs: 'tech_leather_refinement'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'Defense'
+                value: '10'
+              - name: 'LeatherColor'
+                color: 'B85933'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+              - name: 'NoCauldronWash'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_crafted_leather'
+                letter: 'l'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_woven_threading'
+                letter: 't'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_decorative_jewels'
+                letter: 'j'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_clay_tungsten_casting'
+                letter: 'c'
+          shape:
+              - "l l"
+              - "tjt"
+              - "lcl"
+
+        # Checked 125/1/18
+        - id: 'mat_hell_leather_leggings'
+          item_id: 300
+          item_data: 0
+          name: 'Hell Pants'
+          craftable: false
+          required_techs: 'tech_leather_refinement'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'Defense'
+                value: '8'
+              - name: 'LeatherColor'
+                color: 'B85933'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+              - name: 'NoCauldronWash'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_crafted_leather'
+                letter: 'l'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_woven_threading'
+                letter: 't'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_clay_tungsten_casting'
+                letter: 'c'
+          shape:
+              - "lcl"
+              - "t t"
+              - "l l"
+
+        # Checked 25/1/18
+        - id: 'mat_hell_leather_boots'
+          item_id: 301
+          item_data: 0
+          name: 'Hell Boots'
+          craftable: false
+          required_techs: 'tech_leather_refinement'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'Defense'
+                value: '6'
+              - name: 'LeatherColor'
+                color: 'B85933'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+              - name: 'NoCauldronWash'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_crafted_leather'
+                letter: 'l'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_feathered_lining'
+                letter: 'f'
+          shape:
+              - "   "
+              - "l l"
+              - "f f"
+
+        # Checked 25/1/18
+        - id: 'mat_hell_bow'
+          item_id: 261
+          item_data: 0
+          name: 'Hell Bow'
+          craftable: false
+          required_techs: 'tech_fletching'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'RangedAttack'
+                value: '32'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_woven_threading'
+                letter: 'l'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_feathered_lining'
+                letter: 'f'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_aged_wood_stave'
+                letter: 'f'
+          shape:
+              - "ls "
+              - "f s"
+              - "ls "
+
+        # Checked 25/1/18
+        - id: 'mat_hell_sword'
+          item_id: 267
+          item_data: 0
+          name: 'Hell Sword'
+          craftable: false
+          required_techs: 'tech_sword_smithing'
+          shaped: true
+          category: '<lightblue>Hell Armor'
+          components:
+              - name: 'Attack'
+                value: '30'
+              - name: 'NoVanillaDurability'
+              - name: 'DurabilityOnDeath'
+                value: '0.1'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_steel_sword_blade'
+                letter: 'b'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_carbide_steel_sword_hilt'
+                letter: 'h'
+          shape:
+              - " b "
+              - " b "
+              - " h "
 
 # Catalyst/Crystal ingredients
         - id: 'mat_metallic_crystal_fragment_1'
@@ -4188,6 +4393,88 @@ materials:
               - "ddd"
               - "mmm"
 
+
+- id: 'mat_legendary_attack_super_catalyst'
+          item_id: 370
+          item_data: 0
+          name: 'Legendary Attack Super Catalyst'
+          craftable: true
+          shaped: true
+          category: '<gold>Catalyst Tier 4'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Catalyst'
+                enhancement: 'LoreEnhancementAttack'
+                allowed_materials: 'mat_tungsten_sword, mat_marksmen_bow'
+                chance: '50'
+                amount: '1'
+                id: 'mat_legendary_attack_super_catalyst'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_metallic_crystal_4'
+                letter: 'c'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_industrial_diamond'
+                letter: 'd'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_mistical_mercury'
+                letter: 'm'
+          shape:
+              - "ccc"
+              - "ddd"
+              - "mmm"
+
+        - id: 'mat_legendary_defense_super_catalyst'
+          item_id: 370
+          item_data: 0
+          name: 'Legendary Defense Super Catalyst'
+          craftable: true
+          shaped: true
+          category: '<gold>Catalyst Tier 4'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Catalyst'
+                enhancement: 'LoreEnhancementDefense'
+                allowed_materials: 'mat_tungsten_chestplate, mat_tungsten_leggings, mat_tungsten_helmet, mat_tungsten_boots, mat_composite_leather_helmet, mat_composite_leather_chestplate, mat_composite_leather_leggings, mat_composite_leather_boots'
+                chance: '66'
+                amount: '0.25'
+                id: 'mat_legendary_defense_super_catalyst'
+          ingredients:
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_ionic_crystal_4'
+                letter: 'c'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_industrial_diamond'
+                letter: 'd'
+              - type_id: 0
+                data: 0
+                custom_id: 'mat_mistical_mercury'
+                letter: 'm'
+          shape:
+              - "ccc"
+              - "ddd"
+              - "mmm"
+
+        - id: 'mat_mistical_mercury'
+          item_id: 378
+          item_data: 0
+          name: 'Т3 Mystical Mercury'
+          shaped: false
+          craftable: true
+          category: '<lightblue>Tier 3 Materials'
+          components:
+              - name: 'NoRightClick'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_mercury_bath'
+                data: 0
+                count: 9
+
 #  Special Item Recipes -------------------------------------------------
         
         - id: 'mat_tutorial_book'
@@ -4695,7 +4982,7 @@ materials:
               - "lpl"
 
 #---- Fish (new for 1.75) ----
-        - id: 'mat_pond_scum'
+        - id: 'mat_fish_pond_scum'
           item_id: 351
           item_data: 2
           name: 'Pond Scum'
@@ -4708,7 +4995,7 @@ materials:
           components:
               - name: 'NoRightClick'
 
-        - id: 'mat_tangled_string'
+        - id: 'mat_fish_tangled_string'
           item_id: 30
           item_data: 0
           name: 'Tangled String'
@@ -4721,7 +5008,7 @@ materials:
           components:
               - name: 'NoRightClick'
 
-        - id: 'mat_seaweed'
+        - id: 'mat_fish_seaweed'
           item_id: 31
           item_data: 1
           name: 'Seaweed'
@@ -4734,7 +5021,7 @@ materials:
           components:
               - name: 'NoRightClick'
 
-        - id: 'mat_minnows'
+        - id: 'mat_fish_minnows'
           item_id: 362
           item_data: 0
           name: 'Minnows'
@@ -4747,7 +5034,7 @@ materials:
           components:
               - name: 'NoRightClick'
 
-        - id: 'mat_tadpole'
+        - id: 'mat_fish_tadpole'
           item_id: 375
           item_data: 0
           name: 'Tadpole'
@@ -5125,6 +5412,311 @@ materials:
               - name: 'NoRightClick'
 
 #---- End Fish ----
+
+#---- Begin Spaceship Parts----
+        - id: 'mat_electronic'
+          item_id: 265
+          item_data: 0
+          name: 'Electronics'
+          craftable: true
+          shaped: true
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+             - type_id: 41
+               data: 0
+               letter: 'a'
+             - type_id: 152
+               data: 0
+               letter: 'b'
+             - type_id: 0
+               data: 0
+               custom_id: 'mat_steel_ingot'
+               letter: 'x'
+          shape:
+              - "aba"
+              - "bab"
+              - "xxx"
+
+        - id: 'mat_satellite'
+          item_id: 402
+          item_data: 0
+          name: 'Satellite'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_fuel_tanks'
+          item_id: 342
+          item_data: 0
+          name: 'Fuel Tanks'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_engines'
+          item_id: 416
+          item_data: 0
+          name: 'Engines'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_landing_module'
+          item_id: 44
+          item_data: 0
+          name: 'Landing Module'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_orbital_station'
+          item_id: 138
+          item_data: 0
+          name: 'Orbital Station'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_residential_module'
+          item_id: 324
+          item_data: 0
+          name: 'Crew Module'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_solar_reflector'
+          item_id: 151
+          item_data: 0
+          name: 'Solar Reflector'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_equipment'
+          item_id: 356
+          item_data: 0
+          name: 'Equipment'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_solar_sail'
+          item_id: 425
+          item_data: 11
+          name: 'Solar Sail'
+          craftable: false
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_provisions'
+          item_id: 54
+          item_data: 0
+          name: 'Astronaut Food'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_warp_core'
+          item_id: 7
+          item_data: 0
+          name: 'Warp-Core'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_warp_engine'
+          item_id: 407
+          item_data: 0
+          name: 'Warp-Engine'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_gondolas'
+          item_id: 333
+          item_data: 0
+          name: 'Гондолы'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_found_space_shuttle'
+          item_id: 330
+          item_data: 0
+          name: 'Found Space Shuttle'
+          craftable: true
+          shaped: false
+          category: '<gold>Spaceship Parts'
+          components:
+              - name: 'NoRightClick'
+              - name: 'ResearchSpaceShuttle'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches'
+                data: 0
+                count: 9
+
+        - id: 'mat_crutches'
+          item_id: 7
+          item_data: 0
+          name: '<lightblue>Created in the Factory'
+          craftable: false
+          shaped: false
+          category: '<rose>Crutches'
+          components:
+              - name: 'NoRightClick'
+
+        - id: 'mat_scroll'
+          item_id: 358
+          item_data: 0
+          name: 'Scroll'
+          craftable: true
+          shaped: false
+          category: 'Special'
+          components:
+              - name: 'ProcessScroll'
+              - name: 'Attack'
+                value: '0'
+          ingredients:
+              - type_id: 0
+                custom_id: 'mat_crutches2'
+                data: 0
+                count: 9
+
+        - id: 'mat_crutches2'
+          item_id: 7
+          item_data: 0
+          name: '<gold>Found in Ruins'
+          craftable: false
+          shaped: false
+          category: '<rose>Crutches'
+          components:
+              - name: 'NoRightClick'
+#---- End Spaceship Parts----
 
 #
 # This is a list of removed recpies based on the typeID and 

@@ -50,13 +50,13 @@ items:
       name: 'String'
       type_id: 287
       data: 0
-      value: 1
+      value: 50
 
     - id: 6
       name: 'Leather'
       type_id: 334
       data: 0
-      value: 1
+      value: 9
     
     - id: 7
       name: 'Feather'
@@ -135,35 +135,35 @@ items:
       name: 'Pond Scum'
       type_id: 0
       data: 0
-      custom_id: 'mat_pond_scum'
+      custom_id: 'mat_fish_pond_scum'
       value: 1
 
     - id: 21
       name: 'Tangled String'
       type_id: 0
       data: 0
-      custom_id: 'mat_tangled_string'
+      custom_id: 'mat_fish_tangled_string'
       value: 1
 
     - id: 22
       name: 'Seaweed'
       type_id: 0
       data: 0
-      custom_id: 'mat_seaweed'
+      custom_id: 'mat_fish_seaweed'
       value: 1
 
     - id: 23
       name: 'Minnows'
       type_id: 0
       data: 0
-      custom_id: 'mat_minnows'
+      custom_id: 'mat_fish_minnows'
       value: 1
 
     - id: 24
       name: 'Tadpole'
       type_id: 0
       data: 0
-      custom_id: 'mat_tadpole'
+      custom_id: 'mat_fish_tadpole'
       value: 1
 
 # Shelf 2 right side, front 25-29
@@ -398,28 +398,28 @@ items:
       type_id: 0
       data: 0
       custom_id: 'mat_cow_egg'
-      value: 100
+      value: 10
 
     - id: 103
       name: 'T1 Chicken Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_chicken_egg'
-      value: 100
+      value: 10
 
     - id: 104
       name: 'T1 Pig Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_pig_egg'
-      value: 100
+      value: 10
 
     - id: 105
       name: 'T1 Sheep Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_sheep_egg'
-      value: 100
+      value: 10
 
 # Floor 2 Right side Middle 106-109
     - id: 106
@@ -427,49 +427,50 @@ items:
       type_id: 0
       data: 0
       custom_id: 'mat_rabbit_egg'
-      value: 100
+      value: 10
 
     - id: 107
       name: 'T1 Creeper Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_creeper_egg'
-      value: 100
+      value: 10
 
     - id: 108
       name: 'T1 Enderman Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_enderman_egg'
-      value: 100
+      value: 10
 
     - id: 109
       name: 'T1 Zombie Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_zombie_egg'
-      value: 100
+      value: 10
+
 # Floor 2 Right side Forward 110-113
     - id: 110
       name: 'T1 Skeleton Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_skeleton_egg'
-      value: 100
+      value: 10
 
     - id: 111
       name: 'T1 Spider Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_spider_egg'
-      value: 100
+      value: 10
 
     - id: 112
       name: 'T1 Slime Egg'
       type_id: 0
       data: 0
       custom_id: 'mat_slime_egg'
-      value: 100
+      value: 10
 
     # - id: 113
     #   name: ''

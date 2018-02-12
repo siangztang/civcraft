@@ -3,7 +3,7 @@
 # 
 camp:
     # Number of hitpoints a camp has.
-    hitpoints: 5000
+    hitpoints: 100
   
     # Number of hitpoints to regenerate per second
     regen_rate: 2

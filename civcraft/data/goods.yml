@@ -167,8 +167,8 @@ land_goods:
     - id: 'good_poison_ivy'
       name: "Poison Ivy"
       rarity: 3
-      value: 375.0
-      buffs: 'buff_espionage, buff_sabotage, buff_dirty_money'
+      value: 400.0
+      buffs: 'buff_return, buff_farm'
       material: 106 # vines
       material_data: 0
 
@@ -216,7 +216,7 @@ land_goods:
       name: Grapes
       rarity: 1
       value: 125.0
-      buffs: 'buff_year_of_plenty, buff_hedonism'
+      buffs: 'buff_year_of_plenty, buff_hedonism, buff_demand'
       material: 372 # nether wart seed
       material_data: 0
 
@@ -232,7 +232,7 @@ land_goods:
       name: Olives
       rarity: 1
       value: 125.0
-      buffs: 'buff_hedonism'
+      buffs: 'buff_hedonism, buff_demand, buff_growth'
       material: 375 # seeds
       material_data: 0
 
@@ -289,7 +289,7 @@ land_goods:
       name: Spice
       rarity: 1
       value: 125.0
-      buffs: 'buff_preservative'
+      buffs: 'buff_preservative, buff_demand'
       material: 295 # seeds
       material_data: 0
 
@@ -299,6 +299,62 @@ land_goods:
       value: 250.0
       buffs: 'buff_fine_art, buff_construction'
       material: 155 # quartz block
+      material_data: 0
+
+    - id: 'good_tea'
+      name: Tea
+      value: 250.0
+      rarity: 2
+      buffs: 'buff_monopoly, buff_innovation'
+      material: 175 # подсолнух
+      material_data: 0
+
+    - id: 'good_rice'
+      name: Rice
+      value: 250.0
+      rarity: 2
+      buffs: 'buff_innovation'
+      material: 361 # семки тыквы
+      material_data: 0
+
+    - id: 'good_niter'
+      name: Niter
+      rarity: 2
+      value: 250.0
+      buffs: 'buff_advanced_tooling, buff_advanced_mixing'
+      material: 263 # уголь
+      material_data: 1
+
+    - id: 'good_jade'
+      name: Jade
+      rarity: 2
+      value: 250.0
+      buffs: 'buff_advanced_touring, buff_fine_art'
+      material: 295 # семки пшена
+      material_data: 0
+
+    - id: 'good_cocoa'
+      name: Cocoa
+      rarity: 4
+      value: 500.0
+      buffs: 'buff_advanced_touring, buff_year_of_plenty, buff_preservative'
+      material: 351
+      material_data: 3 # какао
+
+    - id: 'good_orange'
+      name: Oranges
+      rarity: 1
+      value: 100.0
+      buffs: 'buff_year_of_plenty'
+      material: 351
+      material_data: 14 # краситель
+
+    - id: 'good_titanium'
+      name: Titanium
+      rarity: 4
+      value: 500.0
+      buffs: 'buff_titan, buff_return'
+      material: 7 # бедрок
       material_data: 0
     
 water_goods: 
@@ -312,8 +368,8 @@ water_goods:
 
     - id: 'good_salmon'
       name: Salmon
-      rarity: 2
-      value: 250.0
+      rarity: 1
+      value: 100.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 350 # cooked fish
       material_data: 0
@@ -348,6 +404,14 @@ water_goods:
       value: 250.0
       buffs: 'buff_year_of_plenty, buff_fishing'
       material: 349 # fish
+      material_data: 0
+
+    - id: 'good_sea_salt'
+      name: Sea Salt
+      rarity: 2
+      value: 250.0
+      buffs: 'buff_advanced_touring, buff_fine_art'
+      material: 353
       material_data: 0
       
 

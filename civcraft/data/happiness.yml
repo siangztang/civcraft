@@ -6,6 +6,7 @@
 happiness:
     # Amount of unhappiness per resident in the town.
     per_resident: 1.0
+    per_group: 0.25
 
     # Empire Unhappiness, how much unhappiness to add, per town, to the entire
     # civilization's towns.
@@ -115,28 +116,28 @@ happiness:
           name:  'Happy'
           color: 'LightGreen'
           amount: 0.7
-          beaker_rate: 1.1
-          coin_rate: 1.1
-          culture_rate: 1.1
-          hammer_rate: 1.1
+          beaker_rate: 1.15
+          coin_rate: 1.15
+          culture_rate: 1.15
+          hammer_rate: 1.15
 
         - level: 5
           name:  'Elated'
           color: 'LightBlue'
           amount: 0.85
-          beaker_rate: 1.2
-          coin_rate: 1.2
-          culture_rate: 1.2
-          hammer_rate: 1.2
+          beaker_rate: 1.30
+          coin_rate: 1.30
+          culture_rate: 1.30
+          hammer_rate: 1.30
 
         - level: 6
           name:  'Ecstatic'
           color: 'LightPurple'
           amount: 0.92
-          beaker_rate: 1.3
-          coin_rate: 1.3
-          culture_rate: 1.3
-          hammer_rate: 1.3
+          beaker_rate: 1.5
+          coin_rate: 1.5
+          culture_rate: 1.5
+          hammer_rate: 1.5
 
         - level: 7
           name:  'Enlightened'

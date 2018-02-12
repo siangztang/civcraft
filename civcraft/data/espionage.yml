@@ -76,36 +76,22 @@ missions:
       cooldown: 2.0
       fail_chance: 0.3
       compromise_chance: 0.25
-      intel: 2
+      intel: 0
       length: 140
       slot: 7
 
-    - id: 'spy_incite_riots'
-      name: 'Incite Riots'
-      description: 
-          - 'Incites riots in the target town.'
-          - 'Causes between 5 to 10 unhappiness for 3 days.'
-          - 'Must be within 50 blocks of town hall.'
-      cost: 50000.0
-      range: 50.0
-      cooldown: 2.0
-      fail_chance: 0.3
-      compromise_chance: 0.25
-      intel: 2
-      length: 120
-      slot: -6
-
-    - id: 'spy_subvert_government'
-      name: 'Subvert Government'
-      description: 
-          - 'Plunges the target civiliztion into Anarchy.'
-          - 'Must be within 100 blocks of the capitol town hall.'
-      cost: 200000.0
-      range: 100.0
-      cooldown: 2.0
-      fail_chance: 0.40
-      compromise_chance: 0.4
-      slot: 5
+    # - id: 'spy_subvert_government'
+    #   name: 'Subvert Government'
+    #   description: 
+    #       - 'Plunges the target civiliztion into Anarchy.'
+    #       - 'Must be within 100 blocks of the capitol town hall.'
+    #   cost: 200000.0
+    #   range: 100.0
+    #   cooldown: 2.0
+    #   fail_chance: 0.40
+    #   compromise_chance: 0.4
+    #   slot: 5
+    #   online_civ: 2
 
     - id: 'spy_poison_granary'
       name: 'Poison Granary'
@@ -120,6 +106,7 @@ missions:
       intel: 0
       length: 60
       slot: 4
+      online_civ: 1
 
     - id: 'spy_pirate'
       name: 'Pirate'
@@ -145,20 +132,35 @@ missions:
       cooldown: 2.0
       fail_chance: 0.4
       compromise_chance: 0.5
-      intel: 4
+      intel: 0
       length: 300
       slot: 2
+      online_civ: 1
     
-    - id: 'spy_sabotage_wonder'
-      name: 'Sabotage'
-      description: 
-          - 'Destroyes the nearest wonder.'
-          - 'Must be within 50 blocks.'
-      cost: 500000.0
-      range: 50.0
+    # - id: 'spy_sabotage_wonder'
+    #   name: 'Sabotage'
+    #   description: 
+    #       - 'Destroyes the nearest wonder.'
+    #       - 'Must be within 50 blocks.'
+    #   cost: 500000.0
+    #   range: 50.0
+    #   cooldown: 2.0
+    #   fail_chance: 0.4
+    #   compromise_chance: 0.5
+    #   intel: 0
+    #   length: 300
+    #   slot: 2
+
+    - id: 'spy_investigate_talents'
+      name: 'Investigate Talents'
+      description:
+          - 'Provides a record of the talents of civilization.'
+          - 'Must be within the enemy Capital.'
+      cost: 40000.0
+      range: 0.0
       cooldown: 2.0
-      fail_chance: 0.4
-      compromise_chance: 0.5
-      intel: 4
-      length: 300
-      slot: -1
+      fail_chance: 0.1
+      compromise_chance: 0.05
+      intel: 0
+      length: 60
+      slot: 6

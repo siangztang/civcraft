@@ -15,6 +15,10 @@ fishing_drops:
       type_id: 0
       drop_chance: 0.005
 
+    - craftMatId: 'mat_mistical_mercury'
+      type_id: 0
+      drop_chance: 0.0001
+
     - craftMatId: 'mat_crafted_reeds'
       type_id: 0
       drop_chance: 0.06

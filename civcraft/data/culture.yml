@@ -57,6 +57,101 @@ culture_levels:
       amount: 5000000
       chunks: 40
 
+talent_levels:
+# Приписка Cap - для баффов только на столицу (все баффается на столицу, но при основании новых город нужно же им давать этот бафф, если он на циву)
+# Приписка Town - для цивы
+# Также при захвате чтоб не стакали баффы
+
+    - level: 1
+      levelName: 'Столица'
+      levelBuff1: 'level1_hammerRateCap'
+      levelBuff2: 'level1_beakerRateCap'
+      levelBuff3: 'level1_growthCultureCap'
+      levelBuffDesc1: 'Молоточки столицы увеличены на 10%.'
+      levelBuffDesc2: 'Пробирки столицы увеличены на 10%.'
+      levelBuffDesc3: 'Растительность и культура города увеличена на 5%.'
+
+    - level: 2
+      levelName: 'Счастье'
+      levelBuff1: 'level2_capitolHappinessCap'
+      levelBuff2: 'level2_civHappinessTown'
+      levelBuff3: 'level2_wonderCivHappinessTown'
+      levelBuffDesc1: 'Дает 5 счастья в столицу.'
+      levelBuffDesc2: 'Дает 2 счастья всей цивилизации.'
+      levelBuffDesc3: 'За каждое чудо, построенное в мире, ваша цивилизация получает 1 счастье.'
+
+    - level: 3
+      levelName: 'Усиление чанков'
+      levelBuff1: 'level3_extraHammerTown'
+      levelBuff2: 'level3_extraRiverTown'
+      levelBuff3: 'level3_extraBekaerTown'
+      levelBuffDesc1: 'За каждый культурный чанк, дающий менее 0.75 молоточка дает 0.25 допольнительных молотчков.'
+      levelBuffDesc2: 'За каждый культурный чанк, дающий менее 0.02 счастья дает 0.01 допольнительного счастья.'
+      levelBuffDesc3: 'За каждый культурный чанк, дающий менее 1 пробирки дает 0.25 допольнительных пробирок.'
+
+    - level: 4
+      levelName: 'Доход'
+      levelBuff1: 'level4_extraCottageTown'
+      levelBuff2: 'level4_extraBankTown'
+      levelBuff3: 'level4_extraTradeTown'
+      levelBuffDesc1: 'Ваши коттеджи производят на 10% монет больше.'
+      levelBuffDesc2: 'Ваш банк становится эффективнее на 10%, удваивая ежедневные налоги.'
+      levelBuffDesc3: 'Торговые ресурсы дают на 15% монет больше.'
+
+    - level: 5
+      levelName: 'Защита'
+      levelBuff1: 'level5_extraTowerHPTown'
+      levelBuff2: 'level5_extraRangeTown'
+      levelBuff3: 'level5_extraHPcpTown'
+      levelBuffDesc1: 'Увеличивает прочность защитных строений на 10% и добавляет им регенерации 1 блок в секунду.'
+      levelBuffDesc2: 'Увеличивает радиус всех башен на 25 блоков.'
+      levelBuffDesc3: 'Увеличивает прочность контрольных блоков на 20% (включая военные лагеря), позволяя им регенерировать 1 прочность раз в 2 минуты.'
+
+    - level: 6
+      levelName: 'Камень Преткновения'
+      levelBuff1: 'level6_extraCPdmgTown'
+      levelBuff2: 'level6_extraStrucutreDmgTown'
+      levelBuff3: 'level6_wcHPTown'
+      levelBuffDesc1: 'Вы имеете шанс нанести 1 дополнительный урон по контрольным блокам городов.'
+      levelBuffDesc2: 'Вы имеете шанс нанести 1 дополнительный урон по строеням.'
+      levelBuffDesc3: 'Удваивает жизни военного лагеря в двое и позволяет регенирировать ему 1 хп в минуту.'
+
+    - level: 7
+      levelName: 'Наука'
+      levelBuff1: 'level7_cheaperCostCap'
+      levelBuff2: 'level7_higherIncomeTown'
+      levelBuff3: 'level7_extraInBestTown'
+      levelBuffDesc1: 'Изучения стоят на 5% пробирок дороже, но на 5% монет дешевле.'
+      levelBuffDesc2: 'Снижает затраты на 1 пробирку (с налогов) с 10 монет до 9.'
+      levelBuffDesc3: 'Дает 25% к пробиркам столицы цивилизации'
+
+    - level: 8
+      levelName: 'Несчастье'
+      levelBuff1: 'level8_unhappyConquerorTown'
+      levelBuff2: 'level8_unhappyLargeEmpireTown'
+      levelBuff3: 'level8_noWarUpkeep'
+      levelBuffDesc1: 'Вы получаете 2 несчастье за каждый свой город, но не получаете несчастья за захваченные города.'
+      levelBuffDesc2: 'Снимает 2 несчастье в каждом городе за каждые 5 городов в цивилизации.'
+      levelBuffDesc3: 'Полностью убирает налог за войну.'
+
+    - level: 9
+      levelName: 'Культура'
+      levelBuff1: 'level9_capitolCultureCap'
+      levelBuff2: 'level9_civCultureTown'
+      levelBuff3: 'level9_equalizerCultureTown'
+      levelBuffDesc1: 'Дает 50% к культуре столице цивилизации.'
+      levelBuffDesc2: 'Дает 20% к культуре цивилизации.'
+      levelBuffDesc3: 'Дает за каждый торговый ресурс в городе цивилизации 150 культуры.'
+
+    - level: 10
+      levelName: 'Победа'
+      levelBuff1: 'level10_scientificFocusTown'
+      levelBuff2: 'level10_dominatorTown'
+      levelBuff3: 'level10_architectorTown'
+      levelBuffDesc1: 'Увеличение пробирок цивилизации на 15%, пробирки с изучения Просвещения идут на 15 быстрее.'
+      levelBuffDesc2: 'Прочность контрольных блоков цивилизации удваивается (включая военные лагеря), захваченная цивилизация не может начать революцию.'
+      levelBuffDesc3: 'Увеличивает культуру всех городов цивилизации на 15% и уменьшает стоимость чудес на 10%.'
+      
 culture_biomes:
     - name: OCEAN
       coins: 0.0

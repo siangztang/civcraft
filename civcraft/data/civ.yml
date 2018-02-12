@@ -10,6 +10,7 @@ global:
    # How often the 'hourly tick' should process in 'seconds'
    # To speed up the game, you could cut this number in half
    hourly_tick: 3600
+   bossspawn_tick: 21600
 
    # The Starting kit for all new players
    # Feel free to customize as you see fit, such as removing the starting 'mat_found_camp' item.
@@ -83,6 +84,134 @@ global:
    #Data will still be loaded from and saved to the database, but it will now be linked to Vault
    use_vault: false
 
+newspaper:
+#
+-  id: 'first'
+   item: 7
+   iData: 0
+   guiData: 0
+   headline: 'Победители первой'
+   date: '21 июня, 2017 год'
+   lineotd: 'фазы'
+   line1: 'Цивилизация: Rebels' # Aura
+   line2: 'Победа: Военная'
+   line3: 'Лидер-Основатель: saguH'
+   line4: 'Цивилизация: Targarian' # Alcor
+   line5: 'Победа: Дипломатическая'
+   line6: 'Лидер-Основатель: Trayder'
+   line7: 'Цивилизация: Targarian' # Orion
+   line8: 'Победа: Доминационная'
+   line9: 'Лидер-Основатель: John__Snow'
+   line10: 'Цивилизация: DeadDynasty' # Tauri
+   line11: 'Победа: Доминационная'
+   line12: 'Лидер-Основатель: BerryNerdy'
+   version: '2.1'
+#
+-  id: 'second'
+   item: 18
+   iData: 0
+   guiData: 1
+   headline: 'Победители второй'
+   date: '2 августа, 2017 год'
+   lineotd: 'фазы'
+   line1: 'Цивилизация: NewEra' # Aura
+   line2: 'Победа: Научная'
+   line3: 'Лидер-Основатель: LLaPb1337'
+   line4: 'Цивилизация: Targarian' # Alcor
+   line5: 'Победа: Научная'
+   line6: 'Лидер-Основатель: BlackPorsche'
+   line7: 'Цивилизация: Narnia' # Orion
+   line8: 'Победа: Доминационная'
+   line9: 'Лидер-Основатель: _Mikrolis_'
+   line10: 'Цивилизация: IronWest' # Tauri
+   line11: 'Победа: Научная'
+   line12: 'Лидер-Основатель: Baconation'
+   version: '2.2'
+
+-  id: 'third'
+   item: 121
+   iData: 0
+   guiData: 2
+   headline: 'Победители третьей'
+   date: '17 сентября, 2017 год'
+   lineotd: 'фазы'
+   line1: ''
+   line2: ''
+   line3: ''
+   line4: ''
+   line5: ''
+   line6: ''
+   line7: 'Цивилизация: IronWest' # Orion
+   line8: 'Победа: Доминационная'
+   line9: 'Лидер-Основатель: Baconation'
+   line10: 'Цивилизация: WinOrDDosServer' # Tauri
+   line11: 'Победа: Научная'
+   line12: 'Лидер-Основатель: dotamaster2008'
+   version: '2.3'
+#
+-  id: 'fourth'
+   item: 152
+   iData: 0
+   guiData: 3
+   headline: 'Победители четвертой'
+   date: '20 октября (Tauri), 24 октября (Orion), 2017 год'
+   lineotd: 'фазы'
+   line1: ''
+   line2: ''
+   line3: ''
+   line4: ''
+   line5: ''
+   line6: ''
+   line7: 'Цивилизация: IronWest' # Orion
+   line8: 'Победа: Доминационная (стрик x3)'
+   line9: 'Лидер-Основатель: 4eTa_KeK'
+   line10: 'Цивилизация: WinOrDDosServer' # Tauri
+   line11: 'Победа: Доминационная (стрик x2)'
+   line12: 'Лидер-Основатель: dotamaster2008'
+   version: '2.4'
+#
+-  id: 'fifth'
+   item: 20
+   iData: 0
+   guiData: 4
+   headline: 'Победители пятой'
+   date: '26 ноября (Tauri), 7 (RIP DAY) декабря (Orion), 2017 год'
+   lineotd: 'фазы'
+   line1: ''
+   line2: ''
+   line3: ''
+   line4: ''
+   line5: ''
+   line6: ''
+   line7: 'Цивилизации: CursedNation, SweetDreams' # Orion
+   line8: 'Ничья'
+   line9: 'Лидеры-Основатели: oreon, Denishik'
+   line10: 'Цивилизация: NewEra' # Tauri
+   line11: 'Победа: Доминационная'
+   line12: 'Лидер-Основатель: LLaPb1337'
+   version: '2.4.5'
+#
+-  id: 'sixth'
+   item: 57
+   iData: 0
+   guiData: 5
+   headline: 'Победители шестой'
+   date: '27 января (Tauri), 2017 год'
+   lineotd: 'фазы'
+   line1: ''
+   line2: ''
+   line3: ''
+   line4: ''
+   line5: ''
+   line6: ''
+   line7: 'Цивилизации: null' # Orion
+   line8: 'Победа: null'
+   line9: 'Лидер-Основатель: null'
+   line10: 'Цивилизация: null' # Tauri
+   line11: 'Победа: null'
+   line12: 'Лидер-Основатель: null'
+   version: '2.5 | Reborn'
+#
 
 civ:
     # Amount of coins required to start a civilization
@@ -106,7 +235,7 @@ civ:
     town_distance_multiplier_outside_culture: 0.9
 
     # Maximum amount of distance upkeep anybody can pay per town
-    town_distance_upkeep_max: 500000.0
+    town_distance_upkeep_max: 50000.0
 
     # Base beaker rate, usually set to 1, increase to make research faster.
     base_beaker_rate: 1.0
@@ -119,8 +248,8 @@ civ:
 
     # Number of days after a civilization is conquered that it must wait before declaring revolution
     # This used to be longer. Reducing to help spur actual viability in starting a revolution!
-    # Default: 2
-    revolution_cooldown: 2
+    # Default: 3
+    revolution_cooldown: 3
 
     # Number of days a leader must be inactive before being able to be reclaimed
     leader_inactive_days: 7
@@ -145,27 +274,33 @@ end_conditions:
     - id: 'end_culture'
       class: 'EndConditionCulture'
       name: 'Cultural'
-      culture_level: '10'
-      towns: '3'
-      wonders: '1'
-      days_held: '21'
-
-    - id: 'end_conquest'
-      class: 'EndConditionConquest'
-      name: 'Conquest'
-      percent_captured: '0.75'
-      percent_captured_with_wonder: '0.50'
       days_after_start: '28'
       days_held: '21'
     
     - id: 'end_science'
       class: 'EndConditionScience'
       name: 'Scientific'
-      tech: 'tech_enlightenment'
-      days_held: '21'
+      wonder: 'w_space_shuttle'
+      days_after_start: '21'
+      days_held: '14'
     
     - id: 'end_diplomacy'
       class: 'EndConditionDiplomacy'
       name: 'Diplomatic'
       vote_cooldown_hours: '24'
+      days_after_start: '28'
       days_held: '21'
+
+    - id: 'end_economic'
+      class: 'EndConditionEconomic'
+      name: 'Economic'
+      stock_exchange_level: '6'
+      days_after_start: '28'
+      days_held: '21'
+
+    - id: 'end_domination'
+      class: 'EndDomination'
+      name: 'Domination'
+      timesMore: '9'
+      days_after_start: '21'
+      days_held: '14'

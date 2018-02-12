@@ -29,7 +29,6 @@ public class ConfigEnchant {
 
 	public String id;
 	public String name;
-	public String description;
 	public double cost;
 	public String enchant_id;
 	
@@ -41,7 +40,6 @@ public class ConfigEnchant {
 			
 			enchant.id = (String)level.get("id");
 			enchant.name = (String)level.get("name");
-			enchant.description = (String)level.get("description");
 			enchant.cost = (Double)level.get("cost");
 			enchant.enchant_id = (String)level.get("enchant_id");			
 			enchant_map.put(enchant.id, enchant);

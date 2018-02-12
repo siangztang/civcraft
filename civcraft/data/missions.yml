@@ -1,59 +1,46 @@
 spacemissions_levels:
-######################################################
-# level: использование - civ.setCurrentMission()     #
-# name: использование: /res book + /civ space        #
-# require_hammers: использование: UpdateMissionTask  #
-# require_beakers: использование: UpdateMissionTask  #
-######################################################
-
     - level: 1
-      name: 'Запуск орбитального спутника'
+      name: 'Launch Orbital Satellite'
       require_hammers: '50000.0'
       require_beakers: '50000.0'
 
     - level: 2
-      name: 'Полет на Луну'
+      name: 'Moon Exploration'
       require_hammers: '100000.0'
       require_beakers: '100000.0'
 
     - level: 3
-      name: 'Полет на Марс'
+      name: 'Mars Exploration'
       require_hammers: '150000.0'
       require_beakers: '150000.0'
 
     - level: 4
-      name: 'Запуск спутника к Солнцу'
+      name: 'Sun Exploration'
       require_hammers: '200000.0'
       require_beakers: '200000.0'
 
     - level: 5
-      name: 'Полет к границам Солнечной системы'
+      name: 'Expedtion to the edge of the Solar System'
       require_hammers: '250000.0'
       require_beakers: '250000.0'
 
     - level: 6
-      name: 'Warp-прыжок к звезде Betelgeuse'
+      name: 'Warp-jump to the Betelgeuse System'
       require_hammers: '500000.0'
       require_beakers: '500000.0'
 
     - level: 7
-      name: 'Warp-прыжок к планете Trestellar'
+      name: 'Warp-jump to Planet Trestellar'
       require_hammers: '750000.0'
       require_beakers: '750000.0'
 
 spacerocket_names:
-###########################################################
-# level: использование - civ.getCurrentMission()          #
-# name: использование: /res book + /civ space             #
-# components: использование: split компонентов для кравта #
-###########################################################
-
     - level: 1
       name: 'V-2'
       components: 'mat_satellite1:mat_fuel_tanks1:mat_engines1'
 
     - level: 2
-      name: 'Сатурн-5'
+      name: 'Saturn-5'
       components: 'mat_landing_module1:mat_orbital_station1:mat_fuel_tanks1:mat_engines1'
 
     - level: 3
@@ -77,15 +64,6 @@ spacerocket_names:
       components: 'mat_landing_module1:mat_orbital_station1:mat_provisions1:mat_residential_module2:mat_equipment1:mat_warp_core1:mat_warp_engine1:mat_gondolas1'
 
 space_crafts:
-################################################################################################################################################################################################
-# originalCraftMat: использование - оригинвльный предмет LoreCraftableMaterial (ID)                                                                                                            #
-# civcraftComponents: использование: кравт этого LoreCraftableMaterial (ибо там слишком много нужно (в верстак не поместится))                                                                 #
-# minecraftComponents: использование: List<Map<?, ?>>. Требует: typeID - ид предмета. data - short предмета. name - оригинальное название ванила итема (машинный перевод плохо переводит майн) #
-# count - кол-во, требуемое на кравт                                                                                                                                                           #
-# minecraftComponents: может и не быть (просто не писать - вернет null при вызове этого List'a)                                                                                                #                                                                                                                                      #
-################################################################################################################################################################################################
-
-
     - originalCraftMat: 'mat_satellite'
       civcraftComponents: 'mat_electronic20:mat_steel_plate4'
 
@@ -94,7 +72,7 @@ space_crafts:
       minecraftComponents:
           - type_id: 378
             data: 0
-            name: 'Сгусток магмы'
+            name: 'Magma Core'
             count: 250
 
     - originalCraftMat: 'mat_engines'
@@ -108,11 +86,11 @@ space_crafts:
       minecraftComponents:
           - type_id: 320
             data: 0
-            name: 'Жареная свинина'
+            name: 'Cooked Porkchop'
             count: 256
           - type_id: 391
             data: 0
-            name: 'Морковь'
+            name: 'Carrot'
             count: 512
 
     - originalCraftMat: 'mat_residential_module'
@@ -120,43 +98,43 @@ space_crafts:
       minecraftComponents:
           - type_id: 374
             data: 0
-            name: 'Пузырек'
+            name: 'Glass Bottle'
             count: 512
           - type_id: 326
             data: 0
-            name: 'Ведро воды'
+            name: 'Water Bucket'
             count: 3
           - type_id: 320
             data: 0
-            name: 'Жареная свинина'
+            name: 'Cooked Porkchop'
             count: 256
           - type_id: 391
             data: 0
-            name: 'Морковь'
+            name: 'Carrot'
             count: 320
           - type_id: 392
             data: 0
-            name: 'Картофель'
+            name: 'Potato'
             count: 256
           - type_id: 412
             data: 0
-            name: 'Жареная крольчатина'
+            name: 'Cooked Rabbit'
             count: 64
           - type_id: 393
             data: 0
-            name: 'Жареный картофель'
+            name: 'Baked Potato'
             count: 64
           - type_id: 40
             data: 0
-            name: 'Мухомор'
+            name: 'Red Mushroom'
             count: 128
           - type_id: 39
             data: 0
-            name: 'Гриб'
+            name: 'Brown Mushroom'
             count: 64
           - type_id: 281
             data: 0
-            name: 'Миска'
+            name: 'Bowl'
             count: 128
 
     - originalCraftMat: 'mat_solar_reflector'
@@ -164,7 +142,7 @@ space_crafts:
       minecraftComponents:
           - type_id: 266
             data: 0
-            name: 'Золото'
+            name: 'Gold Bar'
             count: 1024
 
     - originalCraftMat: 'mat_equipment'
@@ -172,15 +150,15 @@ space_crafts:
       minecraftComponents:
           - type_id: 356
             data: 0
-            name: 'Повторитель'
+            name: 'Redstone Repeater'
             count: 32
           - type_id: 404 # not found
             data: 0
-            name: 'Компоратор'
+            name: 'Comparator'
             count: 32
           - type_id: 151
             data: 0
-            name: 'Датчик дневного света'
+            name: 'Daylight Sensor'
             count: 646
 
     - originalCraftMat: 'mat_solar_sail'
@@ -191,44 +169,44 @@ space_crafts:
       minecraftComponents:
           - type_id: 374
             data: 0
-            name: 'Пузырек'
+            name: 'Glass Bottle'
             count: 2048
           - type_id: 326
             data: 0
-            name: 'Ведро воды'
+            name: 'Water Bucket'
             count: 15
           - type_id: 320
             data: 0
-            name: 'Жареная свинина'
+            name: 'Cooked Porkchop'
             count: 1024
           - type_id: 391
             data: 0
-            name: 'Морковь'
+            name: 'Carrot'
             count: 2048
           - type_id: 392
             data: 0
-            name: 'Картофель'
+            name: 'Potato'
             count: 2048
           - type_id: 412
             data: 0
-            name: 'Жареная крольчатина'
-            count: 512
+            name: 'Cooked Rabbit'
+            count: 64
           - type_id: 393
             data: 0
-            name: 'Жареный картофель'
-            count: 512
+            name: 'Baked Potato'
+            count: 64
           - type_id: 40
             data: 0
-            name: 'Мухомор'
-            count: 1536
+            name: 'Red Mushroom'
+            count: 128
           - type_id: 39
             data: 0
-            name: 'Гриб'
-            count: 512
+            name: 'Brown Mushroom'
+            count: 64
           - type_id: 281
             data: 0
-            name: 'Миска'
-            count: 1024
+            name: 'Bowl'
+            count: 128
 
     - originalCraftMat: 'mat_warp_core'
       civcraftComponents: 'mat_metallic_crystal_4:mat_ionic_crystal_4:mat_mercury_bath4'
