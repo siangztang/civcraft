@@ -128,8 +128,8 @@ extends EndGameCondition {
     public boolean finalWinCheck(Civilization civ) {
         Integer votes = EndConditionDiplomacy.getVotesFor(civ);
         for (Civilization otherCiv : CivGlobal.getCivs()) {
-            Integer otherVotes;
-            if (otherCiv == civ || (otherVotes = EndConditionDiplomacy.getVotesFor(otherCiv)) <= votes) continue;
+            Integer otherVotes = EndConditionDiplomacy.getVotesFor(otherCiv);
+            if (otherCiv == civ || otherVotes <= votes) continue;
             CivMessage.global(CivSettings.localize.localizedString("var_end_diplomacyError", civ.getName(), otherCiv.getName()));
             return false;
         }
@@ -148,15 +148,14 @@ extends EndGameCondition {
         if (!EndConditionDiplomacy.canVoteNow(resident)) {
             return;
         }
-        ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(EndConditionDiplomacy.getVoteSessionKey(civ));
-        if (entries.size() == 0) {
-            CivGlobal.getSessionDB().add(EndConditionDiplomacy.getVoteSessionKey(civ), "1", civ.getId(), 0, 0);
-        } else {
-            Integer votes;
-            Integer n = votes = Integer.valueOf(entries.get((int)0).value);
-            Integer n2 = votes = Integer.valueOf(votes + 1);
-            CivGlobal.getSessionDB().update(entries.get((int)0).request_id, entries.get((int)0).key, "" + votes);
-        }
+        ArrayList<SessionEntry> entries = CivGlobal.getSessionDB().lookup(getVoteSessionKey(civ));
+		if (entries.size() == 0) {
+			CivGlobal.getSessionDB().add(getVoteSessionKey(civ), ""+1, civ.getId(), 0, 0);
+		} else {
+			Integer votes = Integer.valueOf(entries.get(0).value);
+			votes++;
+			CivGlobal.getSessionDB().update(entries.get(0).request_id, entries.get(0).key, ""+votes);			
+		}
         CivMessage.sendSuccess(resident, CivSettings.localize.localizedString("var_end_diplomacyAddVote", civ.getName()));
     }
 

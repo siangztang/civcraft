@@ -53,7 +53,7 @@ public class Pasture2 extends Structure
     }
     
     public void buyItem(final int id, final Player player) {
-        final ItemStack stack = new ItemStack(id, 64, (short)0);
+        final ItemStack stack = ItemManager.createItemStack(id, 64);
         final HashMap<Integer, ItemStack> leftovers = (HashMap<Integer, ItemStack>)player.getInventory().addItem(new ItemStack[] { stack });
         for (final ItemStack itemStack : leftovers.values()) {
             player.getWorld().dropItem(player.getLocation(), itemStack);

@@ -3,7 +3,6 @@ package com.avrgaming.civcraft.endgame;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import org.bukkit.Bukkit;
 import com.avrgaming.civcraft.endgame.EndGameCondition;

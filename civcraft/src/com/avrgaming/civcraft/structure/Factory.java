@@ -10,7 +10,6 @@ import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.util.CivColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Inventory;
-import java.util.Iterator;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.threading.sync.request.UpdateInventoryRequest;
 import com.avrgaming.civcraft.config.ConfigSpaceCraftMat2;
@@ -143,7 +142,7 @@ public class Factory extends Structure
                 if (itemStack != null) {
                     final LoreMaterial loreMaterial = LoreMaterial.getMaterial(itemStack);
                     if (loreMaterial == null) {
-                        final Integer id = itemStack.getTypeId();
+                        final Integer id = ItemManager.getId(itemStack);
                         if (multiInvContentsMinecraft.get(id) == null) {
                             multiInvContentsMinecraft.put(id, itemStack.getAmount());
                         }

@@ -53,13 +53,14 @@ extends WaterStructure {
             double build_distance = CivSettings.getDouble(CivSettings.warConfig, "tesla_tower.build_distance");
             for (Town town : this.getTown().getCiv().getTowns()) {
                 for (Structure structure : town.getStructures()) {
-                    double distance;
-                    BlockCoord center;
-                    if (structure instanceof MagicTower && (distance = (center = structure.getCenterLocation()).distance(this.getCenterLocation())) <= build_distance) {
+					BlockCoord center = structure.getCenterLocation();
+					double distance = center.distance(this.getCenterLocation());
+                    if (structure instanceof MagicTower && distance <= build_distance) {
                         throw new CivException(CivSettings.localize.localizedString("var_buildable_tooCloseToMagicTower", "" + center.getX() + "," + center.getY() + "," + center.getZ()));
                     }
-                    if (!(structure instanceof MagicShip) || (distance = (center = structure.getCenterLocation()).distance(this.getCenterLocation())) > build_distance) continue;
-                    throw new CivException(CivSettings.localize.localizedString("var_buildable_tooCloseToMagicShip", "" + center.getX() + "," + center.getY() + "," + center.getZ()));
+                    if (structure instanceof MagicShip && distance <= build_distance) {
+                    	throw new CivException(CivSettings.localize.localizedString("var_buildable_tooCloseToMagicShip", "" + center.getX() + "," + center.getY() + "," + center.getZ()));
+                    }
                 }
             }
         }

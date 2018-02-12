@@ -37,7 +37,6 @@ extends ItemComponent {
 
     @Override
     public void onDefense(EntityDamageByEntityEvent event, ItemStack stack) {
-        Resident resident;
         double defValue = this.getDouble("value");
         LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterial(stack);
         if (craftMat == null) {
@@ -51,7 +50,7 @@ extends ItemComponent {
         }
         defValue += extraDef;
         double damage = event.getDamage();
-        if (event.getEntity() instanceof Player && !(resident = CivGlobal.getResident((Player)event.getEntity())).hasTechForItem(stack)) {
+        if (event.getEntity() instanceof Player && !(CivGlobal.getResident((Player)event.getEntity())).hasTechForItem(stack)) {
             defValue /= 2.0;
         }
         if ((damage -= defValue) < 0.5) {

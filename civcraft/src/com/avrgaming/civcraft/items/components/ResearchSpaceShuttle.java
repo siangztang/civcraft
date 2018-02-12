@@ -1,7 +1,6 @@
 
 package com.avrgaming.civcraft.items.components;
 
-import java.util.Map;
 import gpl.AttributeUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import com.avrgaming.civcraft.config.CivSettings;
-import com.avrgaming.civcraft.config.ConfigTech;
 import com.avrgaming.civcraft.items.components.ItemComponent;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.main.CivGlobal;
@@ -18,7 +16,6 @@ import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Resident;
-import com.avrgaming.civcraft.permission.PermissionGroup;
 import com.avrgaming.civcraft.util.CallbackInterface;
 
 public class ResearchSpaceShuttle extends ItemComponent implements CallbackInterface {
@@ -65,7 +62,7 @@ public class ResearchSpaceShuttle extends ItemComponent implements CallbackInter
             return;
         }
         ItemStack newStack = new ItemStack(Material.AIR);
-        player.getInventory().setItemInHand(newStack);
+        player.getInventory().setItemInMainHand(newStack);
         civ.addTech(CivSettings.techs.get("tech_space_shuttle"));
         CivMessage.sendSuccess((CommandSender)player, CivSettings.localize.localizedString("researchSpaceShuttle_lore6"));
         String fullName = player.getDisplayName();

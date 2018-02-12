@@ -35,14 +35,16 @@ public class Schematic
         this.name = name;
     }
     
-    public void paste(final Location loc) {
+    @SuppressWarnings("deprecation")
+	public void paste(final Location loc) {
         final BlockFace[] bf = { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
         final short[] blocks = this.getBlocks();
         final byte[] blockData = this.getData();
         final short length = this.getLenght();
         final short width = this.getWidth();
         final short height = this.getHeight();
-        boolean luckkyBlockPasted = false;
+        //TODO: Add Lucky Blocks?
+//        boolean luckkyBlockPasted = false;
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 for (int z = 0; z < length; ++z) {
@@ -76,10 +78,12 @@ public class Schematic
         final NBTInputStream nbtStream = new NBTInputStream(stream);
         final CompoundTag schematicTag = (CompoundTag)nbtStream.readTag();
         if (!schematicTag.getName().equals("Schematic")) {
+            nbtStream.close();
             throw new IllegalArgumentException("Tag \"Schematic\" does not exist or is not first");
         }
         final Map<String, Tag> schematic = schematicTag.getValue();
         if (!schematic.containsKey("Blocks")) {
+            nbtStream.close();
             throw new IllegalArgumentException("Schematic file is missing a \"Blocks\" tag");
         }
         final short width = getChildTag(schematic, "Width", ShortTag.class).getValue();
@@ -103,6 +107,7 @@ public class Schematic
                 blocks[index] = (short)(((addId[index >> 1] & 0xF0) << 4) + (blockId[index] & 0xFF));
             }
         }
+        nbtStream.close();
         return new Schematic(file.getName().replace(".schematic", ""), blocks, blockData, width, length, height);
     }
     
