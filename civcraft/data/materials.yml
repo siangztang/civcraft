@@ -5875,6 +5875,10 @@ removed_recipes:
     - type_id: 214
       data: 0
       
+    #Tipped Arrow
+    - type_id: 440
+      data: 0
+
     #Shield
     - type_id: 442
       data: 0
