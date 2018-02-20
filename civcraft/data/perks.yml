@@ -69,6 +69,16 @@ perks:
             theme: 'lightz'
             template: 'monument'
 
+# ===== Canada TEMPLATES
+    - id: 'perk_canada_monument'
+      display_name: 'Canada Monument Template'
+      item_id: 32
+      data: 0
+      components:
+          - name: 'CustomTemplate'
+            theme: 'canada'
+            template: 'monument'
+
 # ===== Holoska TEMPLATES
     - id: 'perk_holoska_monument'
       display_name: 'Eureka Monument Template'
