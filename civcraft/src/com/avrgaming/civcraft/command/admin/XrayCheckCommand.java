@@ -3,9 +3,11 @@ package com.avrgaming.civcraft.command.admin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
 import com.avrgaming.civcraft.command.CommandBase;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.exception.CivException;
 
 public class XrayCheckCommand
@@ -35,13 +37,13 @@ extends CommandBase {
 
     public String onCheck(int g, Player player) {
         if (g <= 33 && g > 20) {
-            return "\u00a7a" + player.getName() + " y = " + g + "\n";
+            return CivColor.Green + player.getName() + " y = " + g + "\n";
         }
         if (g <= 20 && g > 12) {
-            return "\u00a76" + player.getName() + " y = " + g + "\n";
+            return CivColor.Gold + player.getName() + " y = " + g + "\n";
         }
         if (g <= 12 && g >= 1) {
-            return "\u00a7c" + player.getName() + " y =  " + g + "\n";
+            return CivColor.Red + player.getName() + " y =  " + g + "\n";
         }
         return "";
     }

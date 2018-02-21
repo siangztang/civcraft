@@ -155,8 +155,8 @@ public class Factory extends Structure
             }
         }
         final LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterialFromId(configSpaceCraftMat.originalCraftMat);
-        final StringBuilder notMatchComponents = new StringBuilder("§c\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0441\u043e\u0437\u0434\u0430\u0442\u044c '" + craftMat.getName() + "'. \u041d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u043e\u0432. \u041d\u0443\u0436\u043d\u043e \u0435\u0449\u0435: " + "§6");
-        final String crutches = "§c\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0441\u043e\u0437\u0434\u0430\u0442\u044c '" + craftMat.getName() + "'. \u041d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u043e\u0432. \u041d\u0443\u0436\u043d\u043e \u0435\u0449\u0435: " + "§6";
+        final StringBuilder notMatchComponents = new StringBuilder(CivColor.Red + CivSettings.localize.localizedString("var_structure_factory_create_failed", craftMat.getName()) + CivColor.Gold);
+        final String crutches = CivColor.Red + CivSettings.localize.localizedString("var_structure_factory_create_failed_crutches", craftMat.getName()) + CivColor.Gold;
         if (!configSpaceCraftMat.civcraftComponents.equals("")) {
             for (final String component2 : split) {
                 final int count2 = Integer.parseInt(component2.replaceAll("[^\\d]", ""));
@@ -164,12 +164,12 @@ public class Factory extends Structure
                 final LoreCraftableMaterial itemToGetName = LoreCraftableMaterial.getCraftMaterialFromId(craftMatID2);
                 if (multiInvContentsCraftMat.get(craftMatID2) == null) {
                     allMatchCraftMat = false;
-                    notMatchComponents.append(itemToGetName.getName()).append(" ").append(count2).append(" ").append("\u0448\u0442\u0443\u043a\u0438").append("\n");
+                    notMatchComponents.append(itemToGetName.getName()).append(" ").append(count2).append(" ").append(CivSettings.localize.localizedString("structure_factory_pieces")).append("\n");
                 }
                 else if (multiInvContentsCraftMat.get(craftMatID2) < count2) {
                     allMatchCraftMat = false;
                     final int reaming = count2 - multiInvContentsCraftMat.get(craftMatID2);
-                    notMatchComponents.append(itemToGetName.getName()).append(" ").append(reaming).append(" ").append("\u0448\u0442\u0443\u043a\u0438").append("\n");
+                    notMatchComponents.append(itemToGetName.getName()).append(" ").append(reaming).append(" ").append(CivSettings.localize.localizedString("structure_factory_pieces")).append("\n");
                 }
             }
         }
@@ -183,7 +183,7 @@ public class Factory extends Structure
                     if (succusess) {
                         notMatchComponents.append("§a");
                     }
-                    notMatchComponents.append(configSpaceCraftMat2.name).append(" ").append(count3).append(" ").append("\u0448\u0442\u0443\u043a\u0438").append("\n");
+                    notMatchComponents.append(configSpaceCraftMat2.name).append(" ").append(count3).append(" ").append(CivSettings.localize.localizedString("structure_factory_pieces")).append("\n");
                 }
                 else {
                     if (multiInvContentsMinecraft.get(id2) >= count3) {
@@ -195,7 +195,7 @@ public class Factory extends Structure
                         notMatchComponents.append("§a");
                     }
                     final int reaming2 = count3 - multiInvContentsMinecraft.get(id2);
-                    notMatchComponents.append(configSpaceCraftMat2.name).append(" ").append(reaming2).append(" ").append("\u0448\u0442\u0443\u043a\u0438").append("\n");
+                    notMatchComponents.append(configSpaceCraftMat2.name).append(" ").append(reaming2).append(" ").append(CivSettings.localize.localizedString("structure_factory_pieces")).append("\n");
                 }
             }
         }
@@ -237,20 +237,20 @@ public class Factory extends Structure
         if (this.trainSign != null) {
             try {
                 final LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterialFromId(crafts.get(newIndex).originalCraftMat);
-                this.trainSign.setText(CivSettings.localize.localizedString("factory_sign_craft") + "\n" + CivColor.GreenBold + craftMat.getName());
+                this.trainSign.setText(CivSettings.localize.localizedString("structure_factory_sign_construct") + "\n" + CivColor.GreenBold + craftMat.getName());
                 this.index = newIndex;
             }
             catch (IndexOutOfBoundsException e) {
                 if (crafts.size() > 0) {
                     final LoreCraftableMaterial craftMat = LoreCraftableMaterial.getCraftMaterialFromId(crafts.get(0).originalCraftMat);
-                    this.trainSign.setText(CivSettings.localize.localizedString("factory_sign_craft") + "\n" + CivColor.GreenBold + craftMat.getName());
+                    this.trainSign.setText(CivSettings.localize.localizedString("structure_factory_sign_construct") + "\n" + CivColor.GreenBold + craftMat.getName());
                     this.index = 0;
                 }
             }
             this.trainSign.update();
         }
         else {
-            CivLog.warning("\u041d\u0435 \u043c\u043e\u0433\u0443 \u043d\u0430\u0439\u0442\u0438 \u0442\u0430\u0431\u043b\u0438\u0447\u043a\u0443 \u0434\u043b\u044f \u0441\u0442\u0430\u0440\u0442\u0430 \u043a\u0440\u0430\u0432\u0442\u0430 " + this.getId() + " \u0432 " + this.getCorner());
+            CivLog.warning("Cannot find Construct sign for " + this.getId() + " in " + this.getCorner());
         }
     }
     
@@ -294,7 +294,7 @@ public class Factory extends Structure
                 ItemManager.setTypeId(absCoord.getBlock(), commandBlock.getType());
                 ItemManager.setData(absCoord.getBlock(), commandBlock.getData());
                 final StructureSign structSign = new StructureSign(absCoord, this);
-                structSign.setText(CivColor.UNDERLINE + "\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0438\u0439 \u044d\u043b\u0435\u043c\u0435\u043d\u0442");
+                structSign.setText(CivColor.UNDERLINE + CivSettings.localize.localizedString("factory_sign_previousUnit"));
                 structSign.setDirection(commandBlock.getData());
                 structSign.setAction("prev");
                 structSign.update();
@@ -306,7 +306,7 @@ public class Factory extends Structure
                 ItemManager.setTypeId(absCoord.getBlock(), commandBlock.getType());
                 ItemManager.setData(absCoord.getBlock(), commandBlock.getData());
                 final StructureSign structSign = new StructureSign(absCoord, this);
-                structSign.setText(CivColor.UNDERLINE + "\u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u044d\u043b\u0435\u043c\u0435\u043d\u0442");
+                structSign.setText(CivColor.UNDERLINE + CivSettings.localize.localizedString("factory_sign_nextUnit"));
                 structSign.setDirection(commandBlock.getData());
                 structSign.setAction("next");
                 structSign.update();
@@ -322,7 +322,7 @@ public class Factory extends Structure
                 ItemManager.setTypeId(absCoord.getBlock(), commandBlock.getType());
                 ItemManager.setData(absCoord.getBlock(), commandBlock.getData());
                 final StructureSign structSign = new StructureSign(absCoord, this);
-                structSign.setText(CivColor.UNDERLINE + "\u0421\u043e\u0437\u0434\u0430\u0442\u044c!");
+                structSign.setText(CivColor.UNDERLINE + CivSettings.localize.localizedString("structure_factory_sign_construct"));
                 structSign.setDirection(commandBlock.getData());
                 structSign.setAction("craft");
                 structSign.update();

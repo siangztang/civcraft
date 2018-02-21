@@ -110,13 +110,12 @@ public class AdminCommand extends CommandBase {
         commands.put("goodierepo", CivSettings.localize.localizedString("cmd_servak"));
         commands.put("buildconquer", CivSettings.localize.localizedString("clogan"));
         commands.put("clearchat", CivSettings.localize.localizedString("clearchat"));
-        commands.put("newspaper", "\u041f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0430\u0435\u0442 \u0433\u0430\u0437\u0435\u0442\u0443");
-        commands.put("startMission", "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u0434\u043b\u044f \u0442\u0435\u0441\u0442\u0430");
-        commands.put("replenish", "\u0420\u0435\u0444\u0440\u0435\u0448\u0438\u0442 ");
+        commands.put("newspaper", CivSettings.localize.localizedString("adcmd_newspaper"));
+        commands.put("startMission", CivSettings.localize.localizedString("adcmd_startMission"));
+        commands.put("replenish", CivSettings.localize.localizedString("adcmd_replenish"));
         commands.put("count", CivSettings.localize.localizedString("adcmd_count"));
-        commands.put("globalwar", "\u0423\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u0442 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0439 \u0432\u0430\u0440.");
+        commands.put("globalwar", CivSettings.localize.localizedString("adcmd_globalWar"));
         commands.put("talentcount", CivSettings.localize.localizedString("adcmd_talentcount"));
-        commands.put("anyonehasmarket", CivSettings.localize.localizedString("cmd_civka_anyonehasmarket"));
         commands.put("gc", CivSettings.localize.localizedString("cmd_gc"));
         commands.put("pasteruin", CivSettings.localize.localizedString("cmd_pasteruin"));
 	}
@@ -143,23 +142,7 @@ public class AdminCommand extends CommandBase {
         }
         return sb.toString();
     }
-    
-    public void anyonehasmarket_cmd() throws CivException {
-        boolean has = false;
-        Town owner = null;
-        for (final Town town : CivGlobal.getTowns()) {
-            if (town.getCiv().isAdminCiv()) {
-                continue;
-            }
-            if (town.getStructureByType("s_market") != null) {
-                has = true;
-                owner = town;
-                break;
-            }
-        }
-        throw new CivException(CivSettings.localize.localizedString("cmd_civka_anyonehasmarket_result", has ? ("§a\u0435\u0441\u0442\u044c §6" + owner.getName() + "§b" + " (" + owner.getCiv().getName() + ")") : "§6\u043d\u0435\u0442"));
-    }
-    
+
     public void talentcount_cmd() {
         final HashMap<String, Integer> talents = new HashMap<String, Integer>();
         int count = 0;
@@ -172,7 +155,7 @@ public class AdminCommand extends CommandBase {
                 if (buff.getId().contains("level")) {
                     final int talentLevel = Integer.parseInt(buff.getId().replaceAll("[^\\d]", ""));
                     final ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(talentLevel);
-                    String description = "\u0421\u043b\u043e\u043c\u0430\u043b\u043e\u0441\u044c =(";
+                    String description = CivSettings.localize.localizedString("adcmd_talentcount_broken");
                     if (configLevelTalent.levelBuff1.equals(buff.getId())) {
                         description = talentLevel + " " + configLevelTalent.levelName + " " + configLevelTalent.levelBuffDesc1;
                     }
@@ -267,8 +250,8 @@ public class AdminCommand extends CommandBase {
     
     public void newspaper_cmd() throws IOException, InvalidConfigurationException {
         CivSettings.reloadNewspaperConfigFiles();
-        CivMessage.send(this.sender, "§6\u0413\u0430\u0437\u0435\u0442\u0430 \u043f\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u0430");
-        CivMessage.global("\u0412\u044b\u043f\u0443\u0448\u0435\u0449\u0435\u043d\u0430 \u043d\u043e\u0432\u0430\u044f CivCraft \u0433\u0430\u0437\u0435\u0442\u0430!");
+        CivMessage.send(this.sender, CivColor.Gold + CivSettings.localize.localizedString("adcmd_newspaper_done"));
+        CivMessage.global(CivSettings.localize.localizedString("adcmd_newspaper_broadcast"));
     }
     
     public void clearchat_cmd() throws CivException {

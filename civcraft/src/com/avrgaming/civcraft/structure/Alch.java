@@ -3,9 +3,11 @@ package com.avrgaming.civcraft.structure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import com.avrgaming.civcraft.components.NonMemberFeeComponent;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigAlchLevel;
@@ -18,6 +20,7 @@ import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.StructureSign;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.structure.Structure;
+import com.avrgaming.civcraft.util.CivColor;
 
 public class Alch
 extends Structure {
@@ -88,16 +91,16 @@ extends Structure {
             Civilization c = resident.getCiv();
             if (c == this.getCiv()) {
                 resident.buyItem(itemName, id, data, price, amount);
-                CivMessage.send((Object)player, "\u00a7a" + CivSettings.localize.localizedString("var_alch_msgBought", amount, itemName, new StringBuilder().append(price).append(" ").append(CivSettings.CURRENCY_NAME).toString()));
+                CivMessage.send((Object)player, CivColor.Green + CivSettings.localize.localizedString("var_alch_msgBought", amount, itemName, new StringBuilder().append(price).append(" ").append(CivSettings.CURRENCY_NAME).toString()));
                 return;
             }
             resident.buyItem(itemName, id, data, price + (double)payToTown, amount);
             this.getTown().depositDirect(payToTown);
-            CivMessage.send((Object)player, "\u00a7a" + CivSettings.localize.localizedString("var_alch_msgBought", amount, itemName, price, CivSettings.CURRENCY_NAME));
-            CivMessage.send((Object)player, "\u00a7e" + CivSettings.localize.localizedString("var_alch_msgPaidTaxes", this.getTown().getName(), new StringBuilder().append(payToTown).append(" ").append(CivSettings.CURRENCY_NAME).toString()));
+            CivMessage.send((Object)player, CivColor.Green + CivSettings.localize.localizedString("var_alch_msgBought", amount, itemName, price, CivSettings.CURRENCY_NAME));
+            CivMessage.send((Object)player, CivColor.Yellow + CivSettings.localize.localizedString("var_taxes_paid", this.getTown().getName(), new StringBuilder().append(payToTown).append(" ").append(CivSettings.CURRENCY_NAME).toString()));
         }
         catch (CivException e) {
-            CivMessage.send((Object)player, "\u00a7c" + e.getMessage());
+            CivMessage.send((Object)player, CivColor.Red + e.getMessage());
         }
     }
 
@@ -134,7 +137,7 @@ extends Structure {
             ConfigAlchLevel alchlevel = CivSettings.alchLevels.get(special_id + 1);
             this.sign_buy_material(player, alchlevel.itemName, alchlevel.itemId, (byte)alchlevel.itemData, alchlevel.amount, alchlevel.price);
         } else {
-            CivMessage.send((Object)player, "\u00a7c" + CivSettings.localize.localizedString("alch_sign_needUpgrade"));
+            CivMessage.send((Object)player, CivColor.Red + CivSettings.localize.localizedString("alch_sign_needUpgrade"));
         }
     }
 }

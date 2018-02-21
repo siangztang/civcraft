@@ -35,6 +35,6 @@ public class ConfigLevelTalent
             talent_level.levelBuffDesc3 = (String)level.get("levelBuffDesc3");
             levels.put(talent_level.level, talent_level);
         }
-        CivLog.info("\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e " + levels.size() + " \u0442\u0430\u043b\u0430\u043d\u0442-\u043b\u0432\u043b\u043e\u0432.");
+        CivLog.info("Loaded " + levels.size() + " Talents.");
     }
 }

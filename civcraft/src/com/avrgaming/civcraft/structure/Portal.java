@@ -3,11 +3,13 @@ package com.avrgaming.civcraft.structure;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.items.units.Unit;
 import com.avrgaming.civcraft.main.CivCraft;
@@ -19,6 +21,7 @@ import com.avrgaming.civcraft.object.StructureSign;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.util.BlockCoord;
+import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.util.SimpleBlock;
 import com.avrgaming.civcraft.war.War;
@@ -69,7 +72,7 @@ extends Structure {
                 }
                 boolean right = CivCraft.civRandom.nextBoolean();
                 Location bossLocation = right ? new Location(Bukkit.getWorld((String)"world_nether"), 143.0, 147.0, -613.0) : new Location(Bukkit.getWorld((String)"world_nether"), 1.0, 148.0, -610.0);
-                CivMessage.sendSuccess((CommandSender)player, CivSettings.localize.localizedString("var_portal_teleporting", "\u00a7c"));
+                CivMessage.sendSuccess((CommandSender)player, CivSettings.localize.localizedString("var_portal_teleporting", CivColor.Red));
                 player.teleport(bossLocation);
             }
         }
@@ -81,7 +84,7 @@ extends Structure {
             ItemManager.setTypeId(absCoord.getBlock(), commandBlock.getType());
             ItemManager.setData(absCoord.getBlock(), commandBlock.getData());
             StructureSign structSign = new StructureSign(absCoord, this);
-            structSign.setText("\u00a72\u0422\u0435\u043b\u0435\u043f\u043e\u0440\u0442 \u0432 \n\u00a75\u0410\u0434\u0441\u043a\u0443\u044e \u0414\u043e\u043b\u0438\u043d\u0443");
+            structSign.setText(CivSettings.localize.localizedString("structure_portal_sign"));
             structSign.setDirection(commandBlock.getData());
             structSign.setAction("teleport");
             structSign.update();

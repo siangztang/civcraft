@@ -65,9 +65,9 @@ extends Structure {
         ConfigUnit unit = artifactList.get(index);
         String out = "\n";
         double coinCost = unit.cost;
-        out = out + "\u00a7d" + unit.name + "\n";
-        out = out + "\u00a7e" + coinCost + "\n";
-        out = out + "\u00a7e" + CivSettings.CURRENCY_NAME;
+        out = out + CivColor.LightPurple + unit.name + "\n";
+        out = out + CivColor.Yellow + coinCost + "\n";
+        out = out + CivColor.Yellow + CivSettings.CURRENCY_NAME;
         return out;
     }
 
@@ -145,7 +145,7 @@ extends Structure {
                     break;
                 }
                 catch (CivException e) {
-                    CivMessage.send((Object)player, "\u00a7c" + e.getMessage());
+                    CivMessage.send((Object)player, CivColor.Red + e.getMessage());
                 }
             }
         }
@@ -279,7 +279,7 @@ extends Structure {
                 CivMessage.sendTown(this.getTown(), "\u00a74" + CivSettings.localize.localizedString("ordinary_errorUnknown") + e.getMessage());
             }
             catch (InvocationTargetException e) {
-                CivMessage.sendTown(this.getTown(), "\u00a7c" + e.getCause().getMessage());
+                CivMessage.sendTown(this.getTown(), CivColor.Red + e.getCause().getMessage());
                 this.currentHammers -= 20.0;
                 if (this.currentHammers >= 0.0) break block4;
                 this.currentHammers = 0.0;
@@ -312,7 +312,7 @@ extends Structure {
                 ++textIndex;
             }
             if (i == size / 2) {
-                text[1] = "\u00a7a" + this.trainingArtifact.name;
+                text[1] = CivColor.Green + this.trainingArtifact.name;
             }
             structSign.setText(text);
             structSign.update();

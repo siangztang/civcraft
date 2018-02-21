@@ -4,8 +4,10 @@ package com.avrgaming.civcraft.structure;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+
 import com.avrgaming.civcraft.components.AttributeBiomeRadiusPerLevel;
 import com.avrgaming.civcraft.components.ConsumeLevelComponent;
 import com.avrgaming.civcraft.config.CivSettings;
@@ -17,6 +19,7 @@ import com.avrgaming.civcraft.object.StructureChest;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.threading.CivAsyncTask;
+import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.MultiInventory;
 
 public class Lab
@@ -85,31 +88,31 @@ extends Structure {
     	ConsumeLevelComponent.Result result = this.consume(task);
     	switch (result) {
     	case STARVE: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7c" + CivSettings.localize.localizedString("var_lab_productionFell", this.getConsumeComponent().getLevel(), new StringBuilder().append("\u00a7a").append(this.getConsumeComponent().getCountString()).toString()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Red + CivSettings.localize.localizedString("var_lab_productionFell", this.getConsumeComponent().getLevel(), new StringBuilder().append(CivColor.Green).append(this.getConsumeComponent().getCountString()).toString()));
     		break;
     	}
     	case LEVELDOWN: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7c" + CivSettings.localize.localizedString("var_lab_lostalvl", this.getConsumeComponent().getLevel()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Red + CivSettings.localize.localizedString("var_lab_lostalvl", this.getConsumeComponent().getLevel()));
     		break;
     	}
     	case STAGNATE: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7c" + CivSettings.localize.localizedString("var_lab_stagnated", this.getConsumeComponent().getLevel(), new StringBuilder().append("\u00a7a").append(this.getConsumeComponent().getCountString()).toString()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Red + CivSettings.localize.localizedString("var_lab_stagnated", this.getConsumeComponent().getLevel(), new StringBuilder().append(CivColor.Green).append(this.getConsumeComponent().getCountString()).toString()));
     		break;
     	}
     	case GROW: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7a" + CivSettings.localize.localizedString("var_lab_productionGrew", this.getConsumeComponent().getLevel(), this.getConsumeComponent().getCountString()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Green + CivSettings.localize.localizedString("var_lab_productionGrew", this.getConsumeComponent().getLevel(), this.getConsumeComponent().getCountString()));
     		break;
     	}
     	case LEVELUP: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7a" + CivSettings.localize.localizedString("var_lab_lvlUp", this.getConsumeComponent().getLevel()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Green + CivSettings.localize.localizedString("var_lab_lvlUp", this.getConsumeComponent().getLevel()));
     		break;
     	}
     	case MAXED: {
-    		CivMessage.sendTown(this.getTown(), "\u00a7a" + CivSettings.localize.localizedString("var_lab_maxed", this.getConsumeComponent().getLevel(), new StringBuilder().append("\u00a7a").append(this.getConsumeComponent().getCountString()).toString()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Green + CivSettings.localize.localizedString("var_lab_maxed", this.getConsumeComponent().getLevel(), new StringBuilder().append(CivColor.Green).append(this.getConsumeComponent().getCountString()).toString()));
     		break;
     	}
     	default:
-    		CivMessage.sendTown(this.getTown(), "\u00a7c" + CivSettings.localize.localizedString("var_lab_productionFell", this.getConsumeComponent().getLevel(), new StringBuilder().append("\u00a7a").append(this.getConsumeComponent().getCountString()).toString()));
+    		CivMessage.sendTown(this.getTown(), CivColor.Red + CivSettings.localize.localizedString("var_lab_productionFell", this.getConsumeComponent().getLevel(), new StringBuilder().append(CivColor.Green).append(this.getConsumeComponent().getCountString()).toString()));
     		break;
     	}
     }

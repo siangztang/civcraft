@@ -19,7 +19,7 @@ import com.avrgaming.civcraft.util.CivColor;
 public class CivTalentCommand extends CommandBase {
     protected void addBuffToTown(Town town, String id) {
         try {
-            town.getBuffManager().addBuff(id, id, "\u041a\u0430\u043f\u0438\u0442\u043e\u043b\u0438\u0439 in " + town.getName());
+            town.getBuffManager().addBuff(id, id, "Talent " + town.getName());
         }
         catch (CivException e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class CivTalentCommand extends CommandBase {
     }
 
     public void info_cmd() {
-        CivMessage.send((Object)this.sender, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_info_link"));
+        CivMessage.send((Object)this.sender, CivColor.Green + CivSettings.localize.localizedString("cmd_civ_talent_info_link"));
     }
 
     public void next_cmd() throws CivException {
@@ -48,13 +48,13 @@ public class CivTalentCommand extends CommandBase {
             return;
         }
         if (capitol.getCultureLevel() > 10) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_next_ended"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_next_ended"));
         }
         ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(capitol.getCultureLevel() + 1);
         CivMessage.sendHeading(sender, configLevelTalent.levelName + " (" + configLevelTalent.level + ")");
-        CivMessage.send((Object)sender, "\u00a7c" + configLevelTalent.levelBuffDesc1);
-        CivMessage.send((Object)sender, "\u00a7a" + configLevelTalent.levelBuffDesc2);
-        CivMessage.send((Object)sender, "\u00a7b" + configLevelTalent.levelBuffDesc3);
+        CivMessage.send((Object)sender, CivColor.Red + configLevelTalent.levelBuffDesc1);
+        CivMessage.send((Object)sender, CivColor.Green + configLevelTalent.levelBuffDesc2);
+        CivMessage.send((Object)sender, CivColor.LightBlue + configLevelTalent.levelBuffDesc3);
     }
 
     public void list_cmd() throws CivException {
@@ -68,7 +68,7 @@ public class CivTalentCommand extends CommandBase {
             if (!buff.getId().contains("level")) continue;
             int talentLevel = Integer.parseInt(buff.getId().replaceAll("[^\\d]", ""));
             ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(talentLevel);
-            String description = "\u0421\u043b\u043e\u043c\u0430\u043b\u043e\u0441\u044c =(";
+            String description = CivSettings.localize.localizedString("cmd_talentcount_broken");
             if (configLevelTalent.levelBuff1.equals(buff.getId())) {
                 description = configLevelTalent.levelBuffDesc1;
             } else if (configLevelTalent.levelBuff2.equals(buff.getId())) {
@@ -76,7 +76,7 @@ public class CivTalentCommand extends CommandBase {
             } else if (configLevelTalent.levelBuff3.equals(buff.getId())) {
                 description = configLevelTalent.levelBuffDesc3;
             }
-            talents.add("\u00a7a" + configLevelTalent.level + CivColor.RESET + " (" + CivColor.GoldBold + configLevelTalent.levelName + CivColor.RESET + ")" + CivColor.LightBlueBold + ": " + "\u00a73" + description);
+            talents.add(CivColor.Green + configLevelTalent.level + CivColor.RESET + " (" + CivColor.GoldBold + configLevelTalent.levelName + CivColor.RESET + ")" + CivColor.LightBlueBold + ": " + CivColor.Blue + description);
             has = true;
         }
         if (!has) {
@@ -99,19 +99,19 @@ public class CivTalentCommand extends CommandBase {
             return;
         }
         if (capitol.getCultureLevel() > 10) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
         }
         if (civ.isTalentIsUsed() && capitol.getCultureLevel() >= 10) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
         }
         ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(capitol.getCultureLevel());
         Integer talentChoosen = 999;
         if (this.args.length < 2) {
-            CivMessage.send((Object)sender, "\u00a7d" + CivSettings.localize.localizedString("cmd_civ_talent_choose_chooseOne"));
+            CivMessage.send((Object)sender, CivColor.LightPurple + CivSettings.localize.localizedString("cmd_civ_talent_choose_chooseOne"));
             CivMessage.sendHeading(sender, configLevelTalent.levelName + " (" + configLevelTalent.level + ")");
-            CivMessage.send((Object)sender, "\u00a7c1 - " + configLevelTalent.levelBuffDesc1);
-            CivMessage.send((Object)sender, "\u00a7a2 - " + configLevelTalent.levelBuffDesc2);
-            CivMessage.send((Object)sender, "\u00a7b3 - " + configLevelTalent.levelBuffDesc3);
+            CivMessage.send((Object)sender, CivColor.Red + "1 - " + configLevelTalent.levelBuffDesc1);
+            CivMessage.send((Object)sender, CivColor.Green + "2 - " + configLevelTalent.levelBuffDesc2);
+            CivMessage.send((Object)sender, CivColor.LightBlue + "3 - " + configLevelTalent.levelBuffDesc3);
         } else {
             try {
                 talentChoosen = Integer.parseInt(this.args[1]);
@@ -126,30 +126,30 @@ public class CivTalentCommand extends CommandBase {
             switch (talentChoosen) {
                 case 1: {
                     if (civ.isTalentIsUsed()) {
-                        throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
+                        throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
                     }
                     confirmation = new InteractiveTalentConfirmation(civ, this.getPlayer(), configLevelTalent.levelBuff1, CivSettings.localize.localizedString("cmd_civ_talent_choose_sucusses", player.getDisplayName(), talentChoosen, configLevelTalent.levelBuffDesc1, capitol.getCultureLevel()));
-                    message = "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append("\u00a7a").toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc1).append("\u00a7a").toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append("\u00a7a").toString());
+                    message = CivColor.Green + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc1).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append(CivColor.Green).toString());
                     break;
                 }
                 case 2: {
                     if (civ.isTalentIsUsed()) {
-                        throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
+                        throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
                     }
                     confirmation = new InteractiveTalentConfirmation(civ, this.getPlayer(), configLevelTalent.levelBuff2, CivSettings.localize.localizedString("cmd_civ_talent_choose_sucusses", player.getDisplayName(), talentChoosen, configLevelTalent.levelBuffDesc2, capitol.getCultureLevel()));
-                    message = "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append("\u00a7a").toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc2).append("\u00a7a").toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append("\u00a7a").toString());
+                    message = CivColor.Green + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc2).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append(CivColor.Green).toString());
                     break;
                 }
                 case 3: {
                     if (civ.isTalentIsUsed()) {
-                        throw new CivException("\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
+                        throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_notNow", civ.getCapitol().getName(), civ.getCapitol().getCultureLevel() + 1));
                     }
                     confirmation = new InteractiveTalentConfirmation(civ, this.getPlayer(), configLevelTalent.levelBuff3, CivSettings.localize.localizedString("cmd_civ_talent_choose_sucusses", player.getDisplayName(), talentChoosen, configLevelTalent.levelBuffDesc3, capitol.getCultureLevel()));
-                    message = "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append("\u00a7a").toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc3).append("\u00a7a").toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append("\u00a7a").toString());
+                    message = CivColor.Green + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationText", new StringBuilder().append(CivColor.GreenBold).append(capitol.getCultureLevel()).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.GoldBold).append(configLevelTalent.levelBuffDesc3).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.LightBlueBold).append(talentChoosen).append(CivColor.Green).toString());
                     break;
                 }
                 default: {
-                    CivMessage.send((Object)sender, "\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_badInteger", talentChoosen));
+                    CivMessage.send((Object)sender, CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_badInteger", talentChoosen));
                 }
             }
         }
@@ -157,7 +157,7 @@ public class CivTalentCommand extends CommandBase {
             this.getResident().setInteractiveMode(confirmation);
             CivMessage.sendHeading(sender, CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationHeading"));
             CivMessage.send((Object)sender, message);
-            CivMessage.send((Object)sender, "\u00a78" + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationTypeSth"));
+            CivMessage.send((Object)sender, CivColor.Gray + CivSettings.localize.localizedString("cmd_civ_talent_choose_interactiveConfirmationTypeSth"));
         }
     }
 

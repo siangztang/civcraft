@@ -29,7 +29,7 @@ implements InteractiveResponse {
     @Override
     public void respond(String message, Resident resident) {
         if (!(message.equalsIgnoreCase("yes"))) {
-            CivMessage.sendError((Object)this.leader, CivSettings.localize.localizedString("interactive_confirmTalent_cancel", CivColor.GoldBold + this.target.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)this.leader, CivSettings.localize.localizedString("interactive_confirmTalent_cancel", CivColor.GoldBold + this.target.getName() + CivColor.Red));
             resident.clearInteractiveMode();
             return;
         }
@@ -49,12 +49,12 @@ implements InteractiveResponse {
             e.printStackTrace();
         }
         CivMessage.sendCiv(this.target, this.succesesMessage);
-        CivMessage.send((Object)this.leader, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_sucussesSender"));
+        CivMessage.send((Object)this.leader, CivColor.Green + CivSettings.localize.localizedString("cmd_civ_talent_choose_sucussesSender"));
     }
 
     protected void addBuffToTown(Town town, String id) {
         try {
-            town.getBuffManager().addBuff(id, id, "\u041a\u0430\u043f\u0438\u0442\u043e\u043b\u0438\u0439 in " + town.getName());
+            town.getBuffManager().addBuff(id, id, "Talent in " + town.getName());
         }
         catch (CivException e) {
             e.printStackTrace();

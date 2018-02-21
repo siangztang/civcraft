@@ -79,8 +79,8 @@ public class Pasture2 extends Structure
                     throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noPerms", this.getCiv().getName()));
                 }
                 if (!resident.getTreasury().hasEnough(756.0)) {
-                    final double reaming = 756.0 - resident.getTreasury().getBalance();
-                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + reaming, "\u041c\u043e\u043d\u0435\u0442\u044b"));
+                    final double remaining = 756.0 - resident.getTreasury().getBalance();
+                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + remaining, "\u041c\u043e\u043d\u0435\u0442\u044b"));
                 }
                 this.buyItem(319, player);
                 resident.getTreasury().withdraw(756.0);
@@ -91,8 +91,8 @@ public class Pasture2 extends Structure
                     throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noPerms", this.getCiv().getName()));
                 }
                 if (!resident.getTreasury().hasEnough(756.0)) {
-                    final double reaming = 756.0 - resident.getTreasury().getBalance();
-                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + reaming, "\u041c\u043e\u043d\u0435\u0442\u044b"));
+                    final double remaining = 756.0 - resident.getTreasury().getBalance();
+                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + remaining, "\u041c\u043e\u043d\u0435\u0442\u044b"));
                 }
                 this.buyItem(363, player);
                 resident.getTreasury().withdraw(756.0);
@@ -103,8 +103,8 @@ public class Pasture2 extends Structure
                     throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noPerms", this.getCiv().getName()));
                 }
                 if (!resident.getTreasury().hasEnough(756.0)) {
-                    final double reaming = 756.0 - resident.getTreasury().getBalance();
-                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + reaming, "\u041c\u043e\u043d\u0435\u0442\u044b"));
+                    final double remaining = 756.0 - resident.getTreasury().getBalance();
+                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + remaining, "\u041c\u043e\u043d\u0435\u0442\u044b"));
                 }
                 this.buyItem(365, player);
                 resident.getTreasury().withdraw(756.0);
@@ -115,8 +115,8 @@ public class Pasture2 extends Structure
                     throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noPerms", this.getCiv().getName()));
                 }
                 if (!resident.getTreasury().hasEnough(756.0)) {
-                    final double reaming = 756.0 - resident.getTreasury().getBalance();
-                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + reaming, "\u041c\u043e\u043d\u0435\u0442\u044b"));
+                    final double remaining = 756.0 - resident.getTreasury().getBalance();
+                    throw new CivException("§c" + CivSettings.localize.localizedString("var_pasture2_noMoney", "§a" + remaining, "\u041c\u043e\u043d\u0435\u0442\u044b"));
                 }
                 this.buyItem(423, player);
                 resident.getTreasury().withdraw(756.0);

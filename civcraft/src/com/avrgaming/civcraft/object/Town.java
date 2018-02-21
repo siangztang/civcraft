@@ -3443,7 +3443,7 @@ public class Town extends SQLObject {
                 if (!talentId.equals("")) {
                     try {
                         if (!this.getBuffManager().hasBuff(talentId) && talentId != null) {
-                            this.getBuffManager().addBuff(talentId, talentId, "capitol in " + this.getName());
+                            this.getBuffManager().addBuff(talentId, talentId, "Talent " + this.getName());
                         }
                     }
                     catch (NullPointerException e) {

@@ -2,12 +2,14 @@
 package com.avrgaming.civcraft.items.components;
 
 import gpl.AttributeUtil;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.items.components.ItemComponent;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
@@ -17,14 +19,15 @@ import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.util.CallbackInterface;
+import com.avrgaming.civcraft.util.CivColor;
 
 public class ResearchSpaceShuttle extends ItemComponent implements CallbackInterface {
     @Override
     public void onPrepareCreate(AttributeUtil attrUtil) {
-        attrUtil.addLore((Object)ChatColor.RESET + "\u00a76" + CivSettings.localize.localizedString("researchSpaceShuttle_lore1"));
-        attrUtil.addLore((Object)ChatColor.RESET + "\u00a7c" + CivSettings.localize.localizedString("itemLore_RightClickToUse"));
+        attrUtil.addLore((Object)ChatColor.RESET + CivColor.Gold + CivSettings.localize.localizedString("researchSpaceShuttle_lore1"));
+        attrUtil.addLore((Object)ChatColor.RESET + CivColor.Red + CivSettings.localize.localizedString("itemLore_RightClickToUse"));
         attrUtil.addEnhancement("LoreEnhancementSoulBound", null, null);
-        attrUtil.addLore("\u00a76" + CivSettings.localize.localizedString("Soulbound"));
+        attrUtil.addLore(CivColor.Gold + CivSettings.localize.localizedString("Soulbound"));
     }
 
     @Override

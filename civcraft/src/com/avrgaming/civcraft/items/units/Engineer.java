@@ -29,7 +29,7 @@ extends UnitMaterial {
         Engineer.setOwningTown(town, is);
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
-        attrs.addLore("\u00a76SoulBound");
+        attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
         attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
         attrs.addLore(CivColor.LightGray + "\u041f\u0430\u0441\u0441\u0438\u0432\u043d\u044b\u0439");
         attrs.addLore(CivColor.LightGray + "\u0423\u0432\u0435\u043b\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u0443\u0440\u043e\u043d \u043f\u043e \u0421\u0442\u0440\u043e\u0435\u043d\u0438\u044f\u043c \u043d\u0430 1 (100%)");

@@ -24,14 +24,14 @@ public class Health
 extends ItemComponent {
     @Override
     public void onPrepareCreate(AttributeUtil attrs) {
-        attrs.addLore("\u00a73" + this.getDouble("value") + " " + CivSettings.localize.localizedString("newItemLore_Defense"));
+        attrs.addLore(CivColor.Blue + this.getDouble("value") + " " + CivSettings.localize.localizedString("newItemLore_Defense"));
     }
 
     @Override
     public void onHold(PlayerItemHeldEvent event) {
         Resident resident = CivGlobal.getResident(event.getPlayer());
         if (!resident.hasTechForItem(event.getPlayer().getInventory().getItem(event.getNewSlot()))) {
-            CivMessage.send((Object)resident, "\u00a7c" + CivSettings.localize.localizedString("itemLore_Warning") + " - " + CivColor.LightGray + CivSettings.localize.localizedString("itemLore_defenseHalfPower"));
+            CivMessage.send((Object)resident, CivColor.Red + CivSettings.localize.localizedString("itemLore_Warning") + " - " + CivColor.LightGray + CivSettings.localize.localizedString("itemLore_defenseHalfPower"));
         }
     }
 

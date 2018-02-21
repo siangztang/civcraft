@@ -73,7 +73,7 @@ public class BuildCommand extends CommandBase {
             long timeNow = Calendar.getInstance().getTimeInMillis();
             double seconds = mins * 60.0;
             long end = (long)((double)timeNow + 1000.0 * seconds);
-            String messageSender = "\u00a7a" + CivSettings.localize.localizedString("cmd_build_calc_result", new StringBuilder().append("\u00a72").append(b.getDisplayName()).append("\u00a7a").toString(), new StringBuilder().append("\u00a7c").append(sdf.format(end)).append("\u00a7a").toString());
+            String messageSender = CivColor.Green + CivSettings.localize.localizedString("cmd_build_calc_result", new StringBuilder().append(CivColor.Green).append(b.getDisplayName()).append(CivColor.Green).toString(), new StringBuilder().append(CivColor.Red).append(sdf.format(end)).append(CivColor.Green).toString());
             CivMessage.send(this.sender, messageSender);
         }
     }

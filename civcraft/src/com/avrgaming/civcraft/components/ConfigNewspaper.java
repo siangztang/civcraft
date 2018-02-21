@@ -59,6 +59,6 @@ public class ConfigNewspaper
             newspaper.version = (String)b.get("version");
             newspapers.put(newspaper.id.toLowerCase(), newspaper);
         }
-        CivLog.info("\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e " + newspapers.size() + " \u0433\u0430\u0437\u0435\u0442.");
+        CivLog.info("Loaded " + newspapers.size() + " newspaper issues.");
     }
 }

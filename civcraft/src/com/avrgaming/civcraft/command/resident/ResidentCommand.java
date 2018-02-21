@@ -70,7 +70,7 @@ public class ResidentCommand extends CommandBase {
         StringBuilder outlaws = new StringBuilder();
         for (Town town : CivGlobal.getTowns()) {
             if (!town.isOutlaw(resident)) continue;
-            outlaws.append("\u00a7c").append(town.getName()).append(" [").append(town.getCiv().getName()).append("] ").append("\n");
+            outlaws.append(CivColor.Red).append(town.getName()).append(" [").append(town.getCiv().getName()).append("] ").append("\n");
         }
         if (outlaws.toString().equals("")) {
             throw new CivException(CivSettings.localize.localizedString("cmd_res_outlawed_noOne"));

@@ -38,14 +38,14 @@ extends CommandBase {
         Town from = this.getSelectedTown();
         Civilization to = this.getSenderCiv();
         if (StringUtils.isBlank((String)from.tradeGoods)) {
-            throw new CivException(CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "\u00a76" + from.getName() + "\u00a7c"));
+            throw new CivException(CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", CivColor.Gold + from.getName() + CivColor.Red));
         }
         Inventory withdrawInventory = this.genInventory(this.getPlayer(), 9, CivColor.GoldBold + CivSettings.localize.localizedString("cmd_civ_trade_gift_giftInvName"), CivColor.RoseBold + from.getName());
         int i = 0;
         for (String goodID : from.tradeGoods.split(", ")) {
             ConfigTradeGood configTradeGood = CivSettings.goods.get(goodID);
             if (configTradeGood == null) continue;
-            String[] split = this.getBonusDisplayString(configTradeGood, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_clickToWithdraw", new StringBuilder().append("\u00a72").append(to.getName()).append("\u00a7a").toString())).split(";");
+            String[] split = this.getBonusDisplayString(configTradeGood, CivColor.Green + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_clickToWithdraw", new StringBuilder().append(CivColor.Green).append(to.getName()).append(CivColor.Green).toString())).split(";");
             ItemStack tradeGood = LoreGuiItem.build(configTradeGood.name, configTradeGood.material, configTradeGood.material_data, split);
             tradeGood = LoreGuiItem.setAction(tradeGood, "Confirmation");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "civilizationName", to.getName());
@@ -53,7 +53,7 @@ extends CommandBase {
             tradeGood = LoreGuiItem.setActionData(tradeGood, "tradeGoodID", goodID);
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passFields", "civilizationName,townName,tradeGoodID");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passAction", "WithdrawTradeGood");
-            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_withdraw_confirmText", "\u00a72" + to.getName() + "\u00a7a"));
+            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_withdraw_confirmText", CivColor.Green + to.getName() + CivColor.Green));
             withdrawInventory.setItem(i, tradeGood);
             ++i;
         }
@@ -72,14 +72,14 @@ extends CommandBase {
         for (String goodID : from.tradeGoods.split(", ")) {
             ConfigTradeGood configTradeGood = CivSettings.goods.get(goodID);
             if (configTradeGood == null) continue;
-            String[] split = this.getBonusDisplayString(configTradeGood, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_trade_deposit_clickToDeposit", new StringBuilder().append("\u00a72").append(to.getName()).append("\u00a7a").toString())).split(";");
+            String[] split = this.getBonusDisplayString(configTradeGood, CivColor.Green + CivSettings.localize.localizedString("cmd_civ_trade_deposit_clickToDeposit", new StringBuilder().append(CivColor.Green).append(to.getName()).append(CivColor.Green).toString())).split(";");
             ItemStack tradeGood = LoreGuiItem.build(configTradeGood.name, configTradeGood.material, configTradeGood.material_data, split);
             tradeGood = LoreGuiItem.setAction(tradeGood, "Confirmation");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "townName", to.getName());
             tradeGood = LoreGuiItem.setActionData(tradeGood, "tradeGoodID", goodID);
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passFields", "townName,tradeGoodID");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passAction", "DepositTradeGood");
-            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_deposit_confirmText", "\u00a72" + to.getName() + "\u00a7a"));
+            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_deposit_confirmText", CivColor.Green + to.getName() + CivColor.Green));
             gepositInventory.setItem(i, tradeGood);
             ++i;
         }
@@ -90,7 +90,7 @@ extends CommandBase {
         this.validLeaderMayor();
         Town town = this.getSelectedTown();
         if (StringUtils.isBlank((String)town.tradeGoods)) {
-            throw new CivException(CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "\u00a76" + town.getName() + "\u00a7c"));
+            throw new CivException(CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", CivColor.Gold + town.getName() + CivColor.Red));
         }
         Inventory listInventory = this.genInventory(this.getPlayer(), 9, CivColor.GoldBold + CivSettings.localize.localizedString("cmd_civ_trade_listtown_listInvName"), CivColor.RoseBold + town.getName());
         int i = 0;
@@ -141,7 +141,7 @@ extends CommandBase {
         for (String goodID : from.tradeGoods.split(", ")) {
             ConfigTradeGood configTradeGood = CivSettings.goods.get(goodID);
             if (configTradeGood == null) continue;
-            String[] split = this.getBonusDisplayString(configTradeGood, "\u00a76" + CivSettings.localize.localizedString("cmd_civ_trade_gift_clickToGift")).split(";");
+            String[] split = this.getBonusDisplayString(configTradeGood, CivColor.Gold + CivSettings.localize.localizedString("cmd_civ_trade_gift_clickToGift")).split(";");
             ItemStack tradeGood = LoreGuiItem.build(configTradeGood.name, configTradeGood.material, configTradeGood.material_data, split);
             tradeGood = LoreGuiItem.setAction(tradeGood, "Confirmation");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "civilizationName", to.getName());
@@ -206,13 +206,13 @@ extends CommandBase {
         for (ConfigBuff cBuff : configTradeGood.buffs.values()) {
             out.append((Object)ChatColor.UNDERLINE).append(cBuff.name);
             out.append(";");
-            out.append("\u00a7f" + (Object)ChatColor.ITALIC).append(cBuff.description);
+            out.append(CivColor.RESET + (Object)ChatColor.ITALIC).append(cBuff.description);
             out.append(";");
         }
         if (configTradeGood.water) {
-            out.append("\u00a7b" + CivSettings.localize.localizedString("var_tradegood_water"));
+            out.append(CivColor.LightBlue + CivSettings.localize.localizedString("var_tradegood_water"));
         } else {
-            out.append("\u00a7a" + CivSettings.localize.localizedString("var_tradegood_earth"));
+            out.append(CivColor.Green + CivSettings.localize.localizedString("var_tradegood_earth"));
         }
         out.append(";");
         if (!StringUtils.isBlank((String)addText)) {
