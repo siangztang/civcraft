@@ -39,11 +39,11 @@ extends UnitMaterial {
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
         attrs.addLore(CivColor.Yellow +"Single Use");
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u0410\u043a\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u043c\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "\u0412\u0430\u0448\u0438 \u043f\u0440\u044b\u0436\u043a\u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u044b");
-        attrs.addLore(CivColor.LightGray + "\u041d\u0430 5 \u043c\u0438\u043d\u0443\u0442");
-        attrs.addLore(CivColor.LightGray + "\u041e\u0442\u043a\u0430\u0442: 15 \u043c\u0438\u043d\u0443\u0442");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Active");
+        attrs.addLore(CivColor.LightGray + "Gives increased jump height");
+        attrs.addLore(CivColor.LightGray + "(5 minutes)");
+        attrs.addLore(CivColor.LightGray + "Cooldown: 15 minutes");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.RABBITFEET_ARTIFACT.getUnit().name));
@@ -55,12 +55,12 @@ extends UnitMaterial {
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
-        attrs.addLore("\u00a7e\u041f\u043e\u0441\u043b\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u043f\u0440\u043e\u043f\u0430\u0434\u0430\u0435\u0442");
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u0410\u043a\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u043c\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "\u0412\u0430\u0448\u0438 \u043f\u0440\u044b\u0436\u043a\u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u044b");
-        attrs.addLore(CivColor.LightGray + "\u041d\u0430 5 \u043c\u0438\u043d\u0443\u0442");
-        attrs.addLore(CivColor.LightGray + "\u041e\u0442\u043a\u0430\u0442: 15 \u043c\u0438\u043d\u0443\u0442");
+        attrs.addLore(CivColor.Yellow + "Single Use");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Active");
+        attrs.addLore(CivColor.LightGray + "Gives increased jump height");
+        attrs.addLore(CivColor.LightGray + "(5 minutes)");
+        attrs.addLore(CivColor.LightGray + "Cooldown: 15 minutes");
         is = attrs.getStack();
         location.getWorld().dropItemNaturally(location, is);
     }

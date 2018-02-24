@@ -31,11 +31,11 @@ extends UnitMaterial {
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
-        attrs.addLore("\u00a7a\u0423\u0440\u043e\u0432\u0435\u043d\u044c 1");
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u041f\u0430\u0441\u0441\u0438\u0432\u043d\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "-10% \u041e\u0442 \u0430\u0442\u0430\u043a\u0438 \u043c\u0435\u0447\u0430");
-        attrs.addLore(CivColor.LightGray + "+25% \u041a \u0430\u0442\u0430\u043a\u0435 \u043b\u0443\u043a\u0430");
+        attrs.addLore("Level 1");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Passive");
+        attrs.addLore(CivColor.LightGray + "-10% Sword Defense");
+        attrs.addLore(CivColor.LightGray + "+25% to Bow Attack");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.ARCHER_ARTIFACT.getUnit().name));

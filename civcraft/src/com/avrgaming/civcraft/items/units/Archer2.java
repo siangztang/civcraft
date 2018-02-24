@@ -38,13 +38,13 @@ extends UnitMaterial {
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
         attrs.addLore(CivColor.Yellow +"Single Use");
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u0410\u043a\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u043c\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "\u0417\u0430\u043f\u0440\u0435\u0449\u0430\u0435\u0442 \u0431\u0438\u0442\u044c \u0441 \u0440\u0443\u043a\u0438");
-        attrs.addLore(CivColor.LightGray + "\u041d\u043e \u0430\u0442\u0430\u043a\u0438 \u0441 \u043b\u0443\u043a\u0430 \u043f\u043e\u0434\u0436\u0438\u0433\u0430\u044e\u0442 \u043d\u0430 ~3\u0441\u0435\u043a");
-        attrs.addLore(CivColor.LightGray + "\u0418 \u0437\u0430\u043c\u0435\u0434\u043b\u044f\u044e\u0442 \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u043d\u0430 ~3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b");
-        attrs.addLore(CivColor.LightGray + "1 \u043c\u0438\u043d\u0443\u0442\u0430");
-        attrs.addLore(CivColor.LightGray + "\u041e\u0442\u043a\u0430\u0442: 1 \u043c\u0438\u043d\u0443\u0442\u0430");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Active");
+        attrs.addLore(CivColor.LightGray + "Prevents Hand-to-hand combat");
+        attrs.addLore(CivColor.LightGray + "Arrows ignite for ~3 seconds");
+        attrs.addLore(CivColor.LightGray + "Slows players for ~3 seconds");
+        attrs.addLore(CivColor.LightGray + "1 minute");
+        attrs.addLore(CivColor.LightGray + "Cooldown: 1 minute");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.ARCHER2_ARTIFACT.getUnit().name));

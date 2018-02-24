@@ -140,7 +140,7 @@ extends Structure {
                     return;
                 }
                 if (!resident.getTreasury().hasEnough(2000.0)) {
-                    CivMessage.sendError(resident, CivSettings.localize.localizedString("shipyard_Sign_noMoney", CivColor.Gold + (2000.0 - resident.getTreasury().getBalance()), CivColor.Green + "\u043c\u043e\u043d\u0435\u0442\u044b" + CivColor.Red));
+                    CivMessage.sendError(resident, CivSettings.localize.localizedString("shipyard_Sign_noMoney", CivColor.Gold + (2000.0 - resident.getTreasury().getBalance()), CivColor.Green + CivSettings.CURRENCY_NAME + CivColor.Red));
                     return;
                 }
                 nextTeleport = timeNow + 120000L;

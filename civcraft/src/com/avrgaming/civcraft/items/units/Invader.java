@@ -30,12 +30,12 @@ extends UnitMaterial {
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u041f\u0430\u0441\u0441\u0438\u0432\u043d\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "\u0423\u0432\u0435\u043b\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u0443\u0440\u043e\u043d \u043f\u043e \u041a\u0431 \u043d\u0430 1 (100%)");
-        attrs.addLore(CivColor.LightGray + "\u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u00a7c\u0418\u043d\u0436\u0435\u043d\u0435\u0440\u00a77, \u0442\u043e");
-        attrs.addLore(CivColor.LightGray + "\u0428\u0430\u043d\u0441 \u0443\u043c\u0435\u043d\u044c\u0448\u0438\u0442\u0441\u044f \u0434\u043e 50%");
-        attrs.addLore(CivColor.LightGray + "\u041e\u0442\u043a\u0430\u0442: \u043d\u0435\u0442");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Passive");
+        attrs.addLore(CivColor.LightGray + "Increase damage by 1 (100%)");
+        attrs.addLore(CivColor.LightGray + "If there is an Engineer, then");
+        attrs.addLore(CivColor.LightGray + "The bonus decreases to 50%");
+        attrs.addLore(CivColor.LightGray + "Reusable: No");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.Invader_ARTIFACT.getUnit().name));

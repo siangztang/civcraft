@@ -192,15 +192,7 @@ public class Structure extends Buildable {
 				struct = (Structure) new Hospital(rs);
 			}
 			break;
-			
-        case "ti_pasture2":
-            if (rs == null) {
-                struct = new Pasture2(center, id, town);
-                break;
-            }
-            struct = new Pasture2(rs);
-            break;
-            
+
 		case "s_grocer":
 			if (rs == null) {
 				struct = (Structure) new Grocer(center, id, town);

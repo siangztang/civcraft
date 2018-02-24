@@ -59,6 +59,7 @@ import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.structure.wonders.Neuschwanstein;
 import com.avrgaming.civcraft.structure.wonders.StockExchange;
+import com.avrgaming.civcraft.structure.wonders.TheColossus;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.UpdateTechBar;
@@ -67,6 +68,7 @@ import com.avrgaming.civcraft.util.ChunkCoord;
 import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.DateUtil;
 import com.avrgaming.civcraft.util.ItemManager;
+
 import org.apache.commons.lang.StringUtils;
 
 public class Civilization extends SQLObject {
@@ -2035,11 +2037,17 @@ public class Civilization extends SQLObject {
         }
         this.tradeGoods = goodies;
     }
-
-    public boolean hasNotre() {
-        for (final Town town : this.getTowns()) {
-            if (town.hasWonder("w_notre_dame")) {
-                return true;
+    
+    public static boolean civHasBuiltColossus(final Resident resident) {
+        final Civilization civ = resident.getCiv();
+        if (civ == null) {
+            return false;
+        }
+        for (final Town town : civ.getTowns()) {
+            for (final Wonder wonder : town.getWonders()) {
+                if (wonder instanceof TheColossus && wonder.isComplete() && wonder.isActive()) {
+                    return true;
+                }
             }
         }
         return false;

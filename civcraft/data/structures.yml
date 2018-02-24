@@ -402,20 +402,6 @@ pasture:
     # Maximum amount of mobs for each type, per pasture
     max_mobs: 30
 
-#################### Battledome Settings #######################
-battledome:
-    # Amount of each mob that gets spawned per hour in the pasture.
-    cow_count: 40
-    sheep_count: 40
-    pig_count: 40
-    chicken_count: 40
-
-    # Rate at which they spawn (in seconds)
-    spawn_rate: 3600
-
-    # Maximum amount of mobs for each type, per pasture
-    max_mobs: 300
-
 ################### Barracks Settings #######################
 barracks:
     # Barracks repair cost uses the following formula.
@@ -1349,7 +1335,7 @@ structures:
           biomes: 'PLAINS'
           value: '1.5'
   
-  - id: ti_pasture2
+  - id: ti_pasture
     template: pasture
     template_y_shift: -2
     displayName: Pasture

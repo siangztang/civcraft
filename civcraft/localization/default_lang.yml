@@ -2902,46 +2902,46 @@ var_virtualTG_civHasNoGood: ""
 
 #Interactive Scrolls
 interactive_scroll_cancel: ""
-# var_processScroll_interactive1
-# var_processScroll_interactive2
-# var_processScroll_takeStroll
-# var_processScroll_noCiv
-# var_processScroll_addedCulture
-# var_processScroll_arleadyActivated
-# var_processScroll_addedHammers
-# var_processScroll_noBarracks
-# var_processScroll_noBarracksInProgress
-# var_processScroll_noBarracksNotSettler
-# var_processScroll_addedHammersSettler
-# var_processScroll_noTechInPrg
-# var_processScroll_notThisTech
-# var_processScroll_addedTech
-# var_processScroll_upgradeBankArleadyNo
-# var_processScroll_upgradeBankArleady
-# var_processScroll_proceedBank
-# var_processScroll_upgradeTownArleady
-# var_processScroll_proceedTown
+var_processScroll_interactive1: ""
+var_processScroll_interactive2: ""
+var_processScroll_takeStroll: ""
+var_processScroll_noCiv: ""
+var_processScroll_addedCulture: ""
+var_processScroll_arleadyActivated: ""
+var_processScroll_addedHammers: ""
+var_processScroll_noBarracks: ""
+var_processScroll_noBarracksInProgress: ""
+var_processScroll_noBarracksNotSettler: ""
+var_processScroll_addedHammersSettler: ""
+var_processScroll_noTechInPrg: ""
+var_processScroll_notThisTech: ""
+var_processScroll_addedTech: ""
+var_processScroll_upgradeBankArleadyNo: ""
+var_processScroll_upgradeBankArleady: ""
+var_processScroll_proceedBank: ""
+var_processScroll_upgradeTownArleady: ""
+var_processScroll_proceedTown: ""
 
+# Space Shuttle Research
+researchSpaceShuttle_lore1: ""
+researchSpaceShuttle_lore2: ""
+researchSpaceShuttle_lore3: ""
+researchSpaceShuttle_lore4: ""
+researchSpaceShuttle_lore5: ""
+researchSpaceShuttle_lore6: ""
+researchSpaceShuttle_lore7: ""
+researchSpaceShuttle_lore8: ""
 
-# researchSpaceShuttle_lore1
-# researchSpaceShuttle_lore2
-# researchSpaceShuttle_lore3
-# researchSpaceShuttle_lore4
-# researchSpaceShuttle_lore5
-# researchSpaceShuttle_lore6
-# researchSpaceShuttle_lore7
-# researchSpaceShuttle_lore8
+var_arrtifacts_errorBarracksFull: ""
+var_artifact_useSuccusess: ""
+var_artifact_useSuccusessButNot: ""
+var_artifact_useFailure: ""
+var_arrtifacts_Break: ""
+var_artifact_useFailureSinceWar: ""
 
-# var_arrtifacts_errorBarracksFull
-# var_artifact_useSuccusess
-# var_artifact_useSuccusessButNot
-# var_artifact_useFailure
-# var_arrtifacts_Break
-# var_artifact_useFailureSinceWar
-
-# cmd_civ_talent_choose_sucusses
-# cmd_civ_talent_choose_interactiveConfirmationHeading
-# cmd_civ_talent_choose_interactiveConfirmationTypeSth
+cmd_civ_talent_choose_sucusses: ""
+cmd_civ_talent_choose_interactiveConfirmationHeading: ""
+cmd_civ_talent_choose_interactiveConfirmationTypeSth: ""
 
 adcmd_talentcount: "Count the Talents"
 cmd_talentcount_broken: "Something Broke =("

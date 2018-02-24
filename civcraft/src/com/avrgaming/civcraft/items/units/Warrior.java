@@ -31,11 +31,11 @@ extends UnitMaterial {
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
-        attrs.addLore("\u00a7a\u041f\u043e\u0441\u043b\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u043f\u0440\u043e\u043f\u0430\u0434\u0430\u0435\u0442");
-        attrs.addLore(CivColor.LightGray + "\u042d\u0444\u0444\u0435\u043a\u0442:");
-        attrs.addLore(CivColor.LightGray + "\u041f\u0430\u0441\u0441\u0438\u0432\u043d\u044b\u0439");
-        attrs.addLore(CivColor.LightGray + "+25% \u041a \u0430\u0442\u0430\u043a\u0435 \u043c\u0435\u0447\u0430");
-        attrs.addLore(CivColor.LightGray + "-10% \u041e\u0442 \u0430\u0442\u0430\u043a\u0438 \u043b\u0443\u043a\u0430");
+        attrs.addLore(CivColor.Yellow + "Single Use");
+        attrs.addLore(CivColor.LightGray + "Effect:");
+        attrs.addLore(CivColor.LightGray + "Passive");
+        attrs.addLore(CivColor.LightGray + "+25% Sword Attack Bonus");
+        attrs.addLore(CivColor.LightGray + "-10% Bow Damage");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.WARRIOR_ARTIFACT.getUnit().name));

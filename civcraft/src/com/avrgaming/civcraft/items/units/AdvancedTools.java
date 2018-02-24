@@ -32,9 +32,9 @@ extends UnitMaterial {
         attrs.addLore(CivColor.LightGray + "Effect:");
         attrs.addLore(CivColor.LightGray + "Passive");
         attrs.addLore(CivColor.LightGray + "40% Chance");
-        attrs.addLore(CivColor.LightGray + "\u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u00a7c\u0422\u0430\u043b\u0438\u0441\u043c\u0430\u043d \u0428\u0430\u0445\u0442\u0435\u0440\u0430\u00a77, \u0442\u043e");
-        attrs.addLore(CivColor.LightGray + "\u0428\u0430\u043d\u0441 \u0443\u043c\u0435\u043d\u044c\u0448\u0438\u0442\u0441\u044f \u0434\u043e 20%");
-        attrs.addLore(CivColor.LightGray + "\u041e\u0442\u043a\u0430\u0442: \u043d\u0435\u0442");
+        attrs.addLore(CivColor.LightGray + "If you have a Miner's Amulet,");
+        attrs.addLore(CivColor.LightGray + "Chance decreases to 20%");
+        attrs.addLore(CivColor.LightGray + "Reusable: No");
         is = attrs.getStack();
         if (!Unit.addItemNoStack(inv, is)) {
             throw new CivException(CivSettings.localize.localizedString("var_arrtifacts_errorBarracksFull", Unit.ADVANCED_TOOLS_ARTIFACT.getUnit().name));

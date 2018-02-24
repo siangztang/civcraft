@@ -71,6 +71,7 @@ import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.CultureChunk;
 import com.avrgaming.civcraft.object.Relation;
 import com.avrgaming.civcraft.object.Resident;
@@ -550,37 +551,53 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		Player attacker;
-		Player defender;
+		Player attacker = null;
+		Player defender = null;
 		String damage;
+		Arrow arrow = null;
 		
 		if (event.getEntity() instanceof Player) {
 			defender = (Player)event.getEntity();
-		} else {
-			defender = null;
 		}
 		
 		if (event.getDamager() instanceof Player) {
 			attacker = (Player)event.getDamager();
 		} else if (event.getDamager() instanceof Arrow) {
-			Arrow arrow = (Arrow)event.getDamager();
+			arrow = (Arrow)event.getDamager();
 			if (arrow.getShooter() instanceof Player) {
 				attacker = (Player)arrow.getShooter();
-			} else {
-				attacker = null;
 			}
-		} else {
-			attacker = null;
 		}
 		
 		if (attacker == null && defender == null) {
 			return;
 		}
 		
+		if (attacker != null && attacker.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+            event.setCancelled(true);
+            CivMessage.sendError(attacker, CivSettings.localize.localizedString("var_artifact_archer_attackForbidden"));
+            return;
+        }
+		
+		if (attacker != null && arrow != null) {
+			if (attacker.hasPotionEffect(PotionEffectType.WEAKNESS)) {
+				event.getEntity().setFireTicks(60);
+				if (defender != null) {
+					defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
+					defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 1));
+				}
+			}
+		}
+        
+		
 		damage = new DecimalFormat("#.#").format(event.getDamage());
 		
 		if (defender != null) {
 			Resident defenderResident = CivGlobal.getResident(defender);
+			if (defenderResident.isTeleporting) {
+                CivMessage.send((Object)defenderResident, CivSettings.localize.localizedString("cmd_camp_teleport_moveAborted2"));
+                defenderResident.isTeleporting = false;
+            }
 			if (defenderResident.isCombatInfo()) {	
 				if (attacker != null) {
 					CivMessage.send(defender, CivColor.LightGray+"   "+CivSettings.localize.localizedString("playerListen_combatHeading")+" "+CivSettings.localize.localizedString("var_playerListen_combatDefend",CivColor.Rose+attacker.getName()+CivColor.LightGray,CivColor.Rose+damage+CivColor.LightGray));				
@@ -620,6 +637,21 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
+		
+		double dmg = event.getDamage();
+        if (event.getDamager() instanceof Player && attacker != null && Civilization.civHasBuiltColossus(CivGlobal.getResident(attacker))) {
+            dmg += 1.0;
+        }
+        if (!event.isCancelled() && event.getEntity() instanceof LivingEntity) {
+            LivingEntity def = (LivingEntity)event.getEntity();
+            if (def.getHealth() - dmg > 0.0) {
+                def.setHealth(def.getHealth() - dmg);
+                event.setDamage(0.5);
+            } else {
+                def.setHealth(0.1);
+                event.setDamage(1.0);
+            }
+        }
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
