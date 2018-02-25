@@ -7,7 +7,7 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.avrgaming.civcraft.config.CivSettings;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.CivColor;
 
 public class TutorialBook extends ItemComponent {
@@ -28,7 +28,7 @@ public class TutorialBook extends ItemComponent {
 		}
 		
 		//CivTutorial.showCraftingHelp(event.getPlayer());
-		CivTutorial.spawnGuiBook(event.getPlayer());
+		Book.spawnGuiBook(event.getPlayer());
 
 	}
 	

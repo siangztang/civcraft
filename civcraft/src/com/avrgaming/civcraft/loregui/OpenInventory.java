@@ -11,7 +11,7 @@ import com.avrgaming.civcraft.lorestorage.LoreGuiItemListener;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.threading.TaskMaster;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 
 public class OpenInventory implements GuiAction {
 
@@ -41,10 +41,10 @@ public class OpenInventory implements GuiAction {
 				
 				switch (LoreGuiItem.getActionData(stack, "invType")) {
 				case "showTutorialInventory":
-					CivTutorial.showTutorialInventory(player);
+					Book.showTutorialInventory(player);
 					break;
 				case "showCraftingHelp":
-					CivTutorial.showCraftingHelp(player);
+					Book.showCraftingHelp(player);
 					break;
 				case "showGuiInv":
 					String invName = LoreGuiItem.getActionData(stack, "invName");

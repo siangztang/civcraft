@@ -181,6 +181,8 @@ public class ScoutTower extends Structure {
 							(relationColor+player.getName()+"("+relationName+")"+CivColor.White),(player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()),
 							this.getTown().getName()));
 					alreadyAnnounced.add(this.getCiv().getName()+":"+player.getName());
+		            CivMessage.send(player, CivColor.RoseItalic + CivSettings.localize.localizedString("event_found_by_scoutTower", this.getTown().getName()));
+
 				
 			}
 		}

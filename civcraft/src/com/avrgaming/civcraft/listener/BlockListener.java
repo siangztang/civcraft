@@ -54,6 +54,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockGrowEvent;
@@ -79,6 +80,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -611,6 +613,57 @@ public class BlockListener implements Listener {
 				if(other != null && other.getBlock().getType() != Material.AIR) {
 					other.getBlock().setType(Material.NETHERRACK);
 				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
+        final Resident resident = CivGlobal.getResident(event.getPlayer());
+        try {
+            if (War.isWarTime() && CivGlobal.getCultureChunk(event.getBlockClicked().getLocation()).getCiv().isAdminCiv()) {
+                event.setCancelled(true);
+                CivMessage.sendError(event.getPlayer(), CivSettings.localize.localizedString("var_moblistener_spawn"));
+                return;
+            }
+        }
+        catch (NullPointerException ex) {}
+        if (resident == null) {
+            event.setCancelled(true);
+            return;
+        }
+        if (resident.isSBPermOverride()) {
+            return;
+        }
+        BlockListener.coord.setFromLocation(event.getBlockClicked().getLocation());
+        final TownChunk tc = CivGlobal.getTownChunk(BlockListener.coord);
+        if (tc != null) {
+            if (!tc.getTown().getCiv().isAdminCiv()) {
+                if (!tc.perms.hasPermission(PlotPermissions.Type.BUILD, resident)) {
+                    event.setCancelled(true);
+                    CivMessage.sendError(event.getPlayer(), CivSettings.localize.localizedString("blockPlace_errorBukkit") + " " + tc.getTown().getName());
+                }
+            }
+            else if (!event.getPlayer().isOp()) {
+                event.setCancelled(true);
+                CivMessage.sendError(event.getPlayer(), CivSettings.localize.localizedString("blockPlace_errorBukkit_spawn") + " " + tc.getTown().getName());
+            }
+            else {
+                event.setCancelled(false);
+            }
+        }
+    }
+	
+	// Prevent Ice from Melting in Towns. Gotta stop Arctic Templates from melting somehow.
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void OnBlockFadeEvent (BlockFadeEvent event) {
+		Block block = event.getBlock();
+		if (block.getType() == Material.ICE || block.getType() == Material.PACKED_ICE || block.getType() == Material.FROSTED_ICE) {
+			BlockListener.coord.setFromLocation(block.getLocation());
+
+			final TownChunk tc = CivGlobal.getTownChunk(BlockListener.coord);
+			if (tc != null) {
+				event.setCancelled(true);
 			}
 		}
 	}

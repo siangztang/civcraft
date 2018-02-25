@@ -12,7 +12,9 @@ import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.loreenhancements.LoreEnhancement;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.lorestorage.LoreMaterial;
+import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivLog;
+import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.util.CivColor;
 
 public class Catalyst extends ItemComponent {
@@ -108,6 +110,25 @@ public class Catalyst extends ItemComponent {
 			return false;
 		}
 	}
+
+    public boolean enchantSuccess(String catalystId, int bonusAttack, double bonusDefence, Town owner) {
+        boolean isAttack = catalystId.contains("_attack_catalyst");
+        boolean superCatalyst = catalystId.contains("_super_catalyst");
+        if (superCatalyst) {
+            return true;
+        }
+        if (isAttack && bonusAttack <= 1) {
+            return true;
+        }
+        if (!isAttack && bonusDefence <= 0.25) {
+            return true;
+        }
+        int x = owner.getXChance();
+        if (isAttack) {
+            return CivData.randChance(60 + x);
+        }
+        return CivData.randChance(70 + x);
+    }
 	
 	
 }

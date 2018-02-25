@@ -18,6 +18,8 @@
  */
 package com.avrgaming.civcraft.main;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -428,5 +430,12 @@ public class CivData {
 		System.out.println("Warning, unknown sign post direction:"+data);
 		return CHEST_SOUTH;
 	}
+
+
+    public static boolean randChance(int chance) {
+        Random random = CivCraft.civRandom;
+        int roll = random.nextInt(1000000);
+        return roll <= (chance *= 10000);
+    }
 	
 }

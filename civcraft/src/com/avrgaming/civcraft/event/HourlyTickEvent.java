@@ -24,11 +24,15 @@ import java.util.Calendar;
 import com.avrgaming.civcraft.camp.CampHourlyTick;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
+import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
+import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.CultureProcessAsyncTask;
 import com.avrgaming.civcraft.threading.timers.EffectEventTimer;
 import com.avrgaming.civcraft.threading.timers.SyncTradeTimer;
+import com.avrgaming.civcraft.util.CivColor;
 
 public class HourlyTickEvent implements EventInterface {
 
@@ -39,6 +43,23 @@ public class HourlyTickEvent implements EventInterface {
 		TaskMaster.asyncTask("EffectEventTimer", new EffectEventTimer(), 0);
 		TaskMaster.syncTask(new SyncTradeTimer(), 0);
 		TaskMaster.syncTask(new CampHourlyTick(), 0);
+		
+		for (Civilization civ : CivGlobal.getCivs()) {
+            if (civ.isTalentIsUsed()) continue;
+            CivMessage.sendCiv(civ, CivSettings.localize.localizedString("PlayerLoginAsync_civTalentNotUsed"));
+        }
+        for (Civilization civ : CivGlobal.getCivs()) {
+            if (!civ.getMissionActive()) continue;
+            Integer currentMission = civ.getCurrentMission();
+            String missionName = CivSettings.spacemissions_levels.get((Object)currentMission).name;
+            String[] split = civ.getMissionProgress().split(":");
+            double completedBeakers = Math.round(Double.valueOf(split[0]));
+            double completedHammers = Math.round(Double.valueOf(split[1]));
+            int percentageCompleteBeakers = (int)((double)Math.round(Double.parseDouble(split[0])) / Double.parseDouble(CivSettings.spacemissions_levels.get((Object)Integer.valueOf((int)civ.getCurrentMission())).require_beakers) * 100.0);
+            int percentageCompleteHammers = (int)((double)Math.round(Double.parseDouble(split[1])) / Double.parseDouble(CivSettings.spacemissions_levels.get((Object)Integer.valueOf((int)civ.getCurrentMission())).require_hammers) * 100.0);
+            CivMessage.sendCiv(civ, CivSettings.localize.localizedString("var_spaceshuttle_progress", "\u00a7c" + missionName + CivColor.RESET, "\u00a7b" + completedBeakers + "\u00a7c" + "(" + percentageCompleteBeakers + "%)" + CivColor.RESET, CivColor.LightGray + completedHammers + "\u00a7c" + "(" + percentageCompleteHammers + "%)" + CivColor.RESET));
+        }
+		
 		CivLog.info("TimerEvent: Hourly Finished -----------------------------");
 	}
 

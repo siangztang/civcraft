@@ -30,6 +30,7 @@ import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.structure.Buildable;
+import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.template.Template;
 import com.avrgaming.civcraft.threading.CivAsyncTask;
@@ -231,7 +232,11 @@ public class BuildAsyncTask extends CivAsyncTask {
 		tpl.deleteInProgessTemplate(buildable.getCorner().toString(), buildable.getTown());
 		buildable.getTown().build_tasks.remove(this);
 		TaskMaster.syncTask(new PostBuildSyncTask(tpl, buildable), 10);
-		CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completed",buildable.getTown().getName(), buildable.getDisplayName()));
+		if (this.buildable instanceof Structure) {
+            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completed", this.buildable.getTown().getName(), "\u00a72" + this.buildable.getDisplayName() + CivColor.RESET));
+        } else if (this.buildable instanceof Wonder) {
+            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completedWonder", "\u00a7c" + this.buildable.getCiv().getName() + CivColor.RESET, "\u00a76" + this.buildable.getTown().getName() + CivColor.RESET, "\u00a7a" + this.buildable.getDisplayName() + CivColor.RESET));
+        }
 		buildable.onComplete();
 		return false;
 	}

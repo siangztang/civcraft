@@ -109,7 +109,7 @@ public class MarketBuyCommand extends CommandBase {
 		
 		if (args.length < 2) {
 			list_civs_for_sale(senderCiv);
-			CivMessage.send(sender, "Use /market buy civs [civ-name] to buy this civ.");
+			CivMessage.send(sender, CivSettings.localize.localizedString("cmd_market_buy_civsPrompt"));
 			return;
 		}
 		

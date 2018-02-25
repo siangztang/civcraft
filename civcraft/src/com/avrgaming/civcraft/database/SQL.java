@@ -50,6 +50,7 @@ import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.object.TradeGood;
 import com.avrgaming.civcraft.object.WallBlock;
+import com.avrgaming.civcraft.object.Report;
 import com.avrgaming.civcraft.permission.PermissionGroup;
 import com.avrgaming.civcraft.randomevents.RandomEvent;
 import com.avrgaming.civcraft.road.RoadBlock;
@@ -60,7 +61,6 @@ import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.util.BiomeCache;
 import com.avrgaming.global.perks.PerkManager;
 import com.avrgaming.global.perks.PerkManagerSimple;
-import com.avrgaming.global.reports.ReportManager;
 import com.avrgaming.global.scores.ScoreManager;
 import com.jolbox.bonecp.Statistics;
 
@@ -78,6 +78,7 @@ public class SQL {
 	public static Integer min_conns;
 	public static Integer max_conns;
 	public static Integer parts;
+	public static String useSSL = "false";
 //	public static Connection context = null;
 	
 //	public static Connection global_context = null;
@@ -90,6 +91,7 @@ public class SQL {
 	public static Integer global_min_conns;
 	public static Integer global_max_conns;
 	public static Integer global_parts;
+	public static String global_useSSL = "false";
 	
 	public static ConnectionPool gameDatabase;
 	public static ConnectionPool globalDatabase;
@@ -97,14 +99,15 @@ public class SQL {
 
 	public static void initialize() throws InvalidConfiguration, SQLException, ClassNotFoundException {
 		CivLog.heading("Initializing SQL");
-		
+
+		SQL.useSSL = CivSettings.getStringBase("mysql.useSSL");
 		SQL.hostname = CivSettings.getStringBase("mysql.hostname");
 		SQL.port = CivSettings.getStringBase("mysql.port");
 		SQL.db_name = CivSettings.getStringBase("mysql.database");
 		SQL.username = CivSettings.getStringBase("mysql.username");
 		SQL.password = CivSettings.getStringBase("mysql.password");
 		SQL.tb_prefix = CivSettings.getStringBase("mysql.table_prefix");
-		SQL.dsn = "jdbc:mysql://" + hostname + ":" + port + "/" + tb_prefix+db_name;
+		SQL.dsn = "jdbc:mysql://" + hostname + ":" + port + "/" + tb_prefix+db_name +"?useSSL="+SQL.useSSL+"&requireSSL="+SQL.useSSL;
 		SQL.min_conns = Integer.valueOf(CivSettings.getStringBase("mysql.min_conns"));
 		SQL.max_conns = Integer.valueOf(CivSettings.getStringBase("mysql.max_conns"));
 		SQL.parts = Integer.valueOf(CivSettings.getStringBase("mysql.parts"));
@@ -116,6 +119,7 @@ public class SQL {
 		CivLog.info("\t Connected to GAME database");
 		
 		CivLog.heading("Initializing Global SQL Database");
+		SQL.global_useSSL = CivSettings.getStringBase("global_database.useSSL");
 		SQL.global_hostname = CivSettings.getStringBase("global_database.hostname");
 		SQL.global_port = CivSettings.getStringBase("global_database.port");
 		SQL.global_username = CivSettings.getStringBase("global_database.username");
@@ -125,7 +129,7 @@ public class SQL {
 		SQL.global_max_conns = Integer.valueOf(CivSettings.getStringBase("global_database.max_conns"));
 		SQL.global_parts = Integer.valueOf(CivSettings.getStringBase("global_database.parts"));
 
-		SQL.global_dsn = "jdbc:mysql://"+ SQL.global_hostname + ":" + SQL.global_port + "/" + SQL.global_db;
+		SQL.global_dsn = "jdbc:mysql://"+ SQL.global_hostname + ":" + SQL.global_port + "/" + SQL.global_db +"?useSSL="+SQL.global_useSSL+"&requireSSL="+SQL.global_useSSL;
 		CivLog.info("\t Using GLOBAL db at:"+SQL.global_hostname+":"+SQL.global_port+" user:"+SQL.global_username+" DB:"+SQL.global_db);
 		CivLog.info("\t Building Connection Pool for GLOBAL database.");
 		globalDatabase = new ConnectionPool(SQL.global_dsn, SQL.global_username, SQL.global_password, SQL.global_min_conns, SQL.global_max_conns, SQL.global_parts);
@@ -167,57 +171,16 @@ public class SQL {
 		ConfigMarketItem.init();
 		RandomEvent.init();
 		StructureSign.init();
+        Report.init();
 					
 		CivLog.heading("Building Global Tables!!");
-		ReportManager.init();
 		ScoreManager.init();
 		
 		CivLog.info("----- Done Building Tables ----");
 		
 	}
 	
-//	public static void globalConnect() throws SQLException {
-//		if (global_context == null || global_context.isClosed()) {
-//			if (SQL.global_username.equalsIgnoreCase("") && SQL.global_password.equalsIgnoreCase("")) {
-//				global_context = DriverManager.getConnection(SQL.global_dsn);
-//			} else {
-//				global_context = DriverManager.getConnection(SQL.global_dsn, SQL.global_username, SQL.global_password);
-//			}
-//		}
-//
-//		if (global_context == null || global_context.isClosed()) {
-//			throw new SQLException("Lost context to GLOBAL MYSQL server!");
-//		}
-//		
-//		return;
-//	}
-	
-//	public static void connect() throws SQLException {
-//		if (context == null || context.isClosed()) {
-//			if (SQL.username.equalsIgnoreCase("") && SQL.password.equalsIgnoreCase("")) {
-//				context = DriverManager.getConnection(SQL.dsn);
-//			} else {
-//				context = DriverManager.getConnection(SQL.dsn, SQL.username, SQL.password);
-//			}
-//		}
-//
-//		if (context == null || context.isClosed()) {
-//			throw new SQLException("Lost context to MYSQL server!");
-//		}
-//		
-//		return;
-//	}
-	
 	public static Connection getGameConnection() throws SQLException {
-		//CivLog.debug("get connection ----> free conns:"+SQL.getGameDatabaseStats().getTotalFree()+" leased:"+SQL.getGameDatabaseStats().getTotalLeased());
-//		if (SQL.getGameDatabaseStats().getTotalFree() == 0) {
-//			try {
-//				throw new CivException("No more free connections! Possible connection leak!");
-//			} catch (CivException e) {
-//				e.printStackTrace();
-//			}			
-//		}
-		
 		return gameDatabase.getConnection();
 	}
 
@@ -226,15 +189,6 @@ public class SQL {
 	}
 	
 	public static Connection getGlobalConnection() throws SQLException {
-		//CivLog.debug("get connection ----> free conns:"+SQL.getGameDatabaseStats().getTotalFree()+" leased:"+SQL.getGameDatabaseStats().getTotalLeased());
-//		if (SQL.getGlobalDatabaseStats().getTotalFree() == 0) {
-//			try {
-//				throw new CivException("No more free connections! Possible connection leak!");
-//			} catch (CivException e) {
-//				e.printStackTrace();
-//			}
-//		}
-		
 		return globalDatabase.getConnection();
 	}
 	

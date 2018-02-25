@@ -38,6 +38,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -61,6 +63,7 @@ import com.avrgaming.civcraft.randomevents.ConfigRandomEvent;
 import com.avrgaming.civcraft.structure.FortifiedWall;
 import com.avrgaming.civcraft.structure.Wall;
 import com.avrgaming.civcraft.template.Template;
+import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.global.perks.Perk;
 
 public class CivSettings {
@@ -793,6 +796,15 @@ public class CivSettings {
 		return null;
 	}
 
+    public static ConfigTech getTechById(final String id) {
+        for (final ConfigTech tech : CivSettings.techs.values()) {
+            if (tech.id.equalsIgnoreCase(id)) {
+                return tech;
+            }
+        }
+        return null;
+    }
+
 	public static ConfigHappinessState getHappinessState(double amount) {
 		ConfigHappinessState closestState = happinessStates.get(0);
 		
@@ -935,6 +947,29 @@ public class CivSettings {
 		
 		return biomeInfo;
 	}
+
+	public static String getBonusDisplayString(ConfigTradeGood configTradeGood, String addText) {
+        StringBuilder out = new StringBuilder();
+        out.append(CivColor.PurpleItalic + CivSettings.localize.localizedString("var_tradeGood_heading"));
+        out.append(";");
+        for (ConfigBuff cBuff : configTradeGood.buffs.values()) {
+            out.append((Object)ChatColor.UNDERLINE).append(cBuff.name);
+            out.append(";");
+            out.append("\u00a7f" + (Object)ChatColor.ITALIC).append(cBuff.description);
+            out.append(";");
+        }
+        if (configTradeGood.water) {
+            out.append("\u00a7b" + CivSettings.localize.localizedString("var_tradegood_water"));
+        } else {
+            out.append("\u00a7a" + CivSettings.localize.localizedString("var_tradegood_earth"));
+        }
+        out.append(";");
+        if (!StringUtils.isBlank((String)addText)) {
+            out.append(addText);
+            out.append(";");
+        }
+        return out.toString();
+    }
 
 	
 	

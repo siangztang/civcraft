@@ -250,6 +250,10 @@ civ:
     # This used to be longer. Reducing to help spur actual viability in starting a revolution!
     # Default: 3
     revolution_cooldown: 3
+    
+    # Number of days after a civlization is conquered that it has to declare a revolution
+    # If this number of days has passed, the civ will auto-capitulate during the next daily upkeep.
+    auto_capitulate_days: 7
 
     # Number of days a leader must be inactive before being able to be reclaimed
     leader_inactive_days: 7

@@ -666,5 +666,42 @@ public abstract class CommandBase implements CommandExecutor {
 		
 		return potentialMatches.get(0);
 	}
-		
+
+	protected Civilization getNamedCiv(final int index, final String text) throws CivException {
+		if (this.args.length < index + 1) {
+			throw new CivException(text);
+		}
+		String name = this.args[index].toLowerCase();
+		name = name.replace("%", "(\\w*)");
+		final ArrayList<Civilization> potentialMatches = new ArrayList<Civilization>();
+		for (final Civilization civ : CivGlobal.getCivs()) {
+			final String str = civ.getName().toLowerCase();
+			try {
+				if (str.matches(name)) {
+					potentialMatches.add(civ);
+				}
+			}
+			catch (Exception e) {
+				throw new CivException(CivSettings.localize.localizedString("cmd_invalidPattern"));
+			}
+			if (potentialMatches.size() > 5) {
+				throw new CivException(CivSettings.localize.localizedString("cmd_TooManyResults"));
+			}
+		}
+		if (potentialMatches.size() == 0) {
+			throw new CivException(CivSettings.localize.localizedString("cmd_NameNoResults") + " '" + this.args[index] + "'");
+		}
+		if (potentialMatches.size() != 1) {
+			CivMessage.send(this.sender, "§d" + ChatColor.UNDERLINE + CivSettings.localize.localizedString("cmd_NameMoreThan1"));
+			CivMessage.send(this.sender, " ");
+			final StringBuilder out = new StringBuilder();
+			for (final Civilization civ2 : potentialMatches) {
+				out.append(civ2.getName()).append(", ");
+			}
+			CivMessage.send(this.sender, "§b" + ChatColor.ITALIC + (Object)out);
+			throw new CivException(CivSettings.localize.localizedString("cmd_NameMoreThan2"));
+		}
+		return potentialMatches.get(0);
+	}
+
 }

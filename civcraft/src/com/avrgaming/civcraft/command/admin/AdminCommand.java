@@ -108,7 +108,6 @@ public class AdminCommand extends CommandBase {
 		commands.put("reloadgov", CivSettings.localize.localizedString("adcmd_reloadgovDesc"));
 		commands.put("heartbeat", CivSettings.localize.localizedString("adcmd_heartbeatDesc"));
         commands.put("goodierepo", CivSettings.localize.localizedString("cmd_servak"));
-        commands.put("buildconquer", CivSettings.localize.localizedString("clogan"));
         commands.put("clearchat", CivSettings.localize.localizedString("clearchat"));
         commands.put("newspaper", CivSettings.localize.localizedString("adcmd_newspaper"));
         commands.put("startMission", CivSettings.localize.localizedString("adcmd_startMission"));
@@ -260,18 +259,6 @@ public class AdminCommand extends CommandBase {
         }
         final Player player = this.getPlayer();
         CivMessage.global(CivSettings.localize.localizedString("chatcleared", player.getName()));
-    }
-    
-    public void buildconquer_cmd() {
-        String title = "";
-        String subTitle = "";
-        title = CivColor.Yellow + CivSettings.localize.localizedString("conquer");
-        subTitle = CivColor.LightGray + CivSettings.localize.localizedString("build");
-        if (!title.equals("")) {
-            for (final Player player : Bukkit.getOnlinePlayers()) {
-                CivMessage.sendTitle(player, title, subTitle);
-            }
-        }
     }
     
     public void goodierepo_cmd() {

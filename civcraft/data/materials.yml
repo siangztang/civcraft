@@ -4394,7 +4394,7 @@ materials:
               - "mmm"
 
 
-- id: 'mat_legendary_attack_super_catalyst'
+        - id: 'mat_legendary_attack_super_catalyst'
           item_id: 370
           item_data: 0
           name: 'Legendary Attack Super Catalyst'

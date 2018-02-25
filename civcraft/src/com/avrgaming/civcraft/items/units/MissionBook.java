@@ -322,7 +322,11 @@ public class MissionBook extends UnitItemMaterial {
 				throw new CivException(CivSettings.localize.localizedString("var_missionBook_sabatoge_errorDestroyed",buildable.getDisplayName()));
 			}
 		}
-		
+
+        if (buildable instanceof TradeOutpost || buildable instanceof FishingBoat) {
+            throw new CivException(CivSettings.localize.localizedString("var_buildable_cannotSabotaged", "§6" + buildable.getDisplayName() + "§c"));
+        }
+        
 		if (buildable instanceof Wonder) {
 			// Create a new mission and with the penalties.
 			mission = CivSettings.missions.get("spy_sabotage_wonder");

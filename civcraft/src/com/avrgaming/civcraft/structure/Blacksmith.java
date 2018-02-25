@@ -39,6 +39,9 @@ import com.avrgaming.civcraft.components.NonMemberFeeComponent;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.items.components.Catalyst;
+import com.avrgaming.civcraft.loreenhancements.LoreEnhancement;
+import com.avrgaming.civcraft.loreenhancements.LoreEnhancementAttack;
+import com.avrgaming.civcraft.loreenhancements.LoreEnhancementDefense;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.lorestorage.LoreMaterial;
 import com.avrgaming.civcraft.main.CivData;
@@ -272,6 +275,9 @@ public class Blacksmith extends Structure {
 		AttributeUtil attrs = new AttributeUtil(stack);
 		Catalyst catalyst;
 		
+		if (!CivGlobal.getResident(player).getTreasury().hasEnough(cost)) {
+            throw new CivException("§c" + CivSettings.localize.localizedString("blacksmith_forge_notEnough", "§6" + (cost - CivGlobal.getResident(player).getTreasury().getBalance())));
+        }
 		
 		String freeStr = attrs.getCivCraftProperty("freeCatalyst");
 		if (freeStr == null) {
@@ -330,6 +336,19 @@ public class Blacksmith extends Structure {
 			player.getInventory().setItemInMainHand(attrs.getStack());
 			
 		}
+		double bonusDefense = 0.0;
+        int bonusAttack = 0;
+        for (final LoreEnhancement enh : attrs.getEnhancements()) {
+            if (enh instanceof LoreEnhancementDefense) {
+                bonusDefense += ((LoreEnhancementDefense)enh).getExtraDefense(attrs);
+            }
+            if (enh instanceof LoreEnhancementAttack) {
+                bonusAttack += (int)((LoreEnhancementAttack)enh).getExtraAttack(attrs);
+            }
+        }
+        if (bonusDefense > 0.0 && bonusDefense >= 3.75) {
+            throw new CivException("§c" + CivSettings.localize.localizedString("blacksmith_forge_invalidCatasOnItem", ""));
+        }
 		
 		stack = player.getInventory().getItemInMainHand();
 		ItemStack enhancedItem = catalyst.getEnchantedItem(stack);
@@ -340,8 +359,8 @@ public class Blacksmith extends Structure {
 		
 		/* Consume the enhancement. */
 		CivGlobal.getSessionDB().delete_all(key);
-		
-		if (!catalyst.enchantSuccess(enhancedItem)) {
+        CivGlobal.getResident(player).getTreasury().withdraw(cost);
+        if (!catalyst.enchantSuccess(catalyst.getString("id"), bonusAttack, bonusDefense, this.getTown())) {
 			/* 
 			 * There is a one in third chance that our item will break.
 			 * Sucks, but this is what happened here.

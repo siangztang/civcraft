@@ -74,7 +74,69 @@ public class CivCommand extends CommandBase {
 		commands.put("claimleader", CivSettings.localize.localizedString("cmd_civ_claimleaderDesc"));
 		commands.put("motd", CivSettings.localize.localizedString("cmd_civ_motdDesc"));
 		commands.put("location", CivSettings.localize.localizedString("cmd_civ_locationDesc"));
+        commands.put("members", CivSettings.localize.localizedString("cmd_civ_membersDesc"));
+        commands.put("talent", CivSettings.localize.localizedString("cmd_civ_talentDesc"));
+        commands.put("space", CivSettings.localize.localizedString("cmd_civ_space_name"));
+        commands.put("trade", CivSettings.localize.localizedString("cmd_civ_trade_name"));
+        commands.put("culture", CivSettings.localize.localizedString("cmd_civ_culture_name"));
 	}
+	
+	public void culture_cmd() throws CivException {
+        final Resident resident = this.getResident();
+        final Civilization civ = this.getSenderCiv();
+        if (!civ.getLeaderGroup().hasMember(resident) && !civ.getAdviserGroup().hasMember(resident)) {
+            throw new CivException(CivSettings.localize.localizedString("cmd_civ_culture_notLeader"));
+        }
+        boolean hasBurj = false;
+        int cultureSummary = 0;
+        for (final Town town : civ.getTowns()) {
+            if (town.getMotherCiv() == null) {
+                cultureSummary += town.getAccumulatedCulture();
+            }
+            if (town.hasWonder("w_burj")) {
+                hasBurj = true;
+            }
+        }
+        final boolean culturePassed = cultureSummary > 16500000;
+        CivMessage.sendHeading(this.sender, CivSettings.localize.localizedString("cmd_civ_culture_heading"));
+        if (culturePassed && hasBurj) {
+            CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_civ_culture_allConditionsPassed"));
+            return;
+        }
+        final int summary = 16500000 - cultureSummary;
+        if (!culturePassed) {
+            CivMessage.send(this.sender, "§2" + CivSettings.localize.localizedString("cmd_civ_culture_cultureRequired", CivColor.LightGreenBold + summary + "§2"));
+        }
+        if (!hasBurj) {
+            CivMessage.send(this.sender, "§2" + CivSettings.localize.localizedString("cmd_civ_culture_burjRequired", CivColor.LightGreenBold + "Burj Kalifa"));
+        }
+    }
+
+	 public void trade_cmd() throws CivException {
+		 final CivTradeCommand cmd = new CivTradeCommand();
+		 cmd.onCommand(this.sender, null, "trade", this.stripArgs(this.args, 1));
+	 }
+
+	 public void space_cmd() {
+		 final CivSpaceCommand cmd = new CivSpaceCommand();
+		 cmd.onCommand(this.sender, null, "space", this.stripArgs(this.args, 1));
+	 }
+	 
+	 public void talent_cmd() {
+		 final CivTalentCommand cmd = new CivTalentCommand();
+		 cmd.onCommand(this.sender, null, "talent", this.stripArgs(this.args, 1));
+	 }
+	 public void members_cmd() throws CivException {
+		 final Civilization civ = this.getSenderCiv();
+		 String out = "";
+		 CivMessage.sendHeading(this.sender, CivSettings.localize.localizedString("var_civ_membersHeading", civ.getName()));
+		 for (final Town t : civ.getTowns()) {
+			 for (Resident r : t.getResidents()) {
+				 out += r.getName() + ", ";
+			 }
+		 }
+		 CivMessage.send(this.sender, out);
+	 }
 
 	public void location_cmd() throws CivException {
 		Civilization civ = getSenderCiv();
@@ -168,7 +230,9 @@ public class CivCommand extends CommandBase {
 			throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_revolutionErrorNotCapitol",motherCiv.getCapitolName()));
 		}
 		
-		
+        if (town.getCiv().getCapitol() != null && town.getCiv().getCapitol().getBuffManager().hasBuff("level10_dominatorTown")) {
+            throw new CivException(CivSettings.localize.localizedString("var_cmd_civ_revolutionErrorDominator", town.getCiv().getName()));
+        }
 		try {
 			int revolution_cooldown = CivSettings.getInteger(CivSettings.civConfig, "civ.revolution_cooldown");
 		
@@ -323,6 +387,9 @@ public class CivCommand extends CommandBase {
 		cal.setTime(CivGlobal.getNextRepoTime());
 		out.add(CivColor.Green+CivSettings.localize.localizedString("cmd_civ_timeRepo")+" "+CivColor.LightGreen+sdf.format(cal.getTime()));
 		
+		cal.setTimeInMillis(CivGlobal.cantDemolishFrom);
+        out.add("§2" + CivSettings.localize.localizedString("cmd_civ_timeCantDemolish", "§6" + sdf.format(cal.getTime()) + "§a", "§c" + sdf.format(cal.getTimeInMillis() + 18000000L) + "§a", "§a"));
+        
 		if (War.isWarTime()) {
 			out.add(CivColor.Yellow+CivSettings.localize.localizedString("cmd_civ_timeWarNow"));
 			cal.setTime(War.getStart());
@@ -334,6 +401,7 @@ public class CivCommand extends CommandBase {
 			cal.setTime(War.getNextWarTime());
 			out.add(CivColor.Green+CivSettings.localize.localizedString("cmd_civ_timeWarNext")+" "+CivColor.LightGreen+sdf.format(cal.getTime()));
 		}
+        out.add("§7" + CivSettings.localize.localizedString("cmd_civ_timeCantDemolishHelp"));
 		
 		Player player = null;
 		try {

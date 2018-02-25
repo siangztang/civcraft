@@ -33,9 +33,11 @@ import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
+import com.avrgaming.civcraft.lorestorage.LoreMaterial;
 import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivMessage;
+import com.avrgaming.civcraft.object.Report;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.util.CivColor;
@@ -61,9 +63,34 @@ public class ResidentCommand extends CommandBase {
 		commands.put("timezone", CivSettings.localize.localizedString("cmd_res_timezoneDesc"));
 		commands.put("pvptimer", CivSettings.localize.localizedString("cmd_res_pvptimerDesc"));
         commands.put("outlawed", CivSettings.localize.localizedString("cmd_res_outlawedDesc"));
-
+        commands.put("structure", CivSettings.localize.localizedString("cmd_res_strucutreDesc"));
+        commands.put("tech", CivSettings.localize.localizedString("cmd_res_techDesc"));
+        commands.put("upgrade", CivSettings.localize.localizedString("cmd_res_upgradeDesc"));
+        commands.put("dip", CivSettings.localize.localizedString("cmd_res_dipDesc"));
+        commands.put("report", CivSettings.localize.localizedString("cmd_res_reportDesc"));
 		//commands.put("switchtown", "[town] - Allows you to instantly change your town to this town, if this town belongs to your civ.");
 	}
+	
+	public void report_cmd() throws CivException {
+        Report report;
+        Resident resident = this.getResident();
+        if (!resident.getReportChecked()) {
+            throw new CivException(CivSettings.localize.localizedString("cmd_res_report_notNow"));
+        }
+        String[] split = resident.getReportResult().split("///");
+        String admin = split[0];
+        String result = split[1];
+        try {
+            report = CivGlobal.getReportByCloseTime(Long.valueOf(split[2]));
+        }
+        catch (NumberFormatException badVerdict) {
+            resident.setReportChecked(false);
+            throw new CivException(CivSettings.localize.localizedString("cmd_res_report_badMessage", CivColor.GoldBold + split[2] + " " + split[3]));
+        }
+		SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yy h:mm:ss a z");
+        CivMessage.send((Object)this.sender, "\u00a7c" + admin + ": Complaint #" + report.getId() + ": " + "\u00a7a" + result + "\u00a7b" + " (" + sdf.format(report.getCloseTime()) + ")");
+        resident.setReportChecked(false);
+    }
 	
     public void outlawed_cmd() throws CivException {
         Resident resident = this.getResident();
@@ -129,13 +156,40 @@ public class ResidentCommand extends CommandBase {
 	
 	public void perks_cmd() throws CivException {
 		Resident resident = getResident();
-		
-		//CivMessage.sendHeading(sender, "Your Perks");
-		//for (Perk p : resident.perks.values()) {
-		//	CivMessage.send(sender, "Perk:"+p.getIdent());
-		//}
 		resident.showPerkPage(0);
 	}
+	
+	public void structure_cmd() throws CivException {
+        Resident resident = this.getResident();
+        if (resident.getCiv() == null) {
+            throw new CivException(CivSettings.localize.localizedString("belongTownGUI"));
+        }
+        resident.showStructPage();
+    }
+
+    public void upgrade_cmd() throws CivException {
+        Resident resident = this.getResident();
+        if (resident.getCiv() == null) {
+            throw new CivException(CivSettings.localize.localizedString("belongTownGUI"));
+        }
+        resident.showUpgradePage();
+    }
+
+    public void tech_cmd() throws CivException {
+        Resident resident = this.getResident();
+        if (resident.getCiv() == null) {
+            throw new CivException(CivSettings.localize.localizedString("belongTownGUI"));
+        }
+        resident.showTechPage();
+    }
+
+    public void dip_cmd() throws CivException {
+        Resident resident = this.getResident();
+        if (resident.getCiv() == null) {
+            throw new CivException(CivSettings.localize.localizedString("belongTownGUI"));
+        }
+        resident.showRelationPage();
+    }
 	
 	public void book_cmd() throws CivException {
 		Player player = getPlayer();
@@ -259,6 +313,9 @@ public class ResidentCommand extends CommandBase {
 			if (CivGlobal.isBonusGoodie(is)) {
 				throw new CivException(CivSettings.localize.localizedString("cmd_res_exchangeNoTradeGoods"));
 			}
+            if (LoreMaterial.hasEnhancement(is, "LoreEnhancementBuyItem")) {
+                throw new CivException(CivSettings.localize.localizedString("cmd_res_exchangeNoBuyItems"));
+            }
 			
 			if (ItemManager.getId(is) == exchangeID) {
 				total += is.getAmount();

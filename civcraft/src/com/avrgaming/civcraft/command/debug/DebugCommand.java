@@ -110,7 +110,7 @@ import com.avrgaming.civcraft.threading.tasks.TradeGoodPostGenTask;
 import com.avrgaming.civcraft.threading.tasks.TrommelAsyncTask;
 import com.avrgaming.civcraft.threading.tasks.MobGrinderAsyncTask;
 import com.avrgaming.civcraft.threading.timers.DailyTimer;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.AsciiMap;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.ChunkCoord;
@@ -731,11 +731,11 @@ public class DebugCommand extends CommandBase {
 	}
 	
 	public void showinv_cmd() throws CivException {
-		CivTutorial.spawnGuiBook(getPlayer());
+		Book.spawnGuiBook(getPlayer());
 	}
 	
 	public void showcraftinv_cmd() throws CivException {
-		CivTutorial.showCraftingHelp(getPlayer());
+		Book.showCraftingHelp(getPlayer());
 	}
 	
 	

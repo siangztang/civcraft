@@ -42,6 +42,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigCultureLevel;
+import com.avrgaming.civcraft.config.ConfigTech;
 import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.items.BonusGoodie;
@@ -51,6 +52,7 @@ import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.Buff;
 import com.avrgaming.civcraft.object.BuildableDamageBlock;
+import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.ControlPoint;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.StructureBlock;
@@ -314,11 +316,11 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		
 	}
 
-	public void createControlPoint(BlockCoord absCoord) {
+	public void createControlPoint(BlockCoord absCoord, String... info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		
-		/* Build the bedrock tower. */
+		/* Build the fence block. */
 		//for (int i = 0; i < 1; i++) {
 		Block b = centerLoc.getBlock();
 		ItemManager.setTypeId(b, CivData.FENCE); ItemManager.setData(b, 0);
@@ -334,15 +336,23 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		this.addStructureBlock(sb.getCoord(), true);
 		
 		int townhallControlHitpoints;
-		try {
-			townhallControlHitpoints = CivSettings.getInteger(CivSettings.warConfig, "war.control_block_hitpoints_townhall");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			townhallControlHitpoints = 100;
-		}
-		
+        if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp") && this.getTown().getBuffManager().hasBuff("buff_greatlibrary_extra_beakers")) {
+            townhallControlHitpoints = 30;
+        }
+        else {
+            townhallControlHitpoints = 20;
+        }
+        if (this.getTown().hasStructure("s_castle")) {
+            townhallControlHitpoints += 3;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraHPcpTown")) {
+            townhallControlHitpoints *= (int)1.2;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level10_dominatorTown")) {
+            townhallControlHitpoints *= 2;
+        }
 		BlockCoord coord = new BlockCoord(b);
-		this.controlPoints.put(coord, new ControlPoint(coord, this, townhallControlHitpoints));
+		this.controlPoints.put(coord, new ControlPoint(coord, this, townhallControlHitpoints, info));
 	}
 	
 	public void onControlBlockDestroy(ControlPoint cp, World world, Player player, StructureBlock hit) {
@@ -373,12 +383,35 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		CivMessage.sendTownSound(hit.getTown(), Sound.AMBIENT_CAVE, 1.0f, 0.5f);
 
 		if (allDestroyed) {
+			Civilization civ = getTown().getCiv();
 			
-			if (this.getTown().getCiv().getCapitolName().equals(this.getTown().getName())) {
+			if (civ.getCapitolName().equals(this.getTown().getName())) {
 				CivMessage.globalTitle(CivColor.LightBlue+CivSettings.localize.localizedString("var_townHall_destroyed_isCap",this.getTown().getCiv().getName()),CivSettings.localize.localizedString("var_townHall_destroyed_isCap2",attacker.getCiv().getName()));
-				for (Town town : this.getTown().getCiv().getTowns()) {
+				for (Town town : civ.getTowns()) {
 					town.defeated = true;
 				}
+				
+				if (this instanceof Capitol) {
+					civ.updateReviveSigns();
+                }
+                if (civ.hasTechnology("tech_enlightenment")) {
+                	civ.removeTech("tech_enlightenment");
+                    final ConfigTech tech = CivSettings.techs.get("tech_enlightenment");
+                    attacker.getCiv().addTech(tech);
+                    CivMessage.global(CivSettings.localize.localizedString("war_defeat_loseEnlightenment", this.getTown().getCiv().getName(), attacker.getCiv().getName()));
+                }
+                if (civ.getCurrentMission() >= 2) {
+                    try {
+                    	civ.setCurrentMission(this.getCiv().getCurrentMission() - 1);
+                    	civ.setMissionActive(false);
+                    	civ.updateMissionProgress(0.0, 0.0);
+                    	civ.saveNow();
+                    }
+                    catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                    CivMessage.global(CivSettings.localize.localizedString("war_defeat_loseMission", civ.getName(), civ.getCurrentMission()));
+                }
 				
 				War.transferDefeated(this.getTown().getCiv(), attacker.getTown().getCiv());
 				WarStats.logCapturedCiv(attacker.getTown().getCiv(), this.getTown().getCiv());
@@ -403,6 +436,9 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		}
 		else {
 			CivMessage.sendTown(hit.getTown(), CivColor.Rose+CivSettings.localize.localizedString("townHall_controlBlockDestroyed"));
+            if (hit.getTown().hasWonder("w_neuschwanstein")) {
+                CivMessage.sendCiv(attacker.getCiv(), CivSettings.localize.localizedString("var_townHall_didDestroyNeus", hit.getTown().getName()));
+            }
 			CivMessage.sendCiv(attacker.getTown().getCiv(), CivColor.LightGreen+CivSettings.localize.localizedString("var_townHall_didDestroyCB",hit.getTown().getName()));
 			CivMessage.sendCiv(hit.getTown().getCiv(), CivColor.Rose+CivSettings.localize.localizedString("var_townHall_civMsg_controlBlockDestroyed",hit.getTown().getName()));
 		}

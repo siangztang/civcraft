@@ -217,7 +217,7 @@ public class Capitol extends TownHall {
 	}
 	
 	@Override
-	public void createControlPoint(BlockCoord absCoord) {
+	public void createControlPoint(BlockCoord absCoord, String... info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		
@@ -236,16 +236,19 @@ public class Capitol extends TownHall {
 		sb = new StructureBlock(new BlockCoord(b), this);
 		this.addStructureBlock(sb.getCoord(), true);
 		
-		int capitolControlHitpoints;
-		try {
-			capitolControlHitpoints = CivSettings.getInteger(CivSettings.warConfig, "war.control_block_hitpoints_capitol");
-		} catch (InvalidConfiguration e) {
-			e.printStackTrace();
-			capitolControlHitpoints = 100;
-		}
+		int capitolControlHitpoints = this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp") && this.getTown().getBuffManager().hasBuff("buff_greatlibrary_extra_beakers") ? 150 : 100;
+        if (this.getTown().hasStructure("s_castle")) {
+            capitolControlHitpoints += 3;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraHPcpTown")) {
+            capitolControlHitpoints = (int)((double)capitolControlHitpoints * 1.2);
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level10_dominatorTown")) {
+            capitolControlHitpoints *= 2;
+        }
 		
 		BlockCoord coord = new BlockCoord(b);
-		this.controlPoints.put(coord, new ControlPoint(coord, this, capitolControlHitpoints));
+		this.controlPoints.put(coord, new ControlPoint(coord, this, capitolControlHitpoints, info));
 	}
 	
 	@Override

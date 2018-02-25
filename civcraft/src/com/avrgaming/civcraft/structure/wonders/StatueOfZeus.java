@@ -89,7 +89,7 @@ extends Wonder {
             this.getTown().addAccumulatedCulture(totalCulture);
             int captured = totalCulture / culture;
             CivMessage.sendCiv(this.getCiv(), CivSettings.localize.localizedString("var_statue_of_zeus_addedCoinsAndCulture",
-            		CivColor.LightGreen + totalCulture + CivColor.RESET, CivColor.Gold + totalCoins + CivColor.RESET, CivColor.Rose + captured + CivColor.RESET,
+            		CivColor.LightGreen + totalCulture + CivColor.RESET, CivColor.Gold + totalCoins + " " + CivSettings.CURRENCY_NAME + CivColor.RESET, CivColor.Rose + captured + CivColor.RESET,
             		CivColor.Yellow + this.getTown().getName() + CivColor.RESET));
         }
     }

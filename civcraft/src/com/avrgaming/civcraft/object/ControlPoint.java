@@ -34,12 +34,14 @@ public class ControlPoint {
 	
 	/* TownHall this control point belongs to. */
 	private Buildable buildable;
+    private String info;
 
-	public ControlPoint (BlockCoord coord, Buildable buildable, int hitpoints) {
+	public ControlPoint (BlockCoord coord, Buildable buildable, int hitpoints, String ... info) {
 		this.coord = coord;
 		this.setBuildable(buildable);
 		this.maxHitpoints = hitpoints;
 		this.hitpoints = this.maxHitpoints;
+		this.info = info[0];
 	}
 	
 	/**
@@ -111,4 +113,8 @@ public class ControlPoint {
 	public void setBuildable(Buildable buildable) {
 		this.buildable = buildable;
 	}
+	
+	public String getinfo() {
+        return this.info;
+    }
 }

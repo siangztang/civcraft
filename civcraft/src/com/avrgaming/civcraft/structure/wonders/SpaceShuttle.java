@@ -170,7 +170,7 @@ public class SpaceShuttle extends Wonder
             switch (action) {
                 case "runMission": {
                     if (sign.getOwner().getCiv().getMissionActive()) {
-                        throw new CivException(CivSettings.localize.localizedString("var_spaceshuttle_arleady", CivSettings.spacemissions_levels.get(sign.getOwner().getCiv().getCurrentMission()).name));
+                        throw new CivException(CivSettings.localize.localizedString("var_spaceshuttle_already", CivSettings.spacemissions_levels.get(sign.getOwner().getCiv().getCurrentMission()).name));
                     }
                     if (sign.getOwner().getCiv().getCurrentMission() < 8) {
                         TaskMaster.asyncTask("ValidateShuttleSync", new ValidateShuttleSync(sign.getOwner().getTown(), player), 0L);

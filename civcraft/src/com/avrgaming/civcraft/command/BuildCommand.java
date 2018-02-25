@@ -320,7 +320,9 @@ public class BuildCommand extends CommandBase {
 		}
 		
 		Town town = getSelectedTown();
-		
+		if (sinfo.id.equals("wonder_stock_exchange") && !town.canBuildStock(this.getPlayer())) {
+            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("var_buildStockExchange_nogoodCondition", "http://wiki.minetexas.com/index.php/Stock_Exchange"));
+        }
 		if (sinfo.isWonder) {
 			Wonder wonder = Wonder.newWonder(getPlayer().getLocation(), sinfo.id, town);
 			try {
@@ -339,12 +341,6 @@ public class BuildCommand extends CommandBase {
 			}
 		}
 		
-//		if (sinfo.isWonder) {
-//			town.buildWonder(getPlayer(), sinfo.id, getPlayer().getLocation());
-//		} else {
-//			town.buildStructure(getPlayer(), sinfo.id, getPlayer().getLocation());
-//		}
-//		CivMessage.sendSuccess(sender, "Started building "+sinfo.displayName);
 	}
 
 	@Override

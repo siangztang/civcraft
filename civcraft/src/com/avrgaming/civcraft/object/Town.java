@@ -72,15 +72,22 @@ import com.avrgaming.civcraft.permission.PermissionGroup;
 import com.avrgaming.civcraft.randomevents.RandomEvent;
 import com.avrgaming.civcraft.road.Road;
 import com.avrgaming.civcraft.sessiondb.SessionEntry;
+import com.avrgaming.civcraft.structure.Bank;
 import com.avrgaming.civcraft.structure.Buildable;
 import com.avrgaming.civcraft.structure.Capitol;
+import com.avrgaming.civcraft.structure.Cottage;
+import com.avrgaming.civcraft.structure.Factory;
+import com.avrgaming.civcraft.structure.FishingBoat;
 import com.avrgaming.civcraft.structure.Mine;
+import com.avrgaming.civcraft.structure.Quarry;
 import com.avrgaming.civcraft.structure.ResearchLab;
 import com.avrgaming.civcraft.structure.School;
+import com.avrgaming.civcraft.structure.SilkWorkFarm;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.Temple;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.structure.TradeOutpost;
+import com.avrgaming.civcraft.structure.TradeShip;
 import com.avrgaming.civcraft.structure.University;
 import com.avrgaming.civcraft.structure.Wall;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
@@ -648,6 +655,9 @@ public class Town extends SQLObject {
 		if (this.getBuffManager().hasBuff("buff_pyramid_culture")) {
 			additional += this.getBuffManager().getEffectiveDouble("buff_pyramid_culture");
 		}
+        if (this.getBuffManager().hasBuff("buff_neuschwanstein_culture")) {
+        	additional += this.getBuffManager().getEffectiveDouble("buff_neuschwanstein_culture");
+        }
 		
 		if (this.getBuffManager().hasBuff("buff_globe_theatre_culture_from_towns")) {
 			int townCount = 0;
@@ -1247,6 +1257,14 @@ public class Town extends SQLObject {
 			throw new CivException(CivSettings.localize.localizedString("town_missingStructures"));
 		}
 		
+		if (upgrade.id.equalsIgnoreCase("upgrade_stock_exchange_level_6") && !this.canUpgradeStock(upgrade.id)) {
+            throw new CivException("§c" + CivSettings.localize.localizedString("var_upgradeStockExchange_nogoodCondition", "http://wiki.minetexas.com/index.php/Stock_Exchange"));
+        }
+		
+        if (!this.hasWonder(upgrade.require_wonder)) {
+            throw new CivException(CivSettings.localize.localizedString("town_missingWonders"));
+        }
+		
 		this.getTreasury().withdraw(upgrade.cost);
 		
 		try {
@@ -1260,6 +1278,96 @@ public class Town extends SQLObject {
 		this.upgrades.put(upgrade.id, upgrade);
 		this.save();
 	}
+	
+	public boolean canBuildStock(final Player player) {
+        int bankCount = 0;
+        int tradeShipCount = 0;
+        int cottageCount = 0;
+        int quarryCount = 0;
+        for (final Town t : this.getCiv().getTowns()) {
+            for (final Structure structure : t.getStructures()) {
+                if (structure instanceof Bank && ((Bank)structure).getLevel() == 10) {
+                    ++bankCount;
+                }
+                if (structure instanceof TradeShip && ((TradeShip)structure).getLevel() >= 7) {
+                    ++tradeShipCount;
+                }
+                if (structure instanceof Cottage && ((Cottage)structure).getLevel() >= 5) {
+                    ++cottageCount;
+                }
+                if (structure instanceof Quarry && ((Quarry)structure).getLevel() >= 3) {
+                    ++quarryCount;
+                }
+            }
+        }
+        boolean bankCountCondition = false;
+        boolean tradeShipCountCondition = false;
+        boolean cottageCountCondition = false;
+        boolean quarryCountCondition = false;
+        if (bankCount >= 3) {
+            bankCountCondition = true;
+        }
+        if (tradeShipCount >= 3) {
+            tradeShipCountCondition = true;
+        }
+        if (cottageCount >= 15) {
+            cottageCountCondition = true;
+        }
+        if (quarryCount >= 3) {
+            quarryCountCondition = true;
+        }
+        CivMessage.sendCiv(this.getCiv(), (bankCountCondition ? "§a" : "§c") + "Number of lvl 10 Banks: " + "§e" + (bankCountCondition ? "Done " : "Incomplete ") + bankCount + "/3");
+        CivMessage.sendCiv(this.getCiv(), (tradeShipCountCondition ? "§a" : "§c") + "Number of lvl 7 Trade Ships: " + "§e" + (tradeShipCountCondition ? "Done " : "Incomplete ") + tradeShipCount + "/3");
+        CivMessage.sendCiv(this.getCiv(), (cottageCountCondition ? "§a" : "§c") + "Number of lvl 5 Cottages: " + "§e" + (cottageCountCondition ? "Done " : "Incomplete ") + cottageCount + "/15");
+        CivMessage.sendCiv(this.getCiv(), (quarryCountCondition ? "§a" : "§c") + "Number of lvl 3 Quarries: " + "§e" + (quarryCountCondition ? "Done " : "Incomplete ") + quarryCount + "/3");
+        return bankCountCondition && tradeShipCountCondition && cottageCountCondition && quarryCountCondition;
+    }
+
+	public boolean canUpgradeStock(final String upgradeName) {
+        int bankCount = 0;
+        int tradeShipCount = 0;
+        int cottageCount = 0;
+        int quarryCount = 0;
+        for (final Town town : this.getCiv().getTowns()) {
+            for (final Structure structure : town.getStructures()) {
+                if (structure instanceof Bank && ((Bank)structure).getLevel() == 10) {
+                    ++bankCount;
+                }
+                if (structure instanceof TradeShip && ((TradeShip)structure).getLevel() >= 8) {
+                    ++tradeShipCount;
+                }
+                if (structure instanceof Cottage && ((Cottage)structure).getLevel() >= 6) {
+                    ++cottageCount;
+                }
+                if (structure instanceof Quarry && ((Quarry)structure).getLevel() >= 4) {
+                    ++quarryCount;
+                }
+            }
+        }
+        boolean bankCountCondition = false;
+        boolean tradeShipCountCondition = false;
+        boolean cottageCountCondition = false;
+        boolean quarryCountCondition = false;
+        if (bankCount >= 3) {
+            bankCountCondition = true;
+        }
+        if (tradeShipCount >= 3) {
+            tradeShipCountCondition = true;
+        }
+        if (cottageCount >= 20) {
+            cottageCountCondition = true;
+        }
+        if (quarryCount >= 3) {
+            quarryCountCondition = true;
+        }
+
+        CivMessage.sendCiv(this.getCiv(), (bankCountCondition ? "§a" : "§c") + "Number of lvl 10 Banks: " + "§e" + (bankCountCondition ? "Done " : "Incomplete ") + bankCount + "/3");
+        CivMessage.sendCiv(this.getCiv(), (tradeShipCountCondition ? "§a" : "§c") + "Number of lvl 8 Trade Ships: " + "§e" + (tradeShipCountCondition ? "Done " : "Incomplete ") + tradeShipCount + "/3");
+        CivMessage.sendCiv(this.getCiv(), (cottageCountCondition ? "§a" : "§c") + "Number of lvl 6 Cottages: " + "§e" + (cottageCountCondition ? "Done " : "Incomplete ") + cottageCount + "/20");
+        CivMessage.sendCiv(this.getCiv(), (quarryCountCondition ? "§a" : "§c") + "Number of lvl 4 Quarries: " + "§e" + (quarryCountCondition ? "Done " : "Incomplete ") + quarryCount + "/3");
+    
+        return bankCountCondition && tradeShipCountCondition && cottageCountCondition && quarryCountCondition;
+    }
 
 	public Structure findStructureByConfigId(String require_structure) {
 		
@@ -1610,11 +1718,11 @@ public class Town extends SQLObject {
 		Wonder wonder = Wonder.newWonder(center, id, this);
 		
 		if (!this.hasUpgrade(wonder.getRequiredUpgrade())) {
-			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingUpgrade"));
+			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingUpgrade") + " §6" + CivSettings.getUpgradeById(wonder.getRequiredUpgrade()).name);
 		}
 		
 		if (!this.hasTechnology(wonder.getRequiredTechnology())) {
-			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingTech"));
+			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingTech") + " §6" + CivSettings.getTechById(wonder.getRequiredTechnology()).name);
 		}
 		
 		if (!wonder.isAvailable()) {
@@ -1683,11 +1791,11 @@ public class Town extends SQLObject {
 		Structure struct = Structure.newStructure(center, id, this);
 		
 		if (!this.hasUpgrade(struct.getRequiredUpgrade())) {
-			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingUpgrade"));
+			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingUpgrade") + " §6" + CivSettings.getUpgradeById(struct.getRequiredUpgrade()).name);
 		}
 		
 		if (!this.hasTechnology(struct.getRequiredTechnology())) {
-			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingTech"));
+			throw new CivException(CivSettings.localize.localizedString("town_buildwonder_errorMissingTech") + " §6" + CivSettings.getTechById(struct.getRequiredTechnology()).name);
 		}
 		
 		if (!struct.isAvailable()) {
@@ -1748,26 +1856,18 @@ public class Town extends SQLObject {
 			e.printStackTrace();
 			throw new CivException(CivSettings.localize.localizedString("internalCommandException"));
 		}
-				
+
 		this.getTreasury().withdraw(cost);
-		CivMessage.sendTown(this, CivColor.Yellow+CivSettings.localize.localizedString("var_town_buildwonder_success",struct.getDisplayName()));
-		
-	//	try {
-			//this.save();
-			
-			/* Good needs to be saved after structure to get proper structure id.*/
-			if (struct instanceof TradeOutpost) {
-				TradeOutpost outpost = (TradeOutpost)struct;
-				if (outpost.getGood() != null) {
-					outpost.getGood().save();
-				}
+		CivMessage.sendTown(this, CivColor.Yellow+CivSettings.localize.localizedString("var_town_buildStructure_success",struct.getDisplayName()));
+
+		if (struct instanceof TradeOutpost) {
+			TradeOutpost outpost = (TradeOutpost)struct;
+			if (outpost.getGood() != null) {
+				outpost.getGood().save();
 			}
-			
-			//TODO fix this dependency nightmare! (the center is moved in build and needs to be resaved)
-	//	} catch (SQLException e) {
-	//		e.printStackTrace();
-	//		throw new CivException("Internal database error");
-	//	}
+		}
+
+
 	}
 
 	public boolean isStructureAddable(Structure struct) {
@@ -1873,6 +1973,9 @@ public class Town extends SQLObject {
 		if (!struct.allowDemolish() && !isAdmin) {
 			throw new CivException(CivSettings.localize.localizedString("town_demolish_Cannot"));	
 		}
+        if ((struct instanceof TradeOutpost || struct instanceof FishingBoat) && !CivGlobal.allowDemolishOutPost()) {
+            throw new CivException(CivSettings.localize.localizedString("town_demolish_CannotNotNow"));
+        }
 		
 		try {
 			for (StructureChest structureChest : struct.getChests()) CivGlobal.removeStructureChest(structureChest);
@@ -3250,6 +3353,10 @@ public class Town extends SQLObject {
 		if (buildable.getTown() != this) {
 			throw new CivException(CivSettings.localize.localizedString("town_refresh_errorWrongTown"));
 		}
+
+        if (buildable instanceof Factory || buildable instanceof SilkWorkFarm) {
+            throw new CivException("town_refresh_errorBuildable");
+        }
 		
 		resident.setInteractiveMode(new InteractiveBuildableRefresh(buildable, resident.getName()));
 	}
@@ -3637,5 +3744,16 @@ public class Town extends SQLObject {
         }
         final Town anther = (Town)another;
         return anther.getName().equals(this.getName()) && anther.getId() == this.getId();
+    }
+
+	 public int getXChance() {
+        if (!this.hasTradeGood("good_titanium")) {
+            return 0;
+        }
+        int x = 5;
+        if (this.getTradeGoodCount("good_titanium") >= 2) {
+            x = 10;
+        }
+        return x;
     }
 }

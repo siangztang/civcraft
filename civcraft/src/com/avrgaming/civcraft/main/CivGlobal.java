@@ -148,6 +148,14 @@ public class CivGlobal {
 	public static HashSet<BlockCoord> vanillaGrowthLocations = new HashSet<BlockCoord>();
 	private static Map<BlockCoord, Market> markets = new ConcurrentHashMap<BlockCoord, Market>();
 	public static HashSet<String> researchedTechs = new HashSet<String>();
+    private static Map<Integer, Report> reports = new HashMap<Integer, Report>();
+    
+    public static long cantDemolishFrom; 
+    public static long cantDemolishUntil;
+    
+    public static void addReport(final Report report) {
+        CivGlobal.reports.put(report.getId(), report);
+    }
 	
 	/* TODO change this to true for MC 1.8 */
 	public static boolean useUUID = true;
@@ -230,6 +238,7 @@ public class CivGlobal {
 		loadTradeGoodies();
 		loadRandomEvents();
 		loadProtectedBlocks();
+        loadReports();
 		EventTimer.loadGlobalEvents();
 		EndGameCondition.init();
 		War.init();
@@ -274,6 +283,9 @@ public class CivGlobal {
 			speedChunks = false;
 			e.printStackTrace();
 		}
+
+        cantDemolishFrom = getNextRepoTime().getTime() - 3600000L;
+        cantDemolishUntil = getNextRepoTime().getTime() + 14400000L;
 		
 		loadCompleted = true;
 	}
@@ -286,7 +298,7 @@ public class CivGlobal {
 				if (struct.getTown().getMotherCiv() == null) {
 					if (!struct.getTown().isCapitol()) {
 						struct.markInvalid();
-						struct.setInvalidReason("Capitol structures can only exist in the civilization's capitol. Use '/build town hall' to build a town-hall instead.");
+		                struct.setInvalidReason(CivSettings.localize.localizedString("cap_CanExistInCapitol"));
 					}
 				}
 			}
@@ -296,6 +308,30 @@ public class CivGlobal {
 	private static void loadTradeGoods() {
 		
 	}
+	
+	public static void loadReports() throws SQLException {
+        Connection context = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        try {
+            context = SQL.getGameConnection();
+            ps = context.prepareStatement("SELECT * FROM " + SQL.tb_prefix + "REPORTS");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                try {
+                    final Report report = new Report(rs);
+                    CivGlobal.reports.put(report.getId(), report);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            CivLog.info("Loaded " + CivGlobal.towns.size() + " Reports");
+        }
+        finally {
+            SQL.close(rs, ps, context);
+        }
+    }
 	
 	private static void loadMobSpawners() throws SQLException {
 		Connection context = null;
@@ -2170,5 +2206,27 @@ public class CivGlobal {
             }
         }
         return false;
+    }
+	
+	public static Report getReportById(final int id) {
+        return CivGlobal.reports.get(id);
+    }
+    
+    public static Collection<Report> getReports() {
+        return CivGlobal.reports.values();
+    }
+    
+    public static Report getReportByCloseTime(final long closeTime) {
+        for (final Report report : CivGlobal.reports.values()) {
+            if (report.getClosed() && report.getCloseTime() == closeTime) {
+                return report;
+            }
+        }
+        return null;
+    }
+
+	public static boolean allowDemolishOutPost() {
+        final long now = Calendar.getInstance().getTimeInMillis();
+        return now < CivGlobal.cantDemolishFrom || now > CivGlobal.cantDemolishUntil;
     }
 }

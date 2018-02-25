@@ -476,10 +476,10 @@ public class Camp extends Buildable {
 					ItemManager.setData(absCoord.getBlock(), sb.getData());
 					
 					Sign sign = (Sign)absCoord.getBlock().getState();
-					sign.setLine(0, "Garden Disabled");
-					sign.setLine(1, "Upgrade using");
-					sign.setLine(2, "/camp upgrade");
-					sign.setLine(3, "command");
+					sign.setLine(0, CivSettings.localize.localizedString("camp_garden1"));
+                    sign.setLine(1, CivSettings.localize.localizedString("camp_garden2"));
+                    sign.setLine(2, CivSettings.localize.localizedString("camp_garden3"));
+                    sign.setLine(3, CivSettings.localize.localizedString("camp_garden4"));
 					sign.update();
 					this.addCampBlock(absCoord);
 				} else {

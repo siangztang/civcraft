@@ -19,6 +19,8 @@ welcome_string: "Welcome to MineTexas CivilizationCraft [%0] [%1] [%2]"
 #This is your currency name. MineTexas uses "RedBacks."
 #Changing this here renames every instance of the term throughout the plugin.
 #For instance, if you wanted the currency to be called "Niblits" you would set that here.
+welcome_string: "Welcome to MineTexas CivilizationCraft [%0] [%1] [%2]"
+
 civ_currencyName: "Coins"
 
 #---- Generic Internal Plugin Error Messages ----
@@ -50,7 +52,6 @@ Finished: "Finished."
 Repaired: "Repaired."
 NoStructureAt: "No structure at"
 EnterCampName: "Please enter a camp name."
-EnterTeamName: "Please enter a team name."
 EnterCivName: "Please enter a civ name."
 EnterTownName: "Please enter a town name."
 EnterResidentName: "Please enter a resident name."
@@ -148,56 +149,6 @@ TipHeading: "Tip:"
 structureRepairStart: "Reparing"
 structureRepairComplete: "Structure repair finished."
 
-
-# =========================== AntiCheat =========================
-ac_invalidAuth: "Invalid Auth Message"
-ac_validated: "You have been validated by CivCraft Anti-Cheat"
-ac_unableToValidate: "[CivCraft Anti Cheat] Could not Verify your client"
-ac_hackerNeedsAC: "You must use AntiCheat to join this server. Visit https://www.minetexas.com/ to get it."
-ac_unapprovedMod: "Unapproved Mod:"
-var_ac_failedAuthCheck: "[%0] ([%1]) failed authorization check."
-
-# =========================== Arena =========================
-# This section is currently not used in MineTexas CivlizationCraft
-arena_WithoutAnticheat: "You've been teleported home since you cannot be inside an arena without anti-cheat."
-arena_endedTeleport: "We've been teleported back to our home since the arena has ended."
-arena_revived: "Revived in arena"
-arena_destroyedTeleport: "You've been teleported home since the arena you were in no longer exists."
-arena_respawned: "Respawned in arena."
-arena_timeUp: "Time is up! Nobody Wins!"
-arena_cannotDamage: "Can not damage our own control blocks."
-var_arena_playerHitControlBlock: "[%0] hit an enemy control block! ([%1])"
-var_arena_announceHitControlBlock: "Our control block was hit by [%0]! ([%1])"
-var_arena_playerJoined: "[%0] has rejoined the arena."
-var_arena_playerLeft: "[%0] has logged out of the arena."
-var_arena_respawningIn: "Respawning back into arena in [%0] seconds."
-arena_noOtherTeams: "No other teams waiting in queue yet, please wait."
-arena_enteringArenaIn10: "Teleporting our team to the arena in 10 seconds..."
-arena_ErrorKicked: "An error has occured and your team has been kicked from the arena queue."
-arena_ErrorKickedMessage: "Error:"
-arena_disabled: "Arenas are disabled via an admin. Please wait for them to be re-enabled."
-arena_waitingBusy: "Waiting to join arena. We are next! All arena instances are busy."
-arena_waitingQueue: "Waiting to join arena. Teams ahead of us in line: "
-arena_started: "Arena Match Started!"
-arena_alreadyInQueue: "Your team is already in the queue."
-var_arena_errorMissingAntiCheat: "[%0] cannot join because they are not validated by CivCraft's anti-cheat."
-arena_addingTeamToQueue: "Added our team to the queue..."
-
-arena_statsHeading: "Arena Match"
-arena_statsName: "Arena:"
-arena_statsScore: "Our Score:"
-arena_statsTheirScore: "Their Score:"
-arena_statsTheirTeam: "Their team members:"
-
-var_arena_hasDefeated: "[%0] has defeated [%1]!"
-arena_leavingIn10: "Leaving arena in 10 seconds..."
-arena_teamExists: "A team with that name already exists."
-arena_createTeamPrompt: "Create a new team named"
-var_arena_createInvalid: "'[%0]' is not a valid name. Please choose another."
-arena_noTeamNamed: "No team named"
-arena_noteamMember: "No team member named:"
-var_arena_maxPlayers: "Cannot have teams with more [%0] players on a team."
-
 # =========================== Camps =========================
 camp_nameTaken: "A camp with this name already exists!"
 camp_missingItem: "You must be holding an item that can found a camp."
@@ -280,7 +231,7 @@ cmd_MustBeOP: "You must be OP to use this command."
 cmd_unkownFlag: "Unknown flag"
 cmd_toggled: "Toggled"
 
-var_cmd_notSpecificUpgrade: "'[%0]' is not specific enough to single out only one upgrade."
+var_cmd_notSpecificUpgrade: "[%0]' is not specific enough to single out only one upgrade."
 
 cmd_kill_Mesage: "You couldn't take it anymore."
 
@@ -334,16 +285,6 @@ cmd_pay_WholeNumbers: "You must pay in Whole numbers only."
 var_cmd_pay_PaidSuccess: "Paid [%0] [%1] to [%2]."
 var_cmd_pay_PaidReceiverSuccess: "[%0] has paid you [%1] [%2]."
 
-#---- Report Command ----
-cmd_reprot_Name: "Report"
-cmd_report_playerDesc: "[name] - Reports this player for misconduct."
-cmd_report_Heading: "Reporting a Player"
-cmd_report_1: "You are reporting the following player for misconduct:"
-cmd_report_2: "Please select one of the following categories:"
-cmd_report_3: "Reporting players allows our staff to determine patterns of behavior in players,"
-cmd_report_4: "if a player gets too many bad reports they may be banned. Please know that filing false reports is also a bannable offense."
-cmd_report_5: "Type [cancel] to cancel this report."
-
 #---- Trade Command ----
 cmd_trade_Name: "Trade"
 cmd_trade_YourselfError: "You cannot trade with yourself."
@@ -368,7 +309,7 @@ cmd_build_validateNearestDesc: "Validates the nearest structure. Removing any va
 
 cmd_build_validateNearestYourTownOnly: "You can only validate structures inside your own town."
 cmd_build_validatenearestNotDuringWar: "Cannot validate structures during WarTime."
-var_cmd_build_validateNearestExempt:  "[%0] is exempt from floating structure checks."
+var_cmd_build_validateNearestExempt: "[%0] is exempt from floating structure checks."
 var_cmd_build_validateNearestSuccess: "Running Validation on [%0] at location [%1]. Please Wait."
 cmd_build_repairNotDuringWar: "You cannot repair structures during WarTime."
 cmd_build_Invalid: "Couldn't find a structure."
@@ -391,24 +332,6 @@ cmd_build_help1: "[structure name]"
 cmd_build_help2: "builds this structure at your location."
 
 # =========================== Admin Commands =========================
-
-#----Adming Arena Commands----
-#arena Commands are not used
-adcmd_arena_Name: "Admin Arena"
-adcmd_arena_listDesc: "Lists all active arenas and which teams are in them."
-adcmd_arena_listDesc: "[name] end the arena with this id."
-adcmd_arena_msgAllDesc: "[msg] send a message to all arenas."
-adcmd_arena_msgdesc: "[id] [msg] send a message to this arena."
-adcmd_arena_enableDesc: "Enable arenas globally."
-adcmd_arena_disableDesc: "Disable arenas globally."
-adcmd_arena_Enabled: "Arenas Enabled"
-adcmd_arena_disabled: "Arenas Disabled"
-adcmd_arena_activeArenas: "Active Arenas"
-adcmd_arena_activeArenasTeams: "Teams:"
-adcmd_arena_adminMessage: "ADMIN:"
-adcmd_arena_enterInstanceName: "Enter arena instance name"
-adcmd_arena_arenaIDNotFound: "No arena with that id found."
-adcmd_arena_endDraw: "An Admin is ending this arena in a draw."
 
 #----Admin BUild Commands----
 adcmd_build_Name: "Admin Build"
@@ -444,7 +367,7 @@ adcmd_camp_rebuildDesc: "[name] rebuilds this camp template"
 adcmd_camp_setRaidTimeNoCamp: "This resident does not have a camp."
 adcmd_camp_setRaidTimeInvlidInput: "Enter a camp owner and date like DAY:MONTH:YEAR:HOUR:MIN"
 adcmd_camp_setRaidTimeSuccess: "Set raid date successfully."
-var_adcmd_camp_setRaidTimeFailedFormat: "'[%0] is not a valid date. Use format like DAY:MONTH:YEAR:HOUR:MIN"
+var_adcmd_camp_setRaidTimeFailedFormat: "[%0] is not a valid date. Use format like DAY:MONTH:YEAR:HOUR:MIN"
 adcmd_camp_destroyedSuccess: "Camp destroyed successfully."
 
 #----Admin Chat Commands----
@@ -469,7 +392,7 @@ adcmd_chat_noLongerListenCiv: "No longer listening to civ"
 adcmd_chat_listenCivSuccess: "Listening to civ"
 adcmd_chat_noLongerListenTown: "No longer listening to town"
 adcmd_chat_listenTownSuccess: "Listening to town"
-adcmd_chat_nowChattingInTown: "Now chatting in town chat:" 
+adcmd_chat_nowChattingInTown: "Now chatting in town chat:"
 adcmd_chat_noLongerChattingInTown: "No longer chatting in Town"
 adcmd_chat_noLongerChattingInCiv: "No longer chatting in Civ"
 adcmd_chat_nowChattingInCiv: "Now chatting in civ chat:"
@@ -688,7 +611,7 @@ adcmd_road_setRaidTimeDesc: "d:M:y:H:m sets the raid time on the nearest road"
 adcmd_road_setRaidTimePrompt: "Enter a date like DAY:MONTH:YEAR:HOUR:MIN"
 var_adcmd_road_setRaidTimeNotRoad: "Nearest structure is not a road, it's a [%0]"
 adcmd_road_setRaidTimeEnterTime: "Set raid date."
-var_adcmd_road_setRaidTimeError: "'[%0]' could not be parsed into a date, use format: DAY:MONTH:YEAR:HOUR:MIN"
+var_adcmd_road_setRaidTimeError: "[%0]' could not be parsed into a date, use format: DAY:MONTH:YEAR:HOUR:MIN"
 
 #---- Admin Timer Command ----
 adcmd_timer_name: "Admin Timer"
@@ -850,7 +773,7 @@ cmd_civ_revolutionDesc: "stages a revolution for the mother civilization!"
 cmd_civ_claimleaderDesc: "claim yourself as leader of this civ. All current leaders must be inactive."
 cmd_civ_motdDesc: "View and change the Message of the day for your civ."
 cmd_civ_locationDesc: "Shows the location of Town Hall for every Town in your civ."
-cmd_civ_locationMissingTownHall: " - NO TOWN HALL"
+cmd_civ_locationMissingTownHall: "- NO TOWN HALL"
 cmd_civ_locationSuccess: "Location:"
 cmd_civ_claimleaderStillActive: "At least one leader is not inactive for your civ. Cannot claim leadership."
 var_cmd_civ_claimLeaderSuccess: "You are now a leader in [%0]"
@@ -883,8 +806,8 @@ cmd_civ_timeUpkeep: "Next Upkeep:"
 cmd_civ_timeHourly: "Next Hourly Tick:"
 cmd_civ_timeRepo: "Next Trade Good Repo:"
 cmd_civ_timeWarNow: "WarTime is now!"
-cmd_civ_timeWarStarted: "    Started:"
-cmd_civ_timeWarEnds: "    Ends:"
+cmd_civ_timeWarStarted: "Started:"
+cmd_civ_timeWarEnds: "Ends:"
 cmd_civ_timeWarNext: "Next WarTime:"
 cmd_civ_timeSpawnRegen: "Next Spawn Regen:"
 cmd_civ_timeRandomEvent: "Next Random Event:"
@@ -922,7 +845,6 @@ cmd_civ_dip_errorDuringWar: "You cannot use this diplomacy command while it is W
 cmd_civ_dip_respondPrompt: "Please enter 'yes' or 'no'"
 cmd_civ_dip_respondNoRequest: "No offer to respond to."
 cmd_civ_dip_respondSuccess: "Response sent."
-cmd_civ_dip_requestPrompt: "Enter a civ name followed by 'neutral', 'peace', or 'ally'"
 cmd_civ_dip_requestSameCiv: "Cannot request anything on from your own civilization"
 cmd_civ_dip_capitulateErrorNoMother: "Cannot capitulate unless captured by another civilization."
 cmd_civ_dip_capitulateErrorNotLeader: "You must be the leader of the captured civilization in order to capitulate."
@@ -1044,6 +966,7 @@ var_cmd_civ_info_showHeading: "Civilization of [%0]"
 cmd_civ_info_showTax: "Income Tax Rate:"
 cmd_civ_info_showScience: "Science Percentage:"
 
+
 #---- Civ MOTD Command ----
 cmd_civ_motd_name: "Civ Motd"
 cmd_civ_motd_setDesc: "Set the Message of the Day"
@@ -1116,7 +1039,7 @@ var_cmd_market_buy_townsBroadcast: "The Town of [%0] has been bought and is now 
 cmd_plot_Name: "Plot"
 cmd_plot_infoDesc: "Show info for the plot you're standing on."
 cmd_plot_toggleDesc: "[mobs]|[fire] toggles mob spawning or fire in this plot."
-cmd_plot_permDesc:  "View/Modify permissions."
+cmd_plot_permDesc: "View/Modify permissions."
 cmd_plot_fsDesc: "[amount] - puts plot up for sale for this amount."
 cmd_plot_nfsDesc: "Makes plot not for sale."
 cmd_plot_buyDesc: "Buys the plot your standing on."
@@ -1168,14 +1091,14 @@ cmd_plot_showMobs: "Mobs:"
 cmd_plot_showFire: "Fire:"
 var_cmd_plot_showPrice: "[For Sale at [%0] [%1]]"
 
-#---- Plot Perm Command ---- 
+#---- Plot Perm Command ----
 cmd_plot_perm_name: "Plot Perm"
 cmd_plot_perm_setDesc: "Sets a permission flag on or off."
 cmd_plot_perm_setnotInTown: "Plot is not part of a town."
 cmd_plot_perm_setBadArg: "Incorrect Command Arguments."
 cmd_plot_perm_setInternalError: "Internal error, unknown permission node."
 var_cmd_plot_perm_setSuccess: "Permission [%0] changed to [%1] for [%2]."
-cmd_plot_perm_help1: "/plot perm set <type> <groupType> [on|off] "
+cmd_plot_perm_help1: "/plot perm set <type> <groupType> [on|off]"
 cmd_plot_perm_help2: "types: [build|destroy|interact|itemuse|reset]"
 cmd_plot_perm_help3: "groupType: [owner|group|others]"
 
@@ -1206,7 +1129,7 @@ cmd_res_bookInvenFull: "You cannot hold anything else. Get some space open in yo
 cmd_res_bookSuccess: "Added a help book to your inventory!"
 cmd_res_exchangePrompt: "Enter a type. E.g. iron, gold, diamond, emerald."
 cmd_res_exchangeLessThan0: "You must exchange a positive, non-zero amount."
-var_cmd_res_exchangeInvalid: "'[%0]' is not a known type. Must be iron, gold, diamond, or emerald."
+var_cmd_res_exchangeInvalid: "[%0]' is not a known type. Must be iron, gold, diamond, or emerald."
 cmd_res_exchangeNotEnough: "You do not have any"
 var_cmd_res_exchangeSuccess: "Exchanged [%0] [%1] for [%2] [%3]."
 cmd_res_resetspawnSuccess: "You will now respawn at spawn."
@@ -1254,7 +1177,7 @@ cmd_team_removeDesc: "[resident] removes a resident from your team."
 cmd_team_changeleaderDesc: "[resident] - Gives team leadership to another team member."
 cmd_team_arenaDesc: "Join the queue to fight the arena! Will take us out of the queue if we're already in it."
 cmd_team_top5Desc: "Shows top 5 teams in the game!"
-cmd_team_top10Desc:  "Shows top 10 teams in the game!"
+cmd_team_top10Desc: "Shows top 10 teams in the game!"
 cmd_team_listDesc: "List all teams in the game."
 cmd_team_surrenderDesc: "Give up on the current match."
 cmd_team_surrenderNotInTeam: "You must be part of a team to use this command."
@@ -1672,11 +1595,6 @@ var_interactive_repair_prompt2: "Looks like we can get you fixed up for [%0] [%1
 interactive_repair_prompt3: "If that's ok, please type 'yes'. Type anything else to cancel."
 interactive_repair_canceled: "Repair cancelled."
 
-interactive_report_cancel: "Report cancelled."
-interactive_report_category: "You must select a valid category to report."
-interactive_report_description: "Please enter a description of what happened:"
-var_interactive_report_success: "[%0] was reported. Thank you."
-
 interactive_spy_heading: "Mission:"
 var_interactive_spy_mins: "[%0] minutes"
 var_interactive_spy_seconds: "[%0] seconds"
@@ -1965,7 +1883,7 @@ civ_found_mustleavecamp: "You must first leave your camp before founding a civil
 var_civ_found_errorTooClose1: "You cannot found a civilization here. You are too close to the culture of [%0]! [%1] is your current distance, needs to be at least [%2]"
 civ_found_databaseException: "We detected and internal inconsistency with the database. Try founding your civ again, if the problem persists, contact an admin or try a different name."
 
-var_civ_found_invalidName: "'[%0]' is not a valid name, please choose another."
+var_civ_found_invalidName: "[%0]' is not a valid name, please choose another."
 var_civ_debtAnnounce: "[%0] is in debt by [%1] [%2]!"
 var_civ_fellIntoRuin: "[%0] and its towns have fallen into ruin!"
 var_civ_debtGlobalAnnounce: "[%0] is in debt!"
@@ -2003,8 +1921,8 @@ var_civ_gift_tooyoung1: "[%0] cannot participate in gifting/merging civs or town
 
 var_civ_debt_endWar: "[%0] was in debt too long and can no longer maintain it's aggressive war with [%1]."
 
-var_cultureEnterMsg: "Entering civ [%0]. "
-var_cultureLeaveMsg: "Leaving civ [%0]. "
+var_cultureEnterMsg: "Entering civ [%0]."
+var_cultureLeaveMsg: "Leaving civ [%0]."
 
 # =========================== Resident.java Messages =========================
 var_resident_debtmsg: "You are in debt by [%0] [%1]!"
@@ -2169,6 +2087,8 @@ re_alreadyActive: "Event is already active!"
 re_blockBreak_success: "You seem to have found something interesting...."
 var_re_hammers_increase: "Our production rate has increased by [%0]% due to an unforseen event!"
 var_re_hammers_decrease: "Our production rate has decreased by [%0]% due to an unforseen event!"
+var_re_bkr_increase: "Our science has grown by [%0]% because of an unforeseen event!"
+var_re_bkr_decrease: "Our science has dropped by [%0]% because of an unforeseen event!"
 var_re_happiness1: "We're now enjoying a happiness bonus of [%0] for [%1] hours!"
 var_re_pickBlock1: "Block is somewhere near chunk [%0], between y=[%1] and y=[%2]."
 re_pickBlock2: "To get the actual coordinates multiply these numbers by 16."
@@ -2281,7 +2201,7 @@ var_blacksmith_onCooldown: "Blacksmith is on cooldown. Please wait another [%0] 
 #These are signs. Keep text short, retain the '\n' as that is a newline.
 #signs have 4 lines total.
 blacksmith_sign_catalyst: "Deposit\nWithdraw\nCatalyst"
-blacksmith_sign_forgeCost: "Forge!\nFor" #cost\nNonresfee
+blacksmith_sign_forgeCost: "Forge!\nFor #cost\nNonresfee"
 blacksmith_sign_depositOre: "Deposit\nOre\nResidents Only"
 blacksmith_sign_withdrawOre: "Withdraw\nOre\nResidents Only"
 blacksmith_deposit_notCatalyst: "You must deposit a catalyst into the forge."
@@ -2310,6 +2230,7 @@ buildable_preview_prompt2: "If this location looks good, type 'yes'. Otherwise, 
 buildable_TooCloseToBedrock: "Cannot build here, too close to bedrock."
 var_buildable_toocloseToSpawn1: "You must build at least [%0] blocks away from spawn."
 buildable_notInCulture: "Cannot build here, you need to build inside your culture."
+buildable_shipyard_notEnoughWater: "You can not build a shipyard here, the construction should be for the most part in the biomes of the river, the ocean or the beach."
 buildable_structureExistsHere: "Cannot build here, structure already at this location."
 buildable_errorTILimit: "Cannot build tile improvement. Already at tile improvement limit."
 buildable_errorTIHere: "Cannot build a tile improvement on the same chunk as another tile improvement."
@@ -2363,6 +2284,8 @@ fishingBoat_tooDeep: "You must be close to the water's surface to build this str
 #---- Grocer.java ----
 # "Bought 1 fish for 10 Coins"
 var_grocer_msgBought: "Bought [%0] [%1] for [%2]"
+
+
 #These are for the grocer signs.
 grocer_sign_buy: "Buy"
 grocer_sign_for: "For"
@@ -2504,6 +2427,8 @@ wall_firstLocation: "First location placed, place another to start building a wa
 
 # "Can only build a wall in 100.0 block segments, pick a closer location"
 var_wall_maxLength: "Can only build a wall in [%0] block segments, pick a closer location"
+
+
 wall_build_tooHigh: "Cannot build here, wall is too high."
 wall_build_recursionHalt: "ERROR: Building wall blocks exceeded recusion limit! Halted to keep server alive."
 wall_repair_invalid: "This wall is no longer valid and cannot be repaired. Walls can no longer overlap with protected structure blocks, demolish this wall instead."
@@ -2566,10 +2491,10 @@ espionage_missionAborted: "You've left the civ borders. Mission Aborted."
 var_FoundTownSync_Success: "The town of [%0] has been founded in the Civilization of [%1]!"
 
 #---- playerChunkNotify ----
-playerChunkNotify_enterWilderness: "Wilderness - "
-var_playerChunkNotify_EnterTown: "[%0] [%1]. "
-var_playerChunkNotify_EnterOutpost: "Outpost [%0] [%1]. "
-var_playerChunkNotify_enterCamp: "Camp [%0] - "
+playerChunkNotify_enterWilderness: "Wilderness -"
+var_playerChunkNotify_EnterTown: "[%0] [%1]."
+var_playerChunkNotify_EnterOutpost: "Outpost [%0] [%1]."
+var_playerChunkNotify_enterCamp: "Camp [%0] -"
 var_playerChunkNotify_enteredBorderAlert: "[%0] has entered our borders!"
 
 #---- PlayerLoginAsync ----
@@ -2632,6 +2557,7 @@ var_daily_townTaxes: "Collected [%0] [%1] in town taxes."
 effectEvent_noTownHall: "Your town does not have a town hall! Structures have no effect!"
 var_effectEvent_convertBeakers: "Converted [%0] beakers into [%1] culture as we are not researching any new technologies."
 
+
 var_syncTrade_payout: "Generated [%0] from trade."
 
 
@@ -2691,7 +2617,7 @@ tutorial_ironSword_Line5: "towns from each other. Each weekend, WarTime is enabl
 tutorial_ironSword_Line6: "during which players at war must defend their civ and conquer their enemies."
 tutorial_bookAndQuill_heading: "More Info?"
 tutorial_bookAndQuill_Line1: "There is much more information you will require for your"
-tutorial_bookAndQuill_Line2: "journey into CivCraft. Please visit the wiki at "
+tutorial_bookAndQuill_Line2: "journey into CivCraft. Please visit the wiki at"
 tutorial_bookAndQuill_Line3: "http://wiki.minetexas.com/"
 tutorial_bookAndQuill_Line4: "For more detailed information about CivCraft and it's features."
 tutorial_campQuest_heading: "QUEST: Build a Camp"
@@ -2750,17 +2676,12 @@ war_mustUseTNT: "Must use TNT to break blocks in at-war civilization cultures du
 war_onlyBuildCertainBlocks: "Can only place grass, dirt, and TNT blocks in at-war civilization cultures during WarTime."
 war_canAlsoPlaceBridgeBlocks: "You can also place Iron, Gold, Diamond, or Emerald Blocks during war, and they will not fall like sand."
 var_war_tntMsg: "Our [%0] at location [%1] was hit by TNT. HP is now ([%2])"
-war_kick_atWarNoAnticheat: "All 'at war' players not using CivCraft's Anti-Cheat have been expelled during WarTime."
-war_kick_needAnticheat1: "Kicked: You are required to have CivCraft's Anti-Cheat plugin installed to participate in WarTime."
-war_kick_needAntiCheat2: "Visit https://www.minetexas.com/ to get it."
 
 # =========================== PVP Timer =========================
 pvpListenerError: "You are unable to damage players while protected."
 pvpListenerError2: "You are unable to damage protected players."
 pvpTimerEnded: "Your PvP protection has expired."
 
-
-# ----------------------------------------------------------------
 # =========================== BEGIN 1.75 =========================
 config_material_misc: "Misc"
 civGlobal_serverFullMsg: "Server is full for now, come back later."
@@ -2877,14 +2798,21 @@ var_missionBook_subvert_errorInAnarchy: "[%0] is in Anarchy and has no governmen
 var_missionBook_subvert_errorInTribalism: "[%0] is in Tribalism and has no government to subvert"
 var_missionBook_subvert_alert1: "[%0] has fallen into Anarchy due to the work of spies"
 var_missionBook_subvert_success1: "Mission Accomplished, [%0] is now in Anarchy"
+
 # =========================== END 1.76 =========================
 # ----------------------------------------------------------------
 
-# 1.76.3
+# ----------------------------------------------------------------
+# =========================== BEGIN 1.76.3 =========================
+
 goodieRepoBroadcastTitle: "Trade Goodie Repo"
 cmd_res_exchangeNoTradeGoods: "You Cannot Exchange Trade Goods"
 
-# 1.8
+# =========================== END 1.76.3 =========================
+# ----------------------------------------------------------------
+
+# ----------------------------------------------------------------
+# =========================== BEGIN 1.8 =========================
 
 var_cmd_civ_info_victory: "The Civilization of [%0] has won with a [%1] victory!"
 
@@ -2898,50 +2826,40 @@ adcmd_find_xrayers: "Query all players to find ones at Diamond xray level"
 cmd_res_outlawedDesc: "List the towns that have you listed as an outlaw"
 cmd_res_outlawed_noOne: "You are not outlawed in any towns"
 cmd_res_outlawed_list: "Towns that have you listed as an outlaw: [%0]"
-var_virtualTG_civHasNoGood: ""
 
 #Interactive Scrolls
-interactive_scroll_cancel: ""
-var_processScroll_interactive1: ""
-var_processScroll_interactive2: ""
-var_processScroll_takeStroll: ""
-var_processScroll_noCiv: ""
-var_processScroll_addedCulture: ""
-var_processScroll_arleadyActivated: ""
-var_processScroll_addedHammers: ""
-var_processScroll_noBarracks: ""
-var_processScroll_noBarracksInProgress: ""
-var_processScroll_noBarracksNotSettler: ""
-var_processScroll_addedHammersSettler: ""
-var_processScroll_noTechInPrg: ""
-var_processScroll_notThisTech: ""
-var_processScroll_addedTech: ""
-var_processScroll_upgradeBankArleadyNo: ""
-var_processScroll_upgradeBankArleady: ""
-var_processScroll_proceedBank: ""
-var_processScroll_upgradeTownArleady: ""
-var_processScroll_proceedTown: ""
+var_processScroll_noCiv: "An Ancient Scroll can not be used without civilization"
+var_processScroll_interactive1: "Do you really want to use the Ancient Scroll"
+var_processScroll_interactive2: "If you're sure, write 'yes' or 'yes'"
+interactive_scroll_cancel: "You did not dare to use the Ancient Scroll"
+var_processScroll_addedCulture: "[%0] added [%1] culture to [%2] using the Ancient Scroll"
+var_processScroll_arleadyActivated: "The Scroll of Hammers has already been activated in [%1]. The effect will end [%0]"
+var_processScroll_addedHammers: "[%0] added [%1] hammers to [%3] in [%2] using the Ancient Scroll"
+var_processScroll_noBuildTasks: "It's impossible to add [%0] hammers to the construction, because [%1] is not constructing anything."
+var_processScroll_noBarracks: "It's impossible to add [%0] hammers to the town, because [%1] does not have a barracks."
+var_processScroll_noBarracksInProgress: "It's impossible to add [%0] hammers to the town, because [%1] does nothing."
+var_processScroll_noBarracksNotSettler: "It is not possible to add [%0] hammers to the town, because [%1] produces [%2]."
+var_processScroll_addedHammersSettler: "[%0] added [%1] hammers to the town of [%2] using the Ancient Scroll"
+var_processScroll_noTechInPrg: "It's impossible to add [%0]% of test tubes to study [%1], because you are not studying anything."
+var_processScroll_notThisTech: "It's impossible to add [%0]% of test tubes to study [%1], because you are studying [%2]."
+var_scrollEnded: "The effect of the Scroll of Hammers has disappeared!"
+var_processScroll_addedTech: "[%0] added [%1] tubes to technology [%2] using the Ancient Scroll"
+var_processScroll_upgradeTownArleady: "It is impossible to improve the town of [%1] to [%0] level, because it already level [%0] (or higher)."
+var_processScroll_proceedTown: "[%0] improved [%2] to [%1] town level by using the Ancient Scroll"
+var_processScroll_proceedBank: "[%0] improved the Bank [%2] to [%1] by using the Ancient Scroll"
+var_processScroll_upgradeBankArleady: "It is impossible to improve the Town Bank in [%1] to [%0] level, because it already level [%0] (or higher)."
+var_processScroll_upgradeBankArleadyNo: "It's impossible to improve the Town Bank in [%1] to [%0] level, because it is not built."
+var_processScroll_takeStroll: "You must keep the ancient scroll in your hand."
 
 # Space Shuttle Research
-researchSpaceShuttle_lore1: ""
-researchSpaceShuttle_lore2: ""
-researchSpaceShuttle_lore3: ""
-researchSpaceShuttle_lore4: ""
-researchSpaceShuttle_lore5: ""
-researchSpaceShuttle_lore6: ""
-researchSpaceShuttle_lore7: ""
-researchSpaceShuttle_lore8: ""
-
-var_arrtifacts_errorBarracksFull: ""
-var_artifact_useSuccusess: ""
-var_artifact_useSuccusessButNot: ""
-var_artifact_useFailure: ""
-var_arrtifacts_Break: ""
-var_artifact_useFailureSinceWar: ""
-
-cmd_civ_talent_choose_sucusses: ""
-cmd_civ_talent_choose_interactiveConfirmationHeading: ""
-cmd_civ_talent_choose_interactiveConfirmationTypeSth: ""
+researchSpaceShuttle_lore1: "Exploring the Space Shuttle!"
+researchSpaceShuttle_lore2: "You do not have the correct items to study the Space Shuttle."
+researchSpaceShuttle_lore3: "You do not belong to a civilization."
+researchSpaceShuttle_lore4: "You must be the leader of [%0] to study the Space Shuttle."
+researchSpaceShuttle_lore5: "You've already studied the Space Shuttle!"
+researchSpaceShuttle_lore6: "You have successfully studied the Space Shuttle!"
+researchSpaceShuttle_lore7: "[%0] from [%1] has studied the Space Shuttle!"
+researchSpaceShuttle_lore8: "[%0] is studying the Space Shuttle!"
 
 adcmd_talentcount: "Count the Talents"
 cmd_talentcount_broken: "Something Broke =("
@@ -2961,7 +2879,6 @@ var_structure_factory_create_failed: "Failed to create a '[%0],' Not enough Comp
 var_structure_factory_create_failed_crutches: "Failed to create a '[%0],' Not enough Componenets. Still need: "
 structure_factory_pieces: "pieces"
 factory_sign_craft: "Construct"
-structure_factory_sign_construct: "Construct"
 factory_sign_previousUnit: "Prev Project"
 factory_sign_nextUnit: "Next Project"
 var_factory_noPerm: "Only the leader [%0] can start Construction Projects in the Factory."
@@ -2972,3 +2889,458 @@ alch_sign_buy: "Buy"
 alch_sign_for: "Price"
 alch_sign_empty: "Counter is \n Empty"
 alch_sign_needUpgrade: "Upgrade Alch\nto unlock\n/town upgrade."
+var_townupgrade_alch: "Alchemist's House now at level [%0]"
+
+bonus_chichen_itza_and_library_capitol: "The town of [%0] receives an ultrabuff and multiplies the health of the control blocks by 1.5! (150 hp) (30 hp in the military camp)"
+bonus_chichen_itza_and_library_townhall: "The town of [%0] receives an ultrabuff and multiplies the health of the control units by 1.5! (30 hp) (30 hp in the military camp)"
+bonus_lighthouse_and_colossus: "The town of [%0] receives an ultrabuff and reduced the time of messages from the scout about finding the enemy in cultural chunks and increased the line of sight of scout ships and scout towers!"
+bonus_lighthouse_and_ingermanland: "The town of [%0] receives an ultrabuff and reduces the distance of building gun turrets and gun ships by 50! (80)"
+event_found_by_scoutTower: "Scout Tower from the town of [%0] has spotted you!"
+event_found_by_scoutship: "Scout Ship from the town of [%0] has spotted you!"
+wonder_limit: "There is no way to begin construction of Wonder as the limit of wonders in the town is reached."
+var_alch_msgBought: "Purchased [%0] [%1] for [%2]"
+
+var_lab_maxed: "Level [%0] of the Observatory. Now: [%1] (Maximum [%1])"
+var_lab_lvlUp: "Observatory now level of [%0]"
+var_lab_productionGrew: "The production at the Observatory level [%0] has increased. [%1]"
+var_lab_stagnated: "Production at the Observatory level [%0] stopped. [%1]"
+var_lab_lostalvl: "The Observatory production fell and lowered its level. Current level [%0]"
+var_lab_productionFell: "The Observatory level [%0] has lowered production. [%1]"
+cmd_town_info_labDesc: "Show Observatories Performance"
+cmd_town_info_labHeading: "Observatory"
+cmd_town_info_labBeakersInfo: "science (approximately)."
+cmd_town_info_labName: "Observatory"
+
+cmd_town_switchtown: "[Town] - Allows you to instantly change towns within your civilization for 50,000 coins"
+var_switchtown_own: "You cannot leave a town you lead"
+var_switchtown_captured: "You cannot join a captured town"
+var_switchtown_now_own: "You can only join a town in your civilization"
+var_switchtown_last_mayor: "You're a mayor in your town, you cannot switch towns"
+var_switchtown_no_money: "Insufficient [%0]."
+var_switchtown_arleady_in_this_town: "You are already in this town"
+wartime_now_cenceled: "You can not use this command during war time."
+no_research: "Nothing to consider, since we do not Researching anything."
+
+stable_sign_respawnAt: "Teleport to"
+stable_wartime_returned: "You can not use a teleporter during a war."
+stable_Sign_noPermission: "No rights for teleportation"
+stable_cannotRespawn: "Error, tell admin"
+stable_nomoney: "There is not enough money to teleport to the Town"
+stable_respawningAlert: "Teleportation..."
+stable_sign_nextLocation: "Next \ nLocation"
+stable_sign_previousLocation: "Previous \ nLocation"
+stable_sign_Stable: "Stable"
+stable_cannotSupport1: "Wait a bit..."
+var_stable_cannotSupport2: "Wait a bit..."
+var_stable_secondsLeftTillRespawn: "It is impossible to teleport. Wait for [%0] seconds (s) to be teleported."
+
+var_engliment_research: "Enlightenment in [%0] completed on [%1]!"
+engliment_sucusses: "Civilization [%0] has completed the Enlightenment!"
+
+war_defeat_loseEnlightenment: "The Civilization of [%0] lost the Enlightenment. It has been plundered by the civilization of [%1]"
+war_defeat_loseMission: "The Civilization of [%0] lost 1 mission due to defeat in war. Mission now at: [%1]"
+
+var_civ_membersHeading: "Residents: [%0]"
+cmd_civ_membersDesc: "Shows all the Residents of your civilization."
+
+stockexchange_dynmapName: "Stock Exchange"
+var_townUpgrade_stockexchange: "Stock Exchange in [%1] is now level [%0]!"
+
+town_missingWonders: "The town does not have the required wonders to buy this upgrade."
+
+moscowstateuni_enchantment_success: "Enchantment success!"
+var_moscowstateuni_enchant_cannotAfford: "You can not afford it, you need [%0] [%1]"
+var_moscowstateuni_onlyleader: "Only the leaders of civilization [%0] can use the Moscow State University"
+moscowstateuni_enchant_cannotEnchant: "You can not enchant this item with this enchantment."
+var_moscowstateuni_nonMember: "Only members [%0] can use the Moscow State University"
+
+camp_garden1: "Garden Disabled"
+camp_garden2: "Upgrade Using"
+camp_garden3: "/camp upgrade"
+camp_garden4: "command"
+
+cmd_civ_research_queueAdd: "[Technology] - Adds technology to the research queue."
+cmd_civ_research_queueRemove: "Removes the current technology from the research queue."
+cmd_civ_research_queueList: "Shows the current technology in the research queue"
+cmd_civ_research_queueEnterName: "Enter the name of the technology that you want to add to the research queue."
+cmd_civ_research_queueNotCompletedTownHall: "You must complete the capitol, and then you can add a research to the queue."
+cmd_civ_research_queueTownHallNULL: "I can not find your capitol. It is impossible to add research without a capitol!"
+cmd_civ_research_queueTownHallInternalError: "I can not find the town capitol [%0]. Database Error, contact an Admin."
+cmd_civ_research_queueArleadyThis: "You already have this research."
+cmd_civ_research_queueNoResearchingNow: "At the moment you are not researching anything. Write '/ civ research on [%0]' to start learning this technology."
+cmd_civ_research_queueUnknownTech: "I can not find a technology named [0]."
+cmd_civ_research_queueArleayIn: "This research is already in the queue."
+cmd_civ_research_queueSucussesAdded: "The technology [%0] has been successfully added to your research queue."
+cmd_civ_research_queueSucussesWithWarning: "[ATTENTION] You deleted [%0] from the research queue, adding [%1]. To add it back, use '/civ research queueadd [%0]'."
+cmd_civ_research_queueRemovedSucusses: "Technology [%0] has been removed from the research queue."
+cmd_civ_research_queueErrorListRemove: "Your Research queue is empty. Add something with '/ civ research queueadd (technology name)'."
+cmd_civ_research_queueListSucusses: "Current technology in queue"
+civ_research_queueErrorCodeOne: "An error occurred while trying to start the research from the queue ([%0]), because we do not have the required technologies."
+civ_research_queueErrorCodeTwo: "An error occurred while trying to start the research from the queue ([%0]), because we already have this technology."
+civ_research_queueErrorCodeThree: "An error occurred while trying to start the research from the queue ([%0]), because we do not have the money for this technology. It is necessary still: [%1] [%2]."
+civ_research_queueErrorCodeFour: "An error occurred while trying to start the research from the queue ([%0]), because we already have [%1]. If you want to change the research, then write '/ civ research change (technology)'."
+civ_research_queuePrefix: "[The Research Queue]"
+civ_research_queueSucussesStarted: " Our civilization began to research [%0]!"
+
+var_arrtifacts_Keept_Since_No_WarTime: "Your artifact remained intact, because now it's not war!"
+var_arrtifacts_Keept_Since_WarTime_No_Rolled: "Your artifact remained intact, since you were lucky!"
+var_arrtifacts_Break: "Your artifact has broken, because you are unlucky! Roll: 5 <[%0]."
+
+ordinary_unknownArtifact: "Unknown type of unit."
+var_ordinary_atLimit: "We trained the maximum of artifacts of the type [%0]."
+var_ordinary_tooPoor: "We are too poor for this artifact [%0]. This requires [%1] [%2]."
+ordinary_unavailable: "This Artifact is not available."
+var_ordinary_inProgress: "Already completed [%0]."
+var_ordinary_begin: "We started to make [%0]!"
+ordinary_actionNoPerms: "Only mayors and assistants can make artifacts."
+ordinary_sign_previousArtifact: "Prev Artifact"
+ordinary_sign_nextArtifact: "Next Artifact"
+ordinary_sign_do: "Craft"
+var_ordinary_completedTraining: "Your tavern has completed [%0]!"
+ordinary_errorUnknown: "ERROR? CAN NOT FIND THIS CLASS ?:"
+
+cmd_res_strucutreDesc: "Shows buildings GUI (there you can build them))"
+cmd_res_techDesc: "Shows available researches GUI (there you can research them))"
+cmd_res_upgradeDesc: "Shows available upgrades GUI (there you can buy them))"
+cmd_res_dipDesc: "Shows diplomacy GUI"
+res_gui_noTown: "You are not a member of a town"
+belongTownGUI: "You must be a member of the civilization to view this GUI."
+advancedGuiNoRes: "You do not have this mineral in your hands."
+cmd_civ_research_queueRemoveSucusses: "The '[%0]' technology has been removed from our research queue!"
+
+ordinary_settlerOnlyInBarracks: "You can train units only in Barracks!"
+
+PlayerLoginAsync_loginNotAllies: "You were teleported home, because you were not in allied land"
+loreEnh_LightStrike: "Lightning strike"
+loreEnh_LightStrike_Sucusses2: "[%0] sent you a charge of lightning and inflicted 3 pure damage!"
+
+var_plc_entityMessage: "Tesla from [%0] Damaged you!"
+
+resident_upgradesGuiHeading: "Town Improvements"
+clicktoupgrade: "<Click to improve>"
+loreGui_template_clickToBuild: "<Click to build>"
+
+bookReborn_heading: "CivCraft's Knowledge Book"
+bookReborn_backToDashBoard: "Back to CivCraft's Knowledge Book"
+bookReborn_news_heading: "Winners of past phases"
+bookReborn_clickToView: "<Click to view>"
+bookReborn_perkMenu: "Privileges"
+bookReborn_techMenu: "Studies of civilization"
+bookReborn_buildMenu: "Town Buildings"
+bookReborn_gameInfoMenu: "A small guide"
+bookReborn_dynmapMenu: "useful links"
+bookReborn_newsMenu: "Winners of past phases"
+bookReborn_diplomaticMenu: "Diplomatic relations"
+bookReborn_infoMenu: "Information about yourself"
+bookReborn_craftMenu: "Kraft recipes"
+bookReborn_upgradeMenu: "Town Improvements"
+bookReborn_backTo: "Back to [%0]"
+bookReborn_tutorial_heading: "A small guide"
+
+resident_wonersGuiHeading: "Wonders of the World"
+resident_techsGuiHeading: "Technologies"
+bookReborn_resInfoHeading: "personal information"
+bookReborn_infoMenu_name: "Information"
+cmd_map_dynmapLink: "Link to the map: [%0] (The link has opened in your browser) \ n If you prescribe / map h, then you will be given a link to your current location."
+cmd_wiki_wikiLink: "Link to wiki: [%0] (Link opened in your browser)"
+
+relation_creationDate: "Date of confinement: [%0]"
+resident_relationsGuiHeading: "Diplomacy"
+
+bookReborn_donateMenu: "Donat"
+resident_relationsGui_ally: "Unions"
+resident_relationsGui_allyInfo: "Shows information about your alliances."
+resident_relationsGui_peace: "Worlds"
+resident_relationsGui_peaceInfo: "Displays information about your worlds."
+resident_relationsGui_hostile: "Enmity"
+resident_relationsGui_hostileInfo: "Shows information about your feuds."
+resident_relationsGui_war: "Wars"
+resident_relationsGui_warInfo: "Shows information about your wars."
+resident_relationsGui_relationToString: "[%0]"
+relation_declarationDate: "Ad date: [%0]"
+cmd_civ_hostilesHeading: "Warring civilizations"
+
+cmd_civ_talentDesc: "Management of the Talent Tree for your Civilization."
+cmd_civ_talent_name: "Talent Tree"
+cmd_civ_talent_listDesc: "Shows you the list of selected talents."
+cmd_civ_talent_chooseDesc: "Allows you to choose the talent from the three offered."
+cmd_civ_talent_nextDesc: "Lets you view the talents of the next level."
+cmd_civ_talent_choose_notNow: "At the moment we can not choose that talent! The next will be when [%0] expands to [%1] culture level!"
+cmd_civ_talent_choose_ended: "Talents of civilization are over. There are no more = ("
+cmd_civ_talent_choose_chooseOne: "Choose one of the talents and enter '/civ talent choose [number]'"
+cmd_civ_talent_choose_enterInteger: "Enter the number"
+cmd_civ_talent_choose_badInteger: "There is no talent with the number [%0]"
+cmd_civ_talent_choose_sucussesSender: "You have successfully chosen the talent for your civilization!"
+cmd_civ_talent_list_heading: "Talents: [%0]"
+cmd_civ_talent_list_noOne: "You have not yet chosen any talent."
+cmd_civ_talent_next_ended: "Talents of civilization are over. There are no more = ("
+var_StructureBlockHitEvent_talentDmg: "Thanks to the talent, we have done more on [%0] [%1]!"
+cmd_civ_talent_infoDesc: "Here you can find out the most detailed information about the talents of civilization."
+cmd_civ_talent_info_link: "Visit http://wiki.minetexas.com/index.php/Talents for more info."
+
+var_cmd_civ_revolutionErrorDominator: "You can not start a revolution, for [%0] has a talent that does not give rise to an uprising."
+var_town_buildStructure_success: "The town started constructing a '[%0]'!"
+
+PlayerLoginAsync_civTalentNotUsed: "Your Civilization is not using a talent. Choose one with '/civ talent'"
+
+cmd_civ_research_calc_result: "[%0] will be ready (approximately) [%1]."
+
+bookReborn_talentMenu: "Talents of Civilization"
+talentGui_heading: "Talents of civilization"
+talentGui_talentList: "List your talents"
+talentGui_talentChoose: "Talent choice"
+
+var_stable2_teleportNotAva: "Currently, teleportation to another town is not available. Time Remaining [%0]."
+stable_Sign_teleport_noStable: "A stable was not built in [%0]. Teleportation is impossible."
+shipyard_sign: "Shipyard"
+shipyard_Sign_teleport_noShupyard: "The shipyard is not built in [%0]. Teleportation is impossible."
+
+var_buildable_tooCloseToTeslaShip: "Cannot build here. Too close to Tesla ship at [%0]"
+var_buildable_tooCloseToMagicTower: "Cannot build here. Too close to the Magic Tower at [%0]"
+var_buildable_tooCloseToMagicShip: "Cannot build here. Too close to the Magic Ship at [%0]"
+
+var_pmc_entityMessage: "Mages of the town [%0] have cast a curse on you!"
+
+adcmd_count: "Shows the total number of Residents, Camps, Towns, and Civs"
+adcmd_talentcount: "Shows the total number of talents"
+
+var_autoCapitulate_townTitle: "The captured town of [%0] has given up."
+var_autoCapitulate_townSubTitle: " [%0] has refused to resist."
+var_autoCapitulate_CivTitle: "The captured Civilization [%0] has given up."
+var_autoCapitulate_CivSubTitle: " [%0] and all of its cities are now incapable of revolution."
+
+blacksmith_forge_notEnough: "You do not have enough coins to enchant. You need [%0] more"
+blacksmith_forge_invalidCatasOnItem: "Your armor has reached its maximum enhancement. More information about the mechanics can be found here: [%0]"
+
+var_artifact_useSuccusess: "You have successfully used [%1]. Next use: [%0]."
+var_artifact_useFailure: "The next use of '[%1]' will be [%0]."
+var_artifact_useSuccusessButNot: "Your artifact lost its strength and disappeared."
+var_artifact_useFailureSinceWar: "You can not use [%0] during war time."
+
+var_buildStockExchange_nogoodCondition: "The conditions for starting the construction of the Stock Exchange have not been met. More information about terms and conditions can be found here [%0]"
+var_townUpgrade_stockexchangeWinStart: "Stock exchange in [%0] ([%1]) is now the maximum level. The victory will start after taxes."
+var_upgradeStockExchange_nogoodCondition: "Conditions for improving the Stock Exchange at level 6 are not met. More information about terms and conditions can be found here [%0]"
+
+cmd_res_exchangeNoBuyItems: "You can not exchange purchased items."
+
+var_spaceshuttle_noPerm: "Only leaders [%0] can launch space missions."
+var_spaceshuttle_succusess: "[%2] launched a space mission [%0] with a rocket [%1]"
+var_spaceshuttle_already: "It's impossible to start a new mission, because the mission '[%0]' is already on!"
+var_spacemission_completed: "Mission [%0] completed with rocket [%1]!"
+var_spaceshuttle_noProgress: "At the moment your civilization does not have any active missions. With the command '/civ space succusess' or in the book (section 'Rocket building') you can find out about the completed missions."
+var_spaceshuttle_progress: "Mission [%0]: \ n Checklists: [%1] \ n Hammers: [%2]"
+var_factory_succusess: "[%1] created [%0]!"
+bookReborn_civSpaceMenu: "Rocket building"
+bookReborn_civSpaceHeading: "Rocket building"
+var_bookcivspacegui_noCiv: "To view this UI, you must be a member of the civilization."
+var_bookcivspacegui_noLeader: "You must be the leader [%0] to view this UI."
+bookReborn_civSpaceProgressHeading: "Mission Progress"
+var_spaceshuttle_end: "Mission '[%0]'' was the last. Victory is imminent!"
+bookReborn_civSpaceEndedHeading: "Completed missions"
+bookReborn_civSpaceComponentsHeading: "Mission components"
+bookReborn_civSpaceFutureHeading: "Completed Mission"
+cmd_civ_space_name: "Civilization Rocket Missions"
+cmd_civ_space_guiDesc: "UI of all command rocket."
+
+cmd_civ_space_succusessDesc: "Learn about the completed missions of your civilization."
+cmd_civ_space_futureDesc: "Learn about the future missions of your civilization."
+cmd_civ_space_progressDesc: "Learn about the progress of the mission of your civilization."
+
+Goverment: "Government: [%0]"
+
+cmd_report_playerDesc: "[Player Name] - Report this player."
+cmd_report_bugDesc: "Report a bug."
+cmd_reprot_Name: "Complaints"
+cmd_report_Heading: "Player Complaint"
+cmd_report_1: "You are reporting [%0] for violation of the rules."
+cmd_report_2: "After filing a report, please wait 12 hours for it to be reviewed by an Admin."
+cmd_report_3: "After an Admin reviews your report, you can see the result with the command '/res report'"
+cmd_report_4: "Type 'cancel' to cancel the report."
+interactive_report_cancel: "The report has been canceled."
+interactive_report_description: "Provide evidence (youtube, screenshot)"
+var_interactive_report_success: "The report number [%2] was sent to [%0] ([%1]). Thank you!"
+cmd_report_5: "You are about to inform the Admin about the bug"
+cmd_report_6: "After submitting a report, please wait 24 hours for it to be reviewed by an Admin."
+cmd_report_7: "After an Admin reviews your report, you can see the result with the command '/res report'"
+interactive_report_descriptionBuG: "Describe the bug here: paste.md-5.net and paste the link here."
+cmd_report_8: "Type 'cancel' to cancel the request."
+var_interactive_reportbug_success: "You reported a bug ([%0]) (bug number = [%1]). Thank you!"
+
+adcmd_report: "Opening of closing / checking of complaints / bugs."
+adcmd_report_name: "Reports of players / bugs"
+adcmd_report_buglistDesc: "Returns the list of open server bugs [%0]"
+adcmd_report_playerlistDesc: "Will return a list of open complaints about Civcraft [%0]"
+adcmd_report_closelistDesc: "Close bug / report on server [%0]"
+adcmd_report_close_enterID: "Enter the report number"
+adcmd_report_close_unkReport: "The report number [%0] does not exist!"
+adcmd_report_close_closedReport: "The report number [%0] has already been closed."
+adcmd_report_close_enterArgs: "Enter the verdict and the report will close"
+adcmd_report_close_succusess: "You closed report number [%0] with the verdict [%1]!"
+adcmd_report_checklistDesc: "Report checklist [%0]"
+
+cmd_res_reportDesc: "With the help of this command, you can learn about the verdict of your report / bug."
+cmd_res_report_notNow: "You have already looked at the verdict or never sent a bug / report."
+
+var_townHall_didDestroyNeus: "The Town of [%0] has the Neuschwanstein Castle. To capture it, you need to break the Control blocks in the town and in the Castle."
+var_buildable_cannotAttackNeu: "You cannot break the Neushwanstein Castle until the town of [%0] is captured!"
+var_neuschwanstein_generatedCoins: "Neuschwanstein Castle, built in the town [%3], brought [%0] [%1] for [%2] [%4] in the world!"
+
+var_science_w8: "Count...."
+
+cmd_civ_talent_choose_numberformat: "[%0] is not a number"
+
+cmd_town_info_tradeshipHeading: "Merchant ship of the town [%0]"
+cmd_town_info_tradeship_noShip: "You have not built a trade ship."
+cmd_town_info_tradeship_configurationError: "A trade ship configuration error has occurred ... try again later"
+cmd_town_info_tradeship_level: "Current level of trade ship: [%0]"
+cmd_town_info_tradeship_progress: "Current progress of the trade ship: [%0]"
+cmd_town_info_tradeship_desc: "Learn about the level, progress, the trade ship's income multiplier."
+
+var_changetownrequest_declined: "[%0] declined [%1] for moving from town [%2] to [%3]"
+var_changetownrequest_accepted: "[%0] allowed [%1] to move from town [%2] to [%3]"
+var_changetownrequest_requestMessage: "Will we allow [%0] to move from [%1] to [%2]?"
+var_switchtown_pleaseWait: "Wait for the leader to respond ..."
+
+shipyard_Sign_noMoney: "You do not have enough for teleportation. You need [%0] more."
+
+adcmd_town_eventcancelDesc: "[Town name] - cancels current town event"
+adcmd_town_eventcancel_noEvent: "There are no events in the town [%0]"
+adcmd_town_eventcancel_succusess: "The town of [%0] was canceled [%1]!"
+adcmd_town_eventcancel_succusessTown: "The random event '[%0]' was canceled by the administrator [%1]!"
+
+cmd_market_buy_civsPrompt: "Use /market buy civs [civ-name] to buy this civ."
+
+cmd_town_bonusCottage_pyramid: "Bonus of income from the Great Pyramid: [%0]"
+cmd_town_bonusCottage_hotel: "Bonus of income from the Hotel: [%0]"
+cmd_town_bonusCottage_talent: "Bonus of income from Talent on level 4: [%0]"
+cmd_town_bonusCottage_stockExchange: "Bonus from the Stock Exchange: [%0] (level [%1])"
+cmd_town_bonusCottage_total: "Total income of the town cottages [%2]: [%0] [%1]"
+cmd_civ_talent_choose_sucusses: "[%0] selects [%1] talent at [%3] level! ([%2])"
+
+cap_CanExistInCapitol: "Capitol structures can only exist in the civilization's capitol. Use '/build town hall' to build a town-hall instead."
+town_refresh_errorBuildable: "You cannot refresh a Factory of Silkworm Farm"
+
+var_virtualTG_civHasNoGood: "Your civilization does not have a [%0]"
+var_virtualTG_townHasNoGood: "Town [%0] does not have a [%1]"
+var_virtualTG_townFullGoods: "Town [%0] has already filled all the slots for trading resources."
+var_virtualTG_civFullSlots: "You can not have more than 53 trading resources on the account of civilization."
+
+stackable: "Stackable"
+notStackable: "Not Stackable"
+
+cmd_civ_trade_name: "Manage the Trade Resources of your civilization."
+
+var_buildable_cannotBeBroken: "[%0] can not be broken because it contains a trade resource."
+
+cmd_civ_trade_name: "Trade Resource Management"
+cmd_civ_trade_noCiv: "To manage your trading resources, you must be"
+cmd_civ_trade_gift: "[civilization] - gives a gift of resource of civilization - Need confirmation"
+cmd_civ_trade_gift_enterCivName: "Enter the name of the civilization you want to give the Trade Resource."
+cmd_civ_trade_gift_giftInvName: "Trading Resources"
+cmd_civ_trade_gift_noGoods: "Your civilization does not have any Trade Resources."
+
+var_tradeGood_heading: "Trading Resource"
+var_tradegood_water: "Water"
+var_tradegood_earth: "Land"
+cmd_civ_trade_gift_clickToGift: "<Click to gift>"
+cmd_civ_trade_gift_confirmText: "Confirm gift"
+cmd_civ_trade_gift_succusessMessageFrom: "Leader of our civilization [%0] gave [%1] the Trade Resource [%2]!"
+cmd_civ_trade_gift_succusessMessageTo: "The leader of civilization [%1] [%0] gave us the Trade Resource [%2]!"
+cmd_civ_trade_withdraw: "He takes the commercial resource from the town's account and transfers it to the account of civilization. - Need confirmation"
+cmd_civ_trade_gift_errorFullSlots: "Civilization [%0] has 53 or more Trading Resources. You can not gift any because all the places are occupied."
+cmd_civ_trade_listciv_listInvName: "Trading Resources"
+cmd_civ_trade_listciv: "Shows Trading Resources on the account of your civilization."
+cmd_civ_trade_listtown: "Displays Trading Resources on the account of the selected town."
+cmd_civ_trade_higherRank: "You must be the leader of civilization for the management of Trade Resources."
+cmd_civ_tradelist_higherRank: "You must be the leader of civilization or a town mayor for viewing Trade Resources."
+cmd_civ_trade_listtown_noGoods: "On the town account [%0] there are no Trade Resources."
+cmd_civ_trade_listtown_listInvName: "Trading Resources"
+cmd_civ_trade_gift_yourSelf: "You cannot send a gift to yourself"
+cmd_civ_trade_deposit: "Deposits the Trade Resource to the account of the selected town. - Need confirmation"
+cmd_civ_trade_deposit_clickToDeposit: "<Click to deposit to town account [%0]>"
+cmd_civ_trade_deposit_confirmText: "Confirm Deposit to town account [%0]"
+cmd_civ_trade_deposit_succusessMessageFrom: "Leader of our civilization [%0] has deposited to the town account [%1] Trade Resource [%2]  "
+cmd_civ_trade_withdraw_clickToWithdraw: "<Click to deposit to civilization account [%0]>"
+cmd_civ_trade_withdraw_confirmText: "Confirm deposit to the account of civilization [%0]"
+cmd_civ_trade_withdraw_succusessMessageTo: "The leader of our civilization [%0] withdrew from the account of the Trading Resource [%2], taking it from [%1]!"
+cmd_civ_trade_withdraw_succusessMessageFrom: "The leader of our civilization [%0] withdrew [%1] from us!"
+bookReborn_goodsMenu: "Trade Resource Management"
+bookReborn_goodsMenu_town: "List of Trade Resources in the selected town"
+bookReborn_goodsMenu_civ: "List of Trade Resources in Your Civilization"
+bookReborn_goodsMenu_deposit: "Deposit Trade Resource to the town account"
+bookReborn_goodsMenu_withdraw: "Withdraw Trade Resource from the town account"
+bookReborn_goodsMenuHeading: "Trading Resources"
+
+var_virtualTG_noCiv: "To interact with Trade Resources, you must be a member of civilization."
+var_virtualTG_noPermM: "To interact with the Trade Resources, you must be the leader [%0] or the measure [%1]."
+var_virtualTG_backToMain: " To Trade Resource Management"
+var_virtualTG_noPerm: "To interact with Trade Resources, you must be the leader [%0]"
+
+bookReborn_goodsMenu_listAll: "Displays a list of all available commands."
+
+town_demolish_CannotNotNow: "You can not demolish the structures containing the Trade Resources, 1 hour before the update or after 4 hours (after the update)"
+
+cmd_civ_timeCantDemolish: "Prohibition of demolition of structures with TP: [%2] from [%0] to [%1]"
+cmd_civ_timeCantDemolishHelp: " * TR - Trading Resources."
+
+var_buildAsync_completedWonder: "Civilization [%0] built the Miracle of Light [%2] in [%1]"
+
+cmd_build_notBuilding: "At the moment, you do not build anything."
+
+var_StructureBlockHitEvent_engineerDmg: "Thanks to the Engineer, we applied [%0] [%1] more to [%2]!"
+var_StructureBlockHitEvent_invaderDmg: "Thanks to the Invader, we applied [%0] [%1] more to [%2]!"
+
+var_artifact_archer_attackForbidden: "We can not attack from the hand, because we now used the Archer!"
+
+var_switchtown_lastResident: "You are the last resident in the town [%0]"
+
+cmd_civ_researchcalc_Desc: "Considers an approximate time for Learning Current Technology [date and time] (deviation = + - minute)"
+cmd_build_calc_Desc: "Considers an approximate time for the Construction of the Current Structure [date and time] (deviation = + - minute)"
+
+adcmd_town_tradegoods_result: "World's trade resources: [%0]"
+adcmd_town_tradegoods_noTradeGoods: "There are no trade resources in the world."
+adcmd_town_tradegoodsDesc: "Gets a list of all the world's trade resources."
+
+cmd_town_info_tradeship_stagnateDebuff: "For every hour spent in a SIMPLE Commercial Ship will lose [%0] [%1]"
+
+var_buildable_cannotSabotaged: "[%0] can not be destroyed by sabotage, because it contains the Trade Resource"
+
+loreEnh_LightStrike_warning: "You could not send a bolt of lightning to this creature, for this is a LIQUID creature!"
+loreEnh_LightStrike_Sucusses: "You sent a lightning bolt to [%1] [%0] and inflicted 3 pure damage!"
+
+tutorial_lore_clicktoView: "<Click to Upgrade>"
+cmd_civ_culture_name: "Counts and displays to you the requirements left for a cultural victory"
+cmd_civ_culture_notLeader: "Only leaders and advisers of civilization can count the requirements for a cultural victory."
+cmd_civ_culture_heading: "Cultural Victory"
+cmd_civ_culture_allConditionsPassed: "All conditions for the Cultural Victory are fulfilled!"
+cmd_civ_culture_burjRequired: "You need to build [%0]"
+cmd_civ_culture_cultureRequired: "You need [%0] more Culture Points (Own cities only)"
+
+interactive_confirmTalent_cancel: "The talent selection confirmation for [%0] has been canceled."
+cmd_civ_talent_choose_interactiveConfirmationText: "Confirm talent selection at [%0] level: [%1] (talent under number [%2])"
+cmd_civ_talent_choose_interactiveConfirmationHeading: "Confirming your choice of Talent"
+cmd_civ_talent_choose_interactiveConfirmationTypeSth: "Write 'yes' for confirmation"
+cmd_civ_talent_choose_confirmText: "Confirmation of talent selection at [%0] level (talent under number [%1])"
+
+cmd_res_report_badMessage: "An error occurred while getting the Report. The reason given was: [%0]"
+
+town_chunk_notOwnCultureChunk: "You cannot claim a chunk that belongs to another town."
+
+blockPlace_errorBukkit: "You do not have permission to use buckets here."
+blockPlace_errorBukkit_spawn: "You do not have permission to build on spawn."
+
+var_statue_of_zeus_addedCoinsAndCulture: "The statue of Zeus, built in [%3], brought [%0] culture and [%1] for [%2] [%4] [%5]"
+var_tower_of_zeus_warDeclare: "Zeus is angry!"
+
+cmd_pasteruin: "Paste any ruin"
+cmd_pasteruin_list: "Enter the name of the ruins from the following list: [%0]"
+cmd_pasteruin_success: "Successfully inserted ..."
+
+barracks_repair_noRepairEnch: "This item can not be repaired, because it was bought or dropped from the ruins."
+itemLore_noRepair: "Unrepairable"
+itemLore_noTech: "Tech not Required"
+itemLore_poision: "Poisons the enemy"
+itemLore_trommel: "The area is 1x3x3"
+itemLore_levitate: "Force the enemy to levitate"
+itemLore_techOnly: "Tech Required"
+itemLore_evrei: "Increases Mob money drops"

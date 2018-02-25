@@ -20,8 +20,10 @@ package com.avrgaming.civcraft.config;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -364,5 +366,15 @@ public class ConfigTownUpgrade {
 		
 		return count;
 	}
+
+    public static Set<ConfigTownUpgrade> getAllUpgrades(final Town town) {
+        final Set<ConfigTownUpgrade> rightSequence = new LinkedHashSet<ConfigTownUpgrade>();
+        for (final ConfigTownUpgrade upgrade : CivSettings.townUpgrades.values()) {
+            if (upgrade.isAvailable(town)) {
+                rightSequence.add(upgrade);
+            }
+        }
+        return rightSequence;
+    }
 		
 }

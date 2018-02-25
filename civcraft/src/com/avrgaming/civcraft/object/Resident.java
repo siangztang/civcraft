@@ -43,19 +43,18 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import com.avrgaming.civcraft.camp.Camp;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigBuildableInfo;
 import com.avrgaming.civcraft.config.ConfigPerk;
+import com.avrgaming.civcraft.config.ConfigTech;
+import com.avrgaming.civcraft.config.ConfigTownUpgrade;
 import com.avrgaming.civcraft.database.SQL;
 import com.avrgaming.civcraft.database.SQLUpdate;
 import com.avrgaming.civcraft.event.EventTimer;
@@ -65,8 +64,11 @@ import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.exception.InvalidNameException;
 import com.avrgaming.civcraft.interactive.InteractiveResponse;
 import com.avrgaming.civcraft.items.units.Unit;
+import com.avrgaming.civcraft.loregui.OpenInventoryTask;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.lorestorage.LoreGuiItem;
+import com.avrgaming.civcraft.lorestorage.LoreGuiItemListener;
+import com.avrgaming.civcraft.main.CivCraft;
 import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
@@ -75,17 +77,21 @@ import com.avrgaming.civcraft.permission.PermissionGroup;
 import com.avrgaming.civcraft.road.RoadBlock;
 import com.avrgaming.civcraft.sessiondb.SessionEntry;
 import com.avrgaming.civcraft.structure.Buildable;
+import com.avrgaming.civcraft.structure.Structure;
+import com.avrgaming.civcraft.structure.TeslaShip;
+import com.avrgaming.civcraft.structure.TeslaTower;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.template.Template;
 import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.BuildPreviewAsyncTask;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.CallbackInterface;
 import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.ItemManager;
 import com.avrgaming.civcraft.util.PlayerBlockChangeUtil;
 import com.avrgaming.civcraft.util.SimpleBlock;
+import com.avrgaming.civcraft.util.TimeTools;
 import com.avrgaming.global.perks.NotVerifiedException;
 import com.avrgaming.global.perks.Perk;
 import com.avrgaming.global.perks.components.CustomPersonalTemplate;
@@ -136,7 +142,6 @@ public class Resident extends SQLObject {
 	
 	private Town selectedTown = null;
 	
-	private Scoreboard scoreboard = null;
 	public String desiredCivName;
 	public String desiredCapitolName;
 	public String desiredTownName;
@@ -174,6 +179,15 @@ public class Resident extends SQLObject {
 	public String debugTown;
 	public boolean isTeleporting = false;
 	private long nextTeleport;
+	private long poisonImmune = 0L;
+    private long levitateImmune = 0L;
+    private long nextPLCDamage = 0L;
+    private String reportResult;
+    private boolean reportChecked;
+    private String desiredReportPlayerName;
+
+    public static int POISON_DURATION = 5;
+    public static int LEVITATE_DURATION = 3;
 	
 	public Resident(UUID uid, String name) throws InvalidNameException {
 		this.setName(name);
@@ -220,6 +234,8 @@ public class Resident extends SQLObject {
 					"`debug_civ` mediumtext DEFAULT NuLL,"+
 					"`language_id` int(11) DEFAULT '1033',"+
 					"`nextTeleport` BIGINT NOT NULL DEFAULT '0',"+
+					"`reportResult` mediumtext,"+
+					"`reportChecked` boolean DEFAULT false,"+
 					"UNIQUE KEY (`name`), " +
 					"PRIMARY KEY (`id`)" + ")";
 			
@@ -277,9 +293,31 @@ public class Resident extends SQLObject {
 				CivLog.info("\tCouldn't find `language_id` for resident.");
 				SQL.addColumn(TABLE_NAME, "`language_id` int(11) default '1033'");
 			}
-			SQL.makeCol("flags", "mediumtext", TABLE_NAME);
-			SQL.makeCol("savedInventory", "mediumtext", TABLE_NAME);
-			SQL.makeCol("isProtected", "bool NOT NULL DEFAULT '0'", TABLE_NAME);
+			
+			if (!SQL.hasColumn(TABLE_NAME, "flags")) {
+				CivLog.info("\tCouldn't find `flags` for resident.");
+				SQL.makeCol("flags", "mediumtext", TABLE_NAME);
+			}
+			
+			if (!SQL.hasColumn(TABLE_NAME, "savedInventory")) {
+				CivLog.info("\tCouldn't find `savedInventory` for resident.");
+				SQL.makeCol("savedInventory", "mediumtext", TABLE_NAME);
+			}
+			
+			if (!SQL.hasColumn(TABLE_NAME, "isProtected")) {
+				CivLog.info("\tCouldn't find `isProtected` for resident.");
+				SQL.makeCol("isProtected", "bool NOT NULL DEFAULT '0'", TABLE_NAME);
+			}
+			
+			if (!SQL.hasColumn(TABLE_NAME, "reportResult")) {
+				CivLog.info("\tCouldn't find `reportResult` for resident.");
+				SQL.makeCol("reportResult", "mediumtext", TABLE_NAME);
+			}
+			
+			if (!SQL.hasColumn(TABLE_NAME, "reportChecked")) {
+				CivLog.info("\tCouldn't find `reportChecked` for resident.");
+				SQL.makeCol("reportChecked", "boolean DEFAULT false", TABLE_NAME);
+			}
 		}		
 	}
 
@@ -307,6 +345,8 @@ public class Resident extends SQLObject {
 		this.isProtected = rs.getBoolean("isProtected");
 		this.languageCode = rs.getInt("language_id");
         this.nextTeleport = rs.getLong("nextTeleport");
+        this.reportResult = rs.getString("reportResult");
+        this.reportChecked = rs.getBoolean("reportChecked");
 		
 		if (this.getTimezone() == null) {
 			this.setTimezoneToServerDefault();
@@ -883,60 +923,6 @@ public class Resident extends SQLObject {
 			return null;
 		}
 		return this.getTown().getCiv();
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void setScoreboardName(String name, String key) {
-		if (this.scoreboard == null) {
-			this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-			Team team = this.scoreboard.registerNewTeam("team");
-			team.addPlayer(CivGlobal.getFakeOfflinePlayer(key));
-			team.setDisplayName(name);
-		} else {
-			Team team = this.scoreboard.getTeam("team");
-			team.setDisplayName(name);
-		}
-		
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void setScoreboardValue(String name, String key, int value) {
-		if (this.scoreboard == null) {
-			return;
-		}
-		
-		Objective obj = scoreboard.getObjective("obj:"+key);
-		if (obj == null) {
-			obj = scoreboard.registerNewObjective(name, "dummy");
-			obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-			Score score = obj.getScore(CivGlobal.getFakeOfflinePlayer(key));
-			score.setScore(value);
-		} else {
-			Score score = obj.getScore(CivGlobal.getFakeOfflinePlayer(key));
-			score.setScore(value);
-		}
-	}
-	
-	public void showScoreboard() {
-		if (this.scoreboard != null) {
-			Player player;
-			try {
-				player = CivGlobal.getPlayer(this);
-				player.setScoreboard(this.scoreboard);
-			} catch (CivException e) {
-				e.printStackTrace();
-			}
-		} 
-	}
-	
-	public void hideScoreboard() {
-		Player player;
-		try {
-			player = CivGlobal.getPlayer(this);
-			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		} catch (CivException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public boolean isGivenKit() {
@@ -1652,6 +1638,177 @@ public class Resident extends SQLObject {
 		isProtected = prot;
 	}
 	
+	public void showTechPage() throws CivException {
+        Player player;
+        try {
+            player = CivGlobal.getPlayer(this);
+        }
+        catch (CivException e) {
+            return;
+        }
+        Civilization civ = this.getCiv();
+        if (civ == null) {
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_getSenderCivNoCiv"));
+        }
+        final int type = ItemManager.getId(Material.EMERALD_BLOCK);
+        final ArrayList<ConfigTech> techs = ConfigTech.getAvailableTechs(civ);
+        final Inventory inv = Bukkit.getServer().createInventory((InventoryHolder)player, 54, CivSettings.localize.localizedString("resident_techsGuiHeading"));
+        for (final ConfigTech tech : techs) {
+            final String techh = tech.name;
+            ItemStack itemStack = LoreGuiItem.build(tech.name, type, 0, "§6" + CivSettings.localize.localizedString("clicktoresearch"), "§b" + CivSettings.localize.localizedString("money_req", tech.getAdjustedTechCost(civ)), "§a" + CivSettings.localize.localizedString("bealers_req", tech.getAdjustedBeakerCost(civ)), "§d" + CivSettings.localize.localizedString("era_this", tech.era));
+            itemStack = LoreGuiItem.setAction(itemStack, "ResearchGui");
+            itemStack = LoreGuiItem.setActionData(itemStack, "info", techh);
+            inv.addItem(itemStack);
+        }
+        player.openInventory(inv);
+    }
+    
+    public void showRelationPage() throws CivException {
+        if (this.getCiv() == null) {
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_getSenderCivNoCiv"));
+        }
+        Player player;
+        try {
+            player = CivGlobal.getPlayer(this);
+        }
+        catch (CivException e) {
+            return;
+        }
+        final Inventory inventory = Bukkit.getServer().createInventory((InventoryHolder)player, 9, CivSettings.localize.localizedString("resident_relationsGuiHeading"));
+        ItemStack relation = LoreGuiItem.build(CivColor.LightGreenBold + CivSettings.localize.localizedString("resident_relationsGui_ally"), ItemManager.getId(Material.EMERALD_BLOCK), 0, ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_allyInfo"), "§6" + CivSettings.localize.localizedString("bookReborn_clickToView"));
+        relation = LoreGuiItem.setAction(relation, "RelationAllies");
+        relation = LoreGuiItem.setActionData(relation, "civilization", this.getCiv().getName());
+        inventory.addItem(relation);
+        relation = LoreGuiItem.build(CivColor.LightGreenBold + CivSettings.localize.localizedString("resident_relationsGui_peace"), ItemManager.getId(Material.LAPIS_BLOCK), 0, ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_peaceInfo"), "§6" + CivSettings.localize.localizedString("bookReborn_clickToView"));
+        relation = LoreGuiItem.setAction(relation, "RelationPeaces");
+        relation = LoreGuiItem.setActionData(relation, "civilization", this.getCiv().getName());
+        inventory.addItem(relation);
+        relation = LoreGuiItem.build(CivColor.LightGreenBold + CivSettings.localize.localizedString("resident_relationsGui_hostile"), ItemManager.getId(Material.GOLD_BLOCK), 0, ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_hostileInfo"), "§6" + CivSettings.localize.localizedString("bookReborn_clickToView"));
+        relation = LoreGuiItem.setAction(relation, "RelationHostiles");
+        relation = LoreGuiItem.setActionData(relation, "civilization", this.getCiv().getName());
+        inventory.addItem(relation);
+        relation = LoreGuiItem.build(CivColor.LightGreenBold + CivSettings.localize.localizedString("resident_relationsGui_war"), ItemManager.getId(Material.REDSTONE_BLOCK), 0, ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_warInfo"), "§6" + CivSettings.localize.localizedString("bookReborn_clickToView"));
+        relation = LoreGuiItem.setAction(relation, "RelationWars");
+        relation = LoreGuiItem.setActionData(relation, "civilization", this.getCiv().getName());
+        inventory.addItem(relation);
+        player.openInventory(inventory);
+    }
+    
+    public void showStructPage() throws CivException {
+        Player player;
+        try {
+            player = CivGlobal.getPlayer(this);
+        }
+        catch (CivException e) {
+            return;
+        }
+        Civilization civ = getCiv();
+        Town town = getSelectedTown();
+        if (town == null)  town = getTown();
+        if (town == null) {
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_notPartOfTown"));
+        }
+        Inventory inv = Bukkit.getServer().createInventory((InventoryHolder)player, 54, CivSettings.localize.localizedString("resident_structuresGuiHeading"));
+        double rate = 1.0;
+        rate -= town.getBuffManager().getEffectiveDouble("buff_rush");
+        rate -= town.getBuffManager().getEffectiveDouble("buff_grandcanyon_rush");
+        rate -= town.getBuffManager().getEffectiveDouble("buff_mother_tree_tile_improvement_cost");
+        for (final ConfigBuildableInfo info : CivSettings.structures.values()) {
+            final int type = ItemManager.getId(Material.EMERALD_BLOCK);
+            final double hammerCost = Math.round(info.hammer_cost * rate);
+            ItemStack itemStack;
+            if (town.getMayorGroup() == null || town.getAssistantGroup() == null || civ.getLeaderGroup() == null) {
+                itemStack = LoreGuiItem.build(info.displayName, ItemManager.getId(Material.REDSTONE_BLOCK), 0, "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep), "§c" + CivSettings.localize.localizedString("belongtown"));
+            }
+            else if (!this.getCiv().hasTechnology(info.require_tech)) {
+                final ConfigTech tech = CivSettings.techs.get(info.require_tech);
+                final String techh = tech.name;
+                itemStack = LoreGuiItem.build(info.displayName, ItemManager.getId(Material.REDSTONE), 0, "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep), "§c" + CivSettings.localize.localizedString("req") + tech.name, "§3" + CivSettings.localize.localizedString("clicktoresearch"), "§d" + CivSettings.localize.localizedString("era_this", tech.era));
+                itemStack = LoreGuiItem.setAction(itemStack, "ResearchGui");
+                itemStack = LoreGuiItem.setActionData(itemStack, "info", techh);
+            }
+            else if (!town.getMayorGroup().hasMember(this) && !town.getAssistantGroup().hasMember(this) && !civ.getLeaderGroup().hasMember(this)) {
+                itemStack = LoreGuiItem.build(info.displayName, ItemManager.getId(Material.REDSTONE_BLOCK), 0, "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep), "§c" + CivSettings.localize.localizedString("belongtown"));
+            }
+            else if (info.isAvailable(town)) {
+                if (!info.id.contains("road") && !info.id.contains("wall")) {
+                    itemStack = LoreGuiItem.build(info.displayName, type, 0, "§6" + CivSettings.localize.localizedString("clicktobuild"), "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep));
+                    itemStack = LoreGuiItem.setAction(itemStack, "BuildChooseTemplate");
+                    itemStack = LoreGuiItem.setActionData(itemStack, "info", info.id);
+                }
+                else {
+                    itemStack = LoreGuiItem.build(info.displayName, type, 0, "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep), "§6" + CivSettings.localize.localizedString("clicktobuild"));
+                    itemStack = LoreGuiItem.setAction(itemStack, "BuildFromIdCr");
+                    itemStack = LoreGuiItem.setActionData(itemStack, "buildableName", info.displayName);
+                }
+            }
+            else {
+                final ConfigBuildableInfo str = CivSettings.structures.get(info.require_structure);
+                if (str != null) {
+                    final String req_build = str.displayName;
+                    itemStack = LoreGuiItem.build(info.displayName, ItemManager.getId(Material.BEDROCK), 0, "§c" + CivSettings.localize.localizedString("requ") + str.displayName, "§b" + CivSettings.localize.localizedString("money_requ", Double.parseDouble(String.valueOf(info.cost))), "§a" + CivSettings.localize.localizedString("hammers_requ", hammerCost), "§d" + CivSettings.localize.localizedString("upkeep_day", info.upkeep), "§3" + CivSettings.localize.localizedString("clicktobuild"));
+                    itemStack = LoreGuiItem.setAction(itemStack, "WonderGuiBuild");
+                    itemStack = LoreGuiItem.setActionData(itemStack, "info", req_build);
+                }
+                else {
+                    itemStack = null;
+                }
+            }
+            if (itemStack != null) {
+                inv.addItem(itemStack);
+            }
+        }
+        ItemStack is = LoreGuiItem.build("§e" + CivSettings.localize.localizedString("4udesa"), ItemManager.getId(Material.DIAMOND_BLOCK), 0, "§6" + CivSettings.localize.localizedString("click_to_view"));
+        is = LoreGuiItem.setAction(is, "WondersGui");
+        inv.setItem(53, is);
+        LoreGuiItemListener.guiInventories.put(inv.getName(), inv);
+        TaskMaster.syncTask(new OpenInventoryTask(player, inv));
+    }
+    
+    public void showUpgradePage() throws CivException {
+        Player player;
+        try {
+            player = CivGlobal.getPlayer(this);
+        }
+        catch (CivException e) {
+            return;
+        }
+        Town town = getSelectedTown();
+        if (town == null)  town = getTown();
+        if (town == null) {
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_notPartOfTown"));
+        }
+        final Inventory inv = Bukkit.getServer().createInventory((InventoryHolder)player, 54, CivSettings.localize.localizedString("resident_upgradesGuiHeading"));
+        for (final ConfigTownUpgrade upgrade : ConfigTownUpgrade.getAllUpgrades(town)) {
+            double cost = upgrade.cost;
+            if (town.getCiv().getGovernment().id.equalsIgnoreCase("gov_theocracy")) {
+                cost *= 0.9;
+            }
+            ItemStack is = null;
+            if (upgrade.isAvailable(town)) {
+                is = LoreGuiItem.build(upgrade.name, ItemManager.getId(Material.EMERALD_BLOCK), 0, "§b" + CivSettings.localize.localizedString("money_requ", Math.round(cost)), "§6" + CivSettings.localize.localizedString("tutorial_lore_clicktoView"));
+                is = LoreGuiItem.setAction(is, "UpgradeGuiBuy");
+                is = LoreGuiItem.setActionData(is, "info", upgrade.name);
+            }
+            else if (!town.hasStructure(upgrade.require_structure)) {
+                final ConfigBuildableInfo structure = CivSettings.structures.get(upgrade.require_structure);
+                is = LoreGuiItem.build(upgrade.name, ItemManager.getId(Material.EMERALD), 0, "§b" + CivSettings.localize.localizedString("money_requ", Math.round(cost)), "§c" + CivSettings.localize.localizedString("requ") + structure.displayName, "§3" + CivSettings.localize.localizedString("clicktobuild"));
+                is = LoreGuiItem.setAction(is, "WonderGuiBuild");
+                is = LoreGuiItem.setActionData(is, "info", structure.displayName);
+            }
+            else if (!town.hasUpgrade(upgrade.require_upgrade)) {
+                final ConfigTownUpgrade upgrade2 = CivSettings.getUpgradeById(upgrade.require_upgrade);
+                is = LoreGuiItem.build(upgrade.name, ItemManager.getId(Material.GLOWSTONE_DUST), 0, "§b" + CivSettings.localize.localizedString("money_requ", Math.round(cost)), "§c" + CivSettings.localize.localizedString("requ") + upgrade2.name, "§3" + CivSettings.localize.localizedString("clicktobuild"));
+                is = LoreGuiItem.setAction(is, "UpgradeGuiBuy");
+                is = LoreGuiItem.setActionData(is, "info", upgrade2.name);
+            }
+            if (is != null) {
+                inv.addItem(is);
+            }
+        }
+        player.openInventory(inv);
+    }
+	
 	public void showPerkPage(int pageNumber) {
 		Player player;
 		try {
@@ -1660,7 +1817,7 @@ public class Resident extends SQLObject {
 			return;
 		}
 		
-		Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9, CivSettings.localize.localizedString("resident_perksGuiHeading"));
+		Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9, CivSettings.localize.localizedString("resident_perksGuiHeading"));
 		
 		for (Object obj : perks.values()) {
 			Perk p = (Perk)obj;
@@ -1702,7 +1859,7 @@ public class Resident extends SQLObject {
 			return;
 		}
 		
-		Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9, CivSettings.localize.localizedString("resident_perksGui_templatesHeading")+" "+name);
+		Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9, CivSettings.localize.localizedString("resident_perksGui_templatesHeading")+" "+name);
 		
 		for (Object obj : perks.values()) {
 			Perk p = (Perk)obj;
@@ -1792,5 +1949,89 @@ public class Resident extends SQLObject {
     public void setNextTeleport(final long nextTeleport) {
         this.nextTeleport = nextTeleport;
     }
+    
+    public String getDesiredReportPlayerName() {
+        return this.desiredReportPlayerName;
+    }
+    
+    public void setDesiredReportPlayerName(final String desiredReportPlayerName) {
+        this.desiredReportPlayerName = desiredReportPlayerName;
+    }
+    
+    public String getReportResult() {
+        return this.reportResult;
+    }
+    
+    public void setReportResult(final String reportResult) {
+        this.reportResult = reportResult;
+    }
+    
+    public boolean getReportChecked() {
+        return this.reportChecked;
+    }
+    
+    public void setReportChecked(final boolean reportChecked) {
+        this.reportChecked = reportChecked;
+    }
+    
+    public boolean isPoisonImmune() {
+        return Calendar.getInstance().after(poisonImmune);
+    }
+    
+    public void addPosionImmune() {
+        poisonImmune = Calendar.getInstance().getTimeInMillis() + 1000 * Resident.POISON_DURATION;
+    }
+    
+    public boolean isLevitateImmune() {
+        return Calendar.getInstance().after(levitateImmune);
+    }
+    
+    public void addLevitateImmune() {
+        levitateImmune = Calendar.getInstance().getTimeInMillis() + 1000 * (Resident.LEVITATE_DURATION + 3);
+    }
+    
+    public void addPLCImmune(final int seconds) {
+        nextPLCDamage = System.currentTimeMillis() + TimeTools.toTicks(seconds);
+    }
+    
+    public boolean isPLCImmuned() {
+        return nextPLCDamage > System.currentTimeMillis();
+    }
+    
+    public void lightningStrike(final boolean repeat, final Town source) {
+        Player player;
+        try {
+            player = CivGlobal.getPlayer(this);
+        }
+        catch (CivException e) {
+            return;
+        }
+        if (player == null) {
+            return;
+        }
+        int dmg = 7;
+        Structure tesla = source.getStructureByType("s_teslatower");
+        if (tesla != null) {
+            dmg = ((TeslaTower)tesla).getDamage();
+        }
+        tesla = source.getStructureByType("s_teslaship");
+        if (tesla != null) {
+            dmg = ((TeslaShip)tesla).getDamage();
+        }
+        final LivingEntity target = (LivingEntity)player;
+        if (target.getHealth() - dmg > 0.0) {
+            target.setHealth(target.getHealth() - dmg);
+            target.damage(0.5);
+        }
+        else {
+            target.setHealth(0.1);
+            target.damage(1.0);
+        }
+        target.setFireTicks(60);
+        if (repeat) {
+            Bukkit.getScheduler().runTaskLater(CivCraft.getPlugin(), () -> this.lightningStrike(false, source), 30L);
+        }
+    }
+    
 
 }

@@ -33,10 +33,12 @@ import com.avrgaming.civcraft.structure.ArrowTower;
 import com.avrgaming.civcraft.structure.Buildable;
 import com.avrgaming.civcraft.structure.CannonShip;
 import com.avrgaming.civcraft.structure.CannonTower;
+import com.avrgaming.civcraft.structure.Capitol;
 import com.avrgaming.civcraft.structure.TeslaTower;
 import com.avrgaming.civcraft.structure.TownHall;
 import com.avrgaming.civcraft.structure.TradeOutpost;
 import com.avrgaming.civcraft.structure.wonders.GrandShipIngermanland;
+import com.avrgaming.civcraft.structure.wonders.Neuschwanstein;
 import com.avrgaming.civcraft.template.Template;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.ItemManager;
@@ -138,6 +140,11 @@ public class PostBuildSyncTask implements Runnable {
 					
 					townhall.setRevivePoint(absCoord);
 				}
+                if (buildable instanceof Neuschwanstein) {
+                    final Neuschwanstein neuschwanstein = (Neuschwanstein)buildable;
+                    neuschwanstein.setRevivePoint(absCoord);
+                    break;
+                }
 				break;
 			case "/towerfire":
 				if (buildable instanceof ArrowShip) {
@@ -336,6 +343,19 @@ public class PostBuildSyncTask implements Runnable {
 					TownHall townhall = (TownHall)buildable;
 					townhall.createControlPoint(absCoord);
 				}
+                if (!(buildable instanceof Neuschwanstein)) {
+                    break;
+                }
+                if (buildable.getTown().hasStructure("s_capitol")) {
+                    final Capitol capitol = (Capitol)buildable.getTown().getStructureByType("s_capitol");
+                    capitol.createControlPoint(absCoord, "Neuschwanstein");
+                    break;
+                }
+                if (buildable.getTown().hasStructure("s_townhall")) {
+                    final TownHall townHall = (TownHall)buildable.getTown().getStructureByType("s_townhall");
+                    townHall.createControlPoint(absCoord, "Neuschwanstein");
+                    break;
+                }
 				break;
 			case "/towerfire":
 				if (buildable instanceof ArrowShip) {

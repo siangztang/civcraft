@@ -289,4 +289,8 @@ public class Relation extends SQLObject {
 		
 		return key;
 	}
+
+	public Date getCreatedDate() {
+        return this.created;
+    }
 }

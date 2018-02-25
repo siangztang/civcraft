@@ -53,7 +53,7 @@ import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.object.WallBlock;
 import com.avrgaming.civcraft.permission.PlotPermissions;
 import com.avrgaming.civcraft.template.Template;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.ChunkCoord;
 import com.avrgaming.civcraft.util.CivColor;
@@ -242,7 +242,7 @@ public class FortifiedWall extends Wall {
 			resident.pendingBuildable = this;
 			
 			/* Build an inventory full of templates to select. */
-			Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9);
+			Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9);
 			ItemStack infoRec = LoreGuiItem.build("Default "+this.getDisplayName(), 
 					ItemManager.getId(Material.WRITTEN_BOOK), 
 					0, CivColor.Gold+"<Click To Build>");

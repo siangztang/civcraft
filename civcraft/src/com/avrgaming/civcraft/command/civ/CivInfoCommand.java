@@ -74,26 +74,6 @@ public class CivInfoCommand extends CommandBase {
 			}
 		}
 		
-	/*	for (Town t : civ.getTowns()) {
-			for (BonusGoodie goodie : t.getEffectiveBonusGoodies()) {
-				try {
-					double bonus = Double.valueOf(goodie.getBonusValue("beaker_bonus"));
-					out.add(CivColor.Green+"From Goodie "+goodie.getDisplayName()+": "+CivColor.LightGreen+(bonus*100)+"%");
-					
-				} catch (NumberFormatException e) {
-					//Ignore this goodie might not have the bonus.
-				}
-				
-				try {
-					double bonus = Double.valueOf(goodie.getBonusValue("extra_beakers"));
-					out.add(CivColor.Green+"From Goodie "+goodie.getDisplayName()+": "+CivColor.LightGreen+bonus);
-					
-				} catch (NumberFormatException e) {
-					//Ignore this goodie might not have the bonus.
-				}				
-			}
-		}*/
-		
 		out.add(CivColor.LightBlue+"------------------------------------");
 		out.add(CivColor.Green+CivSettings.localize.localizedString("Total")+" "+CivColor.LightGreen+df.format(civ.getBeakers()));	
 		CivMessage.send(sender, out);
@@ -188,6 +168,9 @@ public class CivInfoCommand extends CommandBase {
 		
 		CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Score")+" "+CivColor.LightGreen+civ.getScore()+
 				CivColor.Green+" "+CivSettings.localize.localizedString("Towns")+" "+CivColor.LightGreen+civ.getTownCount());
+		if (civ.hasResident(resident)) {
+            CivMessage.send((Object)sender, "\u00a72" + CivSettings.localize.localizedString("Goverment", new StringBuilder().append("\u00a7a").append(civ.getGovernment().displayName).toString()));
+        }
 		if (civ.getLeaderGroup() == null) {
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Leaders")+" "+CivColor.Rose+"NONE");
 		} else {

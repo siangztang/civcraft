@@ -52,6 +52,7 @@ import com.avrgaming.civcraft.structure.Mine;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.Temple;
 import com.avrgaming.civcraft.structure.TownHall;
+import com.avrgaming.civcraft.structure.TradeShip;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.util.CivColor;
 
@@ -79,7 +80,21 @@ public class TownInfoCommand extends CommandBase {
 		commands.put("beakers", CivSettings.localize.localizedString("cmd_town_info_beakersDesc"));
 		commands.put("area", CivSettings.localize.localizedString("cmd_town_info_areaDesc"));
 		commands.put("disabled", CivSettings.localize.localizedString("cmd_town_info_disabledDesc"));
+        commands.put("tradeship", CivSettings.localize.localizedString("cmd_town_info_tradeship_desc"));
 	}
+	
+	public void tradeship_cmd() throws CivException {
+        Town town = this.getSelectedTown();
+        CivMessage.sendHeading(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeshipHeading", town.getName()));
+        if (!town.hasStructure("ti_trade_ship")) {
+            throw new CivException(CivSettings.localize.localizedString("cmd_town_info_tradeship_noShip"));
+        }
+        TradeShip tradeShip = (TradeShip)town.getStructureByType("ti_trade_ship");
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_level", "\u00a7b" + tradeShip.getLevel()));
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_progress", "\u00a7c" + tradeShip.getConsumeComponent().getCountString()));
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_stagnateDebuff", "\u00a76" + tradeShip.getLastResult() + "\u00a7a", "\u00a72" + "Progress" + "\u00a7a"));
+        CivMessage.sendHeading(this.sender, "");
+    }
 
 	public void disabled_cmd() throws CivException {
 		Town town = getSelectedTown();
@@ -436,6 +451,18 @@ public class TownInfoCommand extends CommandBase {
 		out.add(CivColor.Green+"----------------------------");
 		out.add(CivColor.Green+CivSettings.localize.localizedString("SubTotal")+" "+CivColor.Yellow+total);
 		out.add(CivColor.Green+CivSettings.localize.localizedString("cmd_civ_gov_infoCottage")+" "+CivColor.Yellow+df.format(town.getCottageRate()*100)+"%");
+        if (town.getBuffManager().hasBuff("buff_pyramid_cottage_bonus")) {
+            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_pyramid", new StringBuilder().append("\u00a7a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_pyramid_cottage_bonus") - 1.0) * 100.0)).toString()));
+        }
+        if (town.getBuffManager().hasBuff("buff_hotel")) {
+            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_hotel", new StringBuilder().append("\u00a7a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_hotel") - 1.0) * 100.0)).toString()));
+        }
+        if (town.getCiv().getCapitol() != null && town.getCiv().getCapitol().getBuffManager().hasBuff("level4_extraCottageTown")) {
+            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_talent", new StringBuilder().append("\u00a7a").append(Math.round((town.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level4_extraCottageTown") - 1.0) * 100.0)).toString()));
+        }
+        if (town.getCiv().getStockExchangeLevel() >= 1) {
+            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_stockExchange", "\u00a7a30%", String.valueOf(town.getCiv().getStockExchangeLevel())));
+        }
 		total *= town.getCottageRate();
 		out.add(CivColor.Green+CivSettings.localize.localizedString("Total")+" "+CivColor.Yellow+df.format(total)+" "+CivSettings.CURRENCY_NAME);
 		

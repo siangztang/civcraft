@@ -1090,6 +1090,9 @@ public class Civilization extends SQLObject {
 		
 		if (getResearchProgress() >= getResearchTech().getAdjustedBeakerCost(this)) {
 			CivMessage.sendCiv(this, CivSettings.localize.localizedString("var_civ_research_Discovery",getResearchTech().name));
+			if ("tech_enlightenment".equals(this.getResearchTech().id)) {
+                CivMessage.global(CivSettings.localize.localizedString("engliment_sucusses", this.getName()));
+            }
 			this.addTech(this.getResearchTech());
 			this.setResearchProgress(0);
 			this.setResearchTech(null);
@@ -1105,6 +1108,9 @@ public class Civilization extends SQLObject {
 			if (percentageComplete != lastTechPercentage) {
 				CivMessage.sendCiv(this, CivSettings.localize.localizedString("var_civ_research_currentProgress",getResearchTech().name,percentageComplete));
 				lastTechPercentage = percentageComplete;
+				if ("tech_enlightenment".equals(this.getResearchTech().id)) {
+	                CivMessage.global(CivSettings.localize.localizedString("var_engliment_research", this.getName(), percentageComplete));
+	            }
 			}
 			
 		}

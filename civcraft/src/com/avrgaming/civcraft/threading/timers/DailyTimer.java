@@ -18,6 +18,8 @@
  */
 package com.avrgaming.civcraft.threading.timers;
 
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantLock;
@@ -25,6 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.endgame.EndGameCheckTask;
 import com.avrgaming.civcraft.event.DailyEvent;
+import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.main.CivMessage;
@@ -33,6 +36,7 @@ import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.wonders.NotreDame;
+import com.avrgaming.civcraft.structure.wonders.StatueOfZeus;
 import com.avrgaming.civcraft.structure.wonders.TheColossus;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.structure.wonders.Colosseum;
@@ -59,7 +63,7 @@ public class DailyTimer implements Runnable {
 					payTownUpkeep();
 					payCivUpkeep();
 					decrementResidentGraceCounters();
-					
+                    checkAutoCapitulate();
 					Iterator<Entry<BlockCoord, Structure>> iter = CivGlobal.getStructureIterator();
 					while (iter.hasNext()) {
 						try { 
@@ -120,6 +124,24 @@ public class DailyTimer implements Runnable {
 						e.printStackTrace();
 					}
 				}
+				else if (wonder.getConfigId().equals("w_neuschwanstein")) {
+                    try {
+                        wonder.processCoinsFromNeuschwanstein();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+				else if (wonder.getConfigId().equals("w_statue_of_zeus")) {
+                    try {
+                        ((StatueOfZeus)wonder).processBonuses();
+                        break;
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 			}
 		}
 		
@@ -170,7 +192,6 @@ public class DailyTimer implements Runnable {
 			if (civ.isAdminCiv()) {
 				continue;
 			}
-			
 			
 			double total = 0;
 			for (Town t : civ.getTowns()) {
@@ -226,6 +247,47 @@ public class DailyTimer implements Runnable {
 			}
 		}
 		
+	}
+	
+	private void checkAutoCapitulate() {
+		for (Town town : CivGlobal.getTowns()) {
+			int daysPassed = (int)(Calendar.getInstance().getTimeInMillis() - town.getConqueredDate()) / 24 / 60 / 60 / 1000;
+			int auto_capitulate_days = 7;
+			try {
+				auto_capitulate_days = CivSettings.getInteger(CivSettings.civConfig, "civ.auto_capitulate_days");
+			} catch (InvalidConfiguration e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			if (town.getConqueredDate() == 0L || daysPassed < auto_capitulate_days) continue;
+			if (town.getMotherCiv() != null) {
+				if (town.getMotherCiv().getCapitolName().equals(town.getName())) {
+					String newCiv = "Error";
+					for (Town var1 : town.getMotherCiv().getTowns()) {
+						var1.setMotherCiv(null);
+						var1.setConqueredDate(0L);
+						var1.save();
+						newCiv = town.getCiv().getName();
+					}
+					CivMessage.globalTitle("\u00a76" + CivSettings.localize.localizedString("var_autoCapitulate_CivTitle", town.getMotherCiv().getName()), "\u00a76" + CivSettings.localize.localizedString("var_autoCapitulate_CivSubTitle", newCiv));
+					try {
+						town.getMotherCiv().delete();
+					}
+					catch (SQLException e) {
+						e.printStackTrace();
+					}
+					continue;
+				}
+				String motherCiv = town.getMotherCiv().getName();
+				town.setMotherCiv(null);
+				town.setConqueredDate(0L);
+				town.save();
+				CivMessage.globalTitle("\u00a76" + CivSettings.localize.localizedString("var_autoCapitulate_townTitle", town.getName()), "\u00a76" + CivSettings.localize.localizedString("var_autoCapitulate_townSubTitle", motherCiv));
+				continue;
+			}
+			CivLog.warning(town.getName() + "has no Mother civilization. AutoCapitulate interrupted");
+		}
 	}
 
 

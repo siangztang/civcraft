@@ -18,6 +18,8 @@
  */
 package com.avrgaming.civcraft.structure;
 
+import gpl.AttributeUtil;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -41,6 +43,8 @@ import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.interactive.InteractiveRepairItem;
 import com.avrgaming.civcraft.items.components.RepairCost;
+import com.avrgaming.civcraft.loreenhancements.LoreEnhancement;
+import com.avrgaming.civcraft.loreenhancements.LoreEnhancementNoRepair;
 import com.avrgaming.civcraft.lorestorage.LoreCraftableMaterial;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivLog;
@@ -230,6 +234,12 @@ public class Barracks extends Structure {
 			if (inHand == null || inHand.getType().equals(Material.AIR)) {
 				throw new CivException(CivSettings.localize.localizedString("barracks_repair_noItem"));
 			}
+
+            for (final LoreEnhancement loreEnhancement : new AttributeUtil(inHand).getEnhancements()) {
+                if (loreEnhancement instanceof LoreEnhancementNoRepair) {
+                    throw new CivException(CivSettings.localize.localizedString("barracks_repair_noRepairEnch"));
+                }
+            }
 			
 			if (inHand.getType().getMaxDurability() == 0) {
 				throw new CivException(CivSettings.localize.localizedString("barracks_repair_invalidItem"));

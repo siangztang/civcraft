@@ -66,6 +66,7 @@ import com.avrgaming.civcraft.main.CivMessage;
 import com.avrgaming.civcraft.object.Buff;
 import com.avrgaming.civcraft.object.BuildableDamageBlock;
 import com.avrgaming.civcraft.object.Civilization;
+import com.avrgaming.civcraft.object.ControlPoint;
 import com.avrgaming.civcraft.object.CultureChunk;
 import com.avrgaming.civcraft.object.MobSpawner;
 import com.avrgaming.civcraft.object.ProtectedBlock;
@@ -77,6 +78,7 @@ import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.permission.PlotPermissions;
 import com.avrgaming.civcraft.road.RoadBlock;
+import com.avrgaming.civcraft.structure.wonders.Neuschwanstein;
 import com.avrgaming.civcraft.structure.wonders.Wonder;
 import com.avrgaming.civcraft.structurevalidation.StructureValidator;
 import com.avrgaming.civcraft.template.Template;
@@ -85,7 +87,7 @@ import com.avrgaming.civcraft.threading.TaskMaster;
 import com.avrgaming.civcraft.threading.tasks.BuildAsyncTask;
 import com.avrgaming.civcraft.threading.tasks.BuildUndoTask;
 import com.avrgaming.civcraft.threading.tasks.PostBuildSyncTask;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.AABB;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.BukkitObjects;
@@ -481,7 +483,7 @@ public abstract class Buildable extends SQLObject {
 			resident.pendingBuildable = this;
 
 			/* Build an inventory full of templates to select. */
-			Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9);
+			Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9);
 			ItemStack infoRec = LoreGuiItem.build(CivSettings.localize.localizedString("buildable_lore_default")+" "+this.getDisplayName(), 
 					ItemManager.getId(Material.WRITTEN_BOOK), 
 					0, CivColor.Gold+CivSettings.localize.localizedString("loreGui_template_clickToBuild"));
@@ -576,7 +578,7 @@ public abstract class Buildable extends SQLObject {
 			resident.pendingCallback = callback;
 
 			/* Build an inventory full of templates to select. */
-			Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9);
+			Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9);
 			ItemStack infoRec = LoreGuiItem.build("Default "+info.displayName, 
 					ItemManager.getId(Material.WRITTEN_BOOK), 
 					0, CivColor.Gold+CivSettings.localize.localizedString("loreGui_template_clickToBuild"));
@@ -1290,13 +1292,47 @@ public abstract class Buildable extends SQLObject {
 			return;
 		}
 
+        if ((this instanceof TradeOutpost || this instanceof FishingBoat) && player != null) {
+            CivMessage.sendError(player, CivSettings.localize.localizedString("var_buildable_cannotBeBroken", "§6" + hit.getOwner().getDisplayName() + "§c"));
+            return;
+        }
+
 		if (!hit.getOwner().isComplete() && !(hit.getOwner() instanceof Wonder)) {
 			if (player != null) {
 				CivMessage.sendError(player, CivSettings.localize.localizedString("var_buildable_underConstruction",hit.getOwner().getDisplayName()));
 			}
 			return;		
 		}
-
+		 if (this instanceof Neuschwanstein && player != null) {
+	            if (this.getTown().hasStructure("s_capitol")) {
+	                final Capitol capitol = (Capitol)this.getTown().getStructureByType("s_capitol");
+	                boolean allDestroyed = true;
+	                for (final ControlPoint c : capitol.controlPoints.values()) {
+	                    if (c.getinfo().equalsIgnoreCase("Neuschwanstein") && !c.isDestroyed()) {
+	                        allDestroyed = false;
+	                        break;
+	                    }
+	                }
+	                if (!allDestroyed) {
+	                    CivMessage.sendError(player, CivSettings.localize.localizedString("var_buildable_cannotAttackNeu", this.getTown().getName()));
+	                    return;
+	                }
+	            }
+	            else {
+	                final TownHall townHall = (TownHall)this.getTown().getStructureByType("s_townhall");
+	                boolean allDestroyed = true;
+	                for (final ControlPoint c : townHall.controlPoints.values()) {
+	                    if (c.getinfo().equalsIgnoreCase("Neuschwanstein") && !c.isDestroyed()) {
+	                        allDestroyed = false;
+	                        break;
+	                    }
+	                }
+	                if (!allDestroyed) {
+	                    CivMessage.sendError(player, CivSettings.localize.localizedString("var_buildable_cannotAttackNeu", this.getTown().getName()));
+	                    return;
+	                }
+	            }
+	        }
 		if ((hit.getOwner().getDamagePercentage() % 10) == 0) {
 			wasTenPercent = true;
 		}

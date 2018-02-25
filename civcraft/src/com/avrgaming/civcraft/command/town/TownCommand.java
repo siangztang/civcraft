@@ -48,12 +48,13 @@ import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.permission.PermissionGroup;
+import com.avrgaming.civcraft.questions.ChangeTownRequest;
 import com.avrgaming.civcraft.questions.JoinTownResponse;
 //import com.avrgaming.civcraft.structure.Capitol;
 import com.avrgaming.civcraft.structure.Structure;
 import com.avrgaming.civcraft.structure.TownHall;
 //import com.avrgaming.civcraft.structure.TownHall;
-import com.avrgaming.civcraft.tutorial.CivTutorial;
+import com.avrgaming.civcraft.tutorial.Book;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.ChunkCoord;
 import com.avrgaming.civcraft.util.CivColor;
@@ -98,7 +99,45 @@ public class TownCommand extends CommandBase {
 //		commands.put("movestructure", "[coord] [town] moves the structure specified by the coord to the specfied town.");
 		commands.put("enablestructure", CivSettings.localize.localizedString("cmd_town_enableStructureDesc"));
 		commands.put("location", CivSettings.localize.localizedString("cmd_town_locationDesc"));
+        commands.put("changetown", CivSettings.localize.localizedString("cmd_town_switchtown"));
 	}
+	
+	public void changetown_cmd() throws CivException {
+        final Resident resident = this.getResident();
+        final Town town = this.getNamedTown(1);
+        final Player player = this.getPlayer();
+        if (War.isWarTime()) {
+            throw new CivException("§c" + CivSettings.localize.localizedString("wartime_now_cenceled"));
+        }
+        if (resident.getTown() == town) {
+            throw new CivException(CivSettings.localize.localizedString("var_switchtown_own"));
+        }
+        if (resident.getTown().getMotherCiv() != town.getMotherCiv()) {
+            throw new CivException(CivSettings.localize.localizedString("var_switchtown_captured"));
+        }
+        if (town.getCiv() != resident.getCiv()) {
+            throw new CivException(CivSettings.localize.localizedString("var_switchtown_now_own"));
+        }
+        if (town.getMayorGroup().hasMember(resident)) {
+            throw new CivException(CivSettings.localize.localizedString("var_switchtown_last_mayor"));
+        }
+        if (this.getSelectedTown().getResidents().size() == 1) {
+            throw new CivException(CivSettings.localize.localizedString("var_switchtown_lastResident", "§6" + this.getSelectedTown().getName() + "§c"));
+        }
+        ChangeTownRequest request = new ChangeTownRequest();
+        request.resident = resident;
+        request.from = resident.getTown();
+        request.to = town;
+        request.civ = resident.getCiv();
+        final String fullPlayerName = player.getDisplayName();
+        try {
+            CivGlobal.questionLeaders(player, resident.getCiv(), CivSettings.localize.localizedString("var_changetownrequest_requestMessage", fullPlayerName, "§c" + resident.getTown().getName(), "§c" + town.getName()), 30000L, request);
+            CivMessage.send(this.sender, "§7" + CivSettings.localize.localizedString("var_switchtown_pleaseWait"));
+        }
+        catch (CivException e) {
+            CivMessage.sendError(player, e.getMessage());
+        }
+    }
 	
 	public void location_cmd() throws CivException {
         Town town = getSelectedTown();
@@ -215,7 +254,7 @@ public class TownCommand extends CommandBase {
 	public void templates_cmd() throws CivException {
 		Player player = getPlayer();
 		Town town = getSelectedTown();
-		Inventory inv = Bukkit.getServer().createInventory(player, CivTutorial.MAX_CHEST_SIZE*9, town.getName()+" "+CivSettings.localize.localizedString("cmd_town_templatesHeading"));
+		Inventory inv = Bukkit.getServer().createInventory(player, Book.MAX_CHEST_SIZE*9, town.getName()+" "+CivSettings.localize.localizedString("cmd_town_templatesHeading"));
 
 		for (ConfigBuildableInfo info : CivSettings.structures.values()) {
 			for (Perk p : CustomTemplate.getTemplatePerksForBuildable(town, info.template_base_name)) {

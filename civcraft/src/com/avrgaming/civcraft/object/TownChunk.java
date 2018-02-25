@@ -247,6 +247,9 @@ public class TownChunk extends SQLObject {
 		if (cultureChunk == null || cultureChunk.getCiv() != town.getCiv()) {
 			throw new CivException(CivSettings.localize.localizedString("town_chunk_claimOutsideCulture"));
 		}
+        if (cultureChunk.getTown() != town) {
+            throw new CivException(CivSettings.localize.localizedString("town_chunk_notOwnCultureChunk"));
+        }
 		
 		TownChunk tc = new TownChunk(town, coord);
 		tc.setCanUnclaim(true);
