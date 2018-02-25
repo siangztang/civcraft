@@ -155,7 +155,7 @@ missions:
       name: 'Investigate Talents'
       description:
           - 'Provides a record of the talents of civilization.'
-          - 'Must be within the enemy Capital.'
+          - 'Must be within the enemy Capitol.'
       cost: 40000.0
       range: 0.0
       cooldown: 2.0

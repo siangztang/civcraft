@@ -114,6 +114,12 @@ public class Bank extends Structure {
 		if (rate > 1) {
 			exchange_rate *= rate;
 		}
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level4_extraBankTown")) {
+            exchange_rate *= this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level4_extraBankTown");
+        }
+        if (this.getCiv().getStockExchangeLevel() >= 3) {
+            exchange_rate *= 1.25;
+        }
 		return exchange_rate;
 	}
 	
@@ -364,7 +370,7 @@ public class Bank extends Structure {
 		}
 		
 		/* Update the principal with the new value. */
-		this.getTown().getTreasury().setPrincipalAmount(this.getTown().getTreasury().getBalance());
+        this.getTown().getTreasury().setPrincipalAmount(this.getTown().getTreasury().getBalance());
 	}
 	
 	@Override
@@ -384,7 +390,10 @@ public class Bank extends Structure {
 			effectiveInterestRate += increase;
 			CivMessage.sendTown(this.getTown(), CivColor.LightGray+CivSettings.localize.localizedString("bank_greed"));
 		}
-		
+
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level4_extraBankTown")) {
+        	effectiveInterestRate *= 2.0;
+        }
 		double newCoins = principal*effectiveInterestRate;
 
 		//Dont allow fractional coins.

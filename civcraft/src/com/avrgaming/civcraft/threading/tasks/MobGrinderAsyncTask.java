@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.avrgaming.civcraft.exception.CivTaskAbortException;
 import com.avrgaming.civcraft.lorestorage.LoreMaterial;
+import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.main.CivLog;
 import com.avrgaming.civcraft.object.StructureChest;
 import com.avrgaming.civcraft.structure.Structure;
@@ -491,6 +492,9 @@ public class MobGrinderAsyncTask extends CivAsyncTask {
 			try {
 				try {
 					processMobGrinderUpdate();
+	                if (CivData.randChance(this.mobGrinder.getTown().getReturnChance())) {
+	                    processMobGrinderUpdate();
+	                }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

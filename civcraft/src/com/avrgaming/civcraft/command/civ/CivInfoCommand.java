@@ -114,7 +114,11 @@ public class CivInfoCommand extends CommandBase {
 			}
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("WarColon")+" "+CivColor.LightGreen+df.format(civ.getWarUpkeep()));
 			
-			CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("cmd_civ_info_upkeepHeading2"));
+			Object[] arrobject = new Object[2];
+            arrobject[0] = "\u00a7a" + (civ.getCapitol().getBonusUpkeep() == 1.0 ? "No" : "Yes");
+            arrobject[1] = "\u00a76" + (civ.getCapitol().getBonusUpkeep() == 1.0 ? "" : (civ.getCapitol().getBonusUpkeep() == 2.5 ? "2.5x (Enemy doesn't have Notre Dame)" : "5x (Enemy has Notre Dame"));
+            CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("var_cmd_civ_info_upkeepTownWar", arrobject));
+            CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("cmd_civ_info_upkeepHeading2"));
 			CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("cmd_civ_info_upkeepHeading3"));
 			
 			return;
@@ -130,6 +134,10 @@ public class CivInfoCommand extends CommandBase {
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Distance")+" "+CivColor.LightGreen+civ.getUpkeepPaid(town, "distance"));
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("DistanceUpkeep")+" "+CivColor.LightGreen+civ.getUpkeepPaid(town, "distanceUpkeep"));
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Debt")+" "+CivColor.LightGreen+civ.getUpkeepPaid(town, "debt"));
+			Object[] arrobject = new Object[2];
+            arrobject[0] = "\u00a7a" + (civ.getCapitol().getBonusUpkeep() == 1.0 ? "No" : "Yes");
+            arrobject[1] = "\u00a76" + (civ.getCapitol().getBonusUpkeep() == 1.0 ? "" : (civ.getCapitol().getBonusUpkeep() == 2.5 ? "2.5x (Enemy doesn't have Notre Dame)" : "5x (Enemy has Notre Dame"));
+            CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("var_cmd_civ_info_upkeepTownWar", arrobject));
 			CivMessage.send(sender, CivColor.Green+CivSettings.localize.localizedString("Total")+" "+CivColor.LightGreen+getTownTotalLastTick(town, civ));
 
 			CivMessage.send(sender, CivColor.LightGray+CivSettings.localize.localizedString("cmd_civ_info_upkeepHeading2"));

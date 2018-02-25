@@ -221,7 +221,16 @@ public class Cottage extends Structure {
 		if (this.getTown().getBuffManager().hasBuff("buff_pyramid_cottage_bonus")) {
 			total_coins *= this.getTown().getBuffManager().getEffectiveDouble("buff_pyramid_cottage_bonus");
 		}
-		
+        if (this.getTown().getBuffManager().hasBuff("buff_hotel")) {
+            total_coins = (int)((double)total_coins * this.getTown().getBuffManager().getEffectiveDouble("buff_hotel"));
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level4_extraCottageTown")) {
+            total_coins = (int)((double)total_coins * this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level4_extraCottageTown"));
+        }
+        if (this.getCiv().getStockExchangeLevel() >= 1) {
+            total_coins = (int)((double)total_coins * 1.3);
+        }
+        total_coins = (int)((double)total_coins * this.getTown().getBonusCottageRate());
 		if (this.getCiv().hasTechnology("tech_taxation")) {
 			double taxation_bonus;
 			try {

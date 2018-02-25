@@ -32,17 +32,17 @@ import com.avrgaming.civcraft.util.BlockCoord;
 public class ArrowTower extends Structure {
 
 	ProjectileArrowComponent arrowComponent;
-	
+
 	protected ArrowTower(Location center, String id, Town town)
 			throws CivException {
 		super(center, id, town);
 		this.hitpoints = this.getMaxHitPoints();
 	}
-	
+
 	protected ArrowTower(ResultSet rs) throws SQLException, CivException {
 		super(rs);
 	}
-	
+
 	@Override
 	public void loadSettings() {
 		super.loadSettings();
@@ -58,30 +58,21 @@ public class ArrowTower extends Structure {
 		rate += this.getTown().getBuffManager().getEffectiveDouble(Buff.FIRE_BOMB);
 		return (int)(arrowComponent.getDamage()*rate);
 	}
-	
+
 	@Override
 	public int getMaxHitPoints() {
-		double rate = 1;
+		double rate = 1.0;
 		if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp")) {
 			rate += this.getTown().getBuffManager().getEffectiveDouble("buff_chichen_itza_tower_hp");
-			rate += this.getTown().getBuffManager().getEffectiveDouble(Buff.BARRICADE);
 		}
-		return (int) (info.max_hitpoints * rate);
+		if (this.getTown().getBuffManager().hasBuff("buff_barricade")) {
+			rate += this.getTown().getBuffManager().getEffectiveDouble("buff_barricade");
+		}
+		if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraTowerHPTown")) {
+			rate *= this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraTowerHPTown");
+		}
+		return (int)((double)this.info.max_hitpoints * rate);
 	}
-
-//	/**
-//	 * @param damage the damage to set
-//	 */
-//	public void setDamage(int damage) {
-//		arrowComponent.setDamage(damage);
-//	}
-	
-//	/**
-//	 * @return the power
-//	 */
-//	public double getPower() {
-//		return arrowComponent.getPower();
-//	}
 
 	/**
 	 * @param power the power to set

@@ -33,7 +33,6 @@ import com.avrgaming.civcraft.exception.CivException;
 import com.avrgaming.civcraft.exception.InvalidConfiguration;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivMessage;
-import com.avrgaming.civcraft.object.Buff;
 import com.avrgaming.civcraft.object.Relation;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.Town;
@@ -68,10 +67,21 @@ public class ScoutTower extends Structure {
 			
 			proximityComponent.setBuildable(this);
 			proximityComponent.setCenter(this.getCenterLocation());
+			int reportrate = (int)CivSettings.getDouble(CivSettings.warConfig, "scout_tower.update");
+			if (this.getTown().getBuffManager().hasBuff("buff_colossus_coins_from_culture") && this.getTown().getBuffManager().hasBuff("buff_great_lighthouse_tower_range")) {
+                range = 600.0;
+                reportrate = 60;
+            } else {
+                range = 400.0;
+                reportrate = 120;
+            }
+            if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraRangeTown")) {
+                range += this.getTown().getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraRangeTown");
+            }
+			
 			proximityComponent.setRadius(range);
 			
-			reportSeconds = (int)CivSettings.getDouble(CivSettings.warConfig, "scout_tower.update");
-			
+			reportSeconds = reportrate;
 			
 		} catch (InvalidConfiguration e) {
 			e.printStackTrace();
@@ -91,14 +101,19 @@ public class ScoutTower extends Structure {
 	}
 	
 	@Override
-	public int getMaxHitPoints() {
-		double rate = 1;
-		if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp")) {
-			rate += this.getTown().getBuffManager().getEffectiveDouble("buff_chichen_itza_tower_hp");
-			rate += this.getTown().getBuffManager().getEffectiveDouble(Buff.BARRICADE);
-		}
-		return (int) (info.max_hitpoints * rate);
-	}
+    public int getMaxHitPoints() {
+        double rate = 1.0;
+        if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp")) {
+            rate += this.getTown().getBuffManager().getEffectiveDouble("buff_chichen_itza_tower_hp");
+        }
+        if (this.getTown().getBuffManager().hasBuff("buff_barricade")) {
+            rate += this.getTown().getBuffManager().getEffectiveDouble("buff_barricade");
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraTowerHPTown")) {
+            rate *= this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraTowerHPTown");
+        }
+        return (int)((double)this.info.max_hitpoints * rate);
+    }
 	
 	/*
 	 * Asynchronously sweeps for players within the scout tower's radius. If

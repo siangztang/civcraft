@@ -58,15 +58,20 @@ public class CannonTower extends Structure {
 		return (int)(cannonComponent.getDamage()*rate);
 	}
 	
-	@Override
-	public int getMaxHitPoints() {
-		double rate = 1;
-		if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp")) {
-			rate += this.getTown().getBuffManager().getEffectiveDouble("buff_chichen_itza_tower_hp");
-			rate += this.getTown().getBuffManager().getEffectiveDouble(Buff.BARRICADE);
-		}
-		return (int) (info.max_hitpoints * rate);
-	}
+    @Override
+    public int getMaxHitPoints() {
+        double rate = 1.0;
+        if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp")) {
+            rate += this.getTown().getBuffManager().getEffectiveDouble("buff_chichen_itza_tower_hp");
+        }
+        if (this.getTown().getBuffManager().hasBuff("buff_barricade")) {
+            rate += this.getTown().getBuffManager().getEffectiveDouble("buff_barricade");
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraTowerHPTown")) {
+            rate *= this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraTowerHPTown");
+        }
+        return (int)((double)this.info.max_hitpoints * rate);
+    }
 	
 //	public void setDamage(int damage) {
 //		cannonComponent.setDamage(damage);

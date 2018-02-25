@@ -464,6 +464,7 @@ public class TownInfoCommand extends CommandBase {
             out.add("§2" + CivSettings.localize.localizedString("cmd_town_bonusCottage_stockExchange", "§a30%", String.valueOf(town.getCiv().getStockExchangeLevel())));
         }
 		total *= town.getCottageRate();
+        total *= town.getBonusCottageRate();
 		out.add(CivColor.Green+CivSettings.localize.localizedString("Total")+" "+CivColor.Yellow+df.format(total)+" "+CivSettings.CURRENCY_NAME);
 		
 		CivMessage.send(sender, out);

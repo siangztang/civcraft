@@ -56,6 +56,9 @@ public class WindmillPreProcessTask extends CivAsyncTask {
 			if (windmill.getCiv().hasTechnology("tech_machinery")) {
 				plant_max *= 2;
 			}
+            if (windmill.getTown().getBuffManager().hasBuff("buff_farm")) {
+                plant_max *= 2;
+            }
 		} catch (InvalidConfiguration e) {
 			e.printStackTrace();
 			return;

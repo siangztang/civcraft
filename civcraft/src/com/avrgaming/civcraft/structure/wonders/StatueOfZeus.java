@@ -68,10 +68,14 @@ extends Wonder {
 
     @Override
     protected void removeBuffs() {
+        this.removeBuffFromTown(this.getTown(), "buff_statue_of_zeus_tower_range");
+        this.removeBuffFromTown(this.getTown(), "buff_statue_of_zeus_struct_regen");
     }
 
     @Override
     protected void addBuffs() {
+        this.addBuffToTown(this.getTown(), "buff_statue_of_zeus_tower_range");
+        this.addBuffToTown(this.getTown(), "buff_statue_of_zeus_struct_regen");
     }
 
     public void processBonuses() {

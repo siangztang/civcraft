@@ -917,7 +917,10 @@ public class Civilization extends SQLObject {
 		}
 		
 		upkeep += this.getWarUpkeep();
-		
+
+        if (this.getCapitol() != null) {
+            upkeep += this.getCapitol().getBonusUpkeep();
+        }
 		if (this.getTreasury().hasEnough(upkeep)) {
 			/* Have plenty on our coffers, pay the lot and clear all of these towns' debt. */
 			this.getTreasury().withdraw(upkeep);
@@ -1225,7 +1228,9 @@ public class Civilization extends SQLObject {
 		double coins_per_beaker;
 		try {
 			coins_per_beaker = CivSettings.getDouble(CivSettings.civConfig, "civ.coins_per_beaker");
-			
+			if (this.getCapitol() != null && this.getCapitol().getBuffManager().hasBuff("level7_higherIncomeTown")) {
+                --coins_per_beaker;
+            }
 			for (Town t : this.getTowns()) {
 				if (t.getBuffManager().hasBuff("buff_greatlibrary_double_tax_beakers")) {
 					coins_per_beaker /= 2;
@@ -1647,10 +1652,30 @@ public class Civilization extends SQLObject {
 					happy_captured_town += per_captured_town;
 				}
 			}
+
+            if (this.getCapitol() != null && this.getCapitol().getBuffManager().hasBuff("level8_unhappyConquerorTown")) {
+                happy_town *= 2.0;
+                happy_captured_town = 0.0;
+            }
 			
 			total += happy_town;
 			sources.put("Towns", happy_town);
-			
+
+            boolean civHasColossus = false;
+            for (final Town town2 : this.getTowns()) {
+                for (final Wonder wonder : town2.getWonders()) {
+                    if (wonder.getConfigId().equalsIgnoreCase("w_colossus") && wonder.isComplete() && wonder.isActive()) {
+                        civHasColossus = true;
+                    }
+                }
+            }
+            if (civHasColossus) {
+                happy_captured_town = 0.0;
+            }
+            if (this.getCapitol() != null && this.getCapitol().getBuffManager().hasBuff("level8_unhappyLargeEmpireTown")) {
+                final double decrease = happy_town / 5.0 * 2.0;
+                happy_town -= decrease;
+            }
 			total += happy_captured_town;
 			sources.put("Captured Towns", happy_captured_town);
 

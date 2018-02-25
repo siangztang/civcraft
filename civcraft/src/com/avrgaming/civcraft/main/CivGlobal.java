@@ -2229,4 +2229,14 @@ public class CivGlobal {
         final long now = Calendar.getInstance().getTimeInMillis();
         return now < CivGlobal.cantDemolishFrom || now > CivGlobal.cantDemolishUntil;
     }
+
+	public static int getWonderCount() {
+		int count = 0;
+		for (final Wonder wonder : getWonders()) {
+			if (wonder != null && !wonder.getConfigId().contains("w_colosseum")) {
+				++count;
+			}
+		}
+		return count;
+	}
 }

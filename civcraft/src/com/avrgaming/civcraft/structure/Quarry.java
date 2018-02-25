@@ -93,7 +93,7 @@ public class Quarry extends Structure {
 	}
 	
 	private double modifyChance(Double chance) {
-		double increase = chance*this.getTown().getBuffManager().getEffectiveDouble(Buff.EXTRACTION);
+		double increase = chance * (this.getTown().getBuffManager().getEffectiveDouble(Buff.EXTRACTION) + this.getTown().getBuffManager().getEffectiveDouble("buff_grandcanyon_quarry_and_trommel"));
 		chance += increase;
 		
 		try {

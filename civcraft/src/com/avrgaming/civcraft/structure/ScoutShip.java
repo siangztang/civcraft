@@ -48,9 +48,21 @@ public class ScoutShip extends WaterStructure {
 			
 			proximityComponent.setBuildable(this);
 			proximityComponent.setCenter(this.getCenterLocation());
+			int reportrate = (int)CivSettings.getDouble(CivSettings.warConfig, "scout_tower.update");
+			if (this.getTown().getBuffManager().hasBuff("buff_colossus_coins_from_culture") && this.getTown().getBuffManager().hasBuff("buff_great_lighthouse_tower_range")) {
+                range = 600.0;
+                reportrate = 60;
+            } else {
+                range = 400.0;
+                reportrate = 120;
+            }
+            if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraRangeTown")) {
+                range += this.getTown().getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraRangeTown");
+            }
+			
 			proximityComponent.setRadius(range);
 			
-			reportSeconds = (int)CivSettings.getDouble(CivSettings.warConfig, "scout_tower.update");
+			reportSeconds = reportrate;
 			
 			
 		} catch (InvalidConfiguration e) {
@@ -159,6 +171,15 @@ public class ScoutShip extends WaterStructure {
 			scoutDebug(CivSettings.localize.localizedString("scoutTower_debug_emptyCache"));
 		}
 	}
+
+    @Override
+    public int getMaxHitPoints() {
+        double rate = 1.0;
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraTowerHPTown")) {
+            rate *= this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level5_extraTowerHPTown");
+        }
+        return (int)((double)this.info.max_hitpoints * rate);
+    }
 	
 	@Override
 	public String getMarkerIconName() {

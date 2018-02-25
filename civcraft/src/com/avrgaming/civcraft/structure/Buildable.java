@@ -279,13 +279,10 @@ public abstract class Buildable extends SQLObject {
 
 	public double getHammerCost() {
 		double rate = 1;
-		if (this.getTown().getBuffManager().hasBuff(Buff.RUSH)) {
-			rate -= this.getTown().getBuffManager().getEffectiveDouble(Buff.RUSH);
-		}
-		if (this.isTileImprovement() && this.getTown().getBuffManager().hasBuff("buff_mother_tree_tile_improvement_cost")) {
+		rate -= this.getTown().getBuffManager().getEffectiveDouble(Buff.RUSH);
+		rate -= this.getTown().getBuffManager().getEffectiveDouble("buff_grandcanyon_rush");
+		rate -= this.getTown().getBuffManager().getEffectiveDouble("buff_mother_tree_tile_improvement_cost");
 
-			rate -= this.getTown().getBuffManager().getEffectiveDouble("buff_mother_tree_tile_improvement_cost");
-		}
 		return rate*info.hammer_cost;
 	}
 
@@ -1485,7 +1482,8 @@ public abstract class Buildable extends SQLObject {
 		}
 
 		int regenRate = this.getRegenRate();
-		regenRate += this.getTown().getBuffManager().getEffectiveInt("buff_chichen_itza_regen_rate");
+        regenRate += this.getTown().getBuffManager().getEffectiveInt("buff_chichen_itza_regen_rate");
+        regenRate += this.getTown().getBuffManager().getEffectiveInt("buff_statue_of_zeus_struct_regen");
 		if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraTowerHPTown")) {
 			++regenRate;
 		}

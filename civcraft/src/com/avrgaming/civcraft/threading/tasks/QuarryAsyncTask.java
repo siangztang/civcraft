@@ -420,6 +420,9 @@ public class QuarryAsyncTask extends CivAsyncTask {
 			try {
 				try {
 					processQuarryUpdate();
+	                if (CivData.randChance(this.quarry.getTown().getReturnChance())) {
+	                    processQuarryUpdate();
+	                }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

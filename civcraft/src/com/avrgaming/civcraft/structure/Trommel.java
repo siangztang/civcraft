@@ -26,7 +26,6 @@ import org.bukkit.Location;
 
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.exception.CivException;
-import com.avrgaming.civcraft.object.Buff;
 import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.util.BlockCoord;
 import com.avrgaming.civcraft.util.SimpleBlock;
@@ -292,7 +291,7 @@ public class Trommel extends Structure {
 	}
 	
 	private double modifyChance(Double chance) {
-		double increase = chance*this.getTown().getBuffManager().getEffectiveDouble(Buff.EXTRACTION);
+        double increase = chance * (this.getTown().getBuffManager().getEffectiveDouble("buff_extraction") + this.getTown().getBuffManager().getEffectiveDouble("buff_grandcanyon_quarry_and_trommel"));
 		chance += increase;
 		
 //		try {

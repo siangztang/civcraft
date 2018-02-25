@@ -69,6 +69,9 @@ public class ConfigTech {
 	
 	public double getAdjustedBeakerCost(Civilization civ) {
 		double rate = 1.0;
+        if (civ.getCapitol() != null && civ.getCapitol().getBuffManager().hasBuff("level7_cheaperCostCap")) {
+            rate += 0.05;
+        }
 		rate -= eraRate(civ);
 		return Math.floor(this.beaker_cost*Math.max(rate, .01));
 	}
@@ -78,11 +81,16 @@ public class ConfigTech {
 		
 		for (Town town : civ.getTowns())
 		{
-			if (town.getBuffManager().hasBuff("buff_profit_sharing"))
-			{
-				rate -= town.getBuffManager().getEffectiveDouble("buff_profit_sharing");
-			}
+			if (town.getBuffManager().hasBuff("buff_profit_sharing")) {
+                rate -= town.getBuffManager().getEffectiveDouble("buff_profit_sharing");
+            }
+            if (town.getBuffManager().hasBuff("buff_moscowstateuni_profit_sharing")) {
+                rate -= town.getBuffManager().getEffectiveDouble("buff_moscowstateuni_profit_sharing");
+            }
 		}
+		if (civ.getCapitol() != null && civ.getCapitol().getBuffManager().hasBuff("level7_cheaperCostCap")) {
+			rate -= 0.05;
+        }
 		rate = Math.max(rate, 0.75);
 		rate -= eraRate(civ);
 		

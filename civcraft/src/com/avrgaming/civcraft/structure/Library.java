@@ -189,10 +189,15 @@ public class Library extends Structure {
 				CivLog.error("sign from special id was null, id:"+count);
 				return;
 			}
+			double price = enchant.price;
+
+			if (this.getTown().hasStructure("s_shopingcenter")) {
+				price /= 2.0;
+			}
 			sign.setText(enchant.displayName+"\n"+
 					"Level "+enchant.level+"\n"+
 					getNonResidentFeeString()+"\n"+
-					"For "+enchant.price);
+					"For "+ price);
 			sign.update();
 			count++;
 		}

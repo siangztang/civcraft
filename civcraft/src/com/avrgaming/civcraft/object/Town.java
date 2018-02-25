@@ -45,6 +45,7 @@ import org.bukkit.inventory.ItemStack;
 import com.avrgaming.civcraft.components.AttributeBase;
 import com.avrgaming.civcraft.components.AttributeRate;
 import com.avrgaming.civcraft.components.AttributeWarUnhappiness;
+import com.avrgaming.civcraft.components.AttributeWarUnpkeep;
 import com.avrgaming.civcraft.components.Component;
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigBuff;
@@ -673,7 +674,21 @@ public class Town extends SQLObject {
 		
 		rates.put("Wonders/Goodies", additional);
 		rate += additional;
-		
+
+        double talent = 1.0;
+        if (this.getBuffManager().hasBuff("level1_growthCultureCap")) {
+            talent = this.getBuffManager().getEffectiveDouble("level1_growthCultureCap");
+        }
+        if (this.getBuffManager().hasBuff("level9_capitolCultureCap")) {
+            talent += 0.5;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level9_civCultureTown")) {
+            talent += 0.2;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level10_architectorTown")) {
+            talent += 0.15;
+        }
+        rate = rate * talent;
 		return new AttrSource(rates, rate, null);
 	}
 	
@@ -694,7 +709,22 @@ public class Town extends SQLObject {
 		
 		double total = 0;
 		HashMap<String, Double> sources = new HashMap<String, Double>();
-			
+		double goodieCulture = 0.0;
+        if (this.getBuffManager().hasBuff("buff_advanced_touring")) {
+            goodieCulture += 200.0;
+        }
+        sources.put("Goodies", goodieCulture);
+        total += goodieCulture;
+        double talent = 0.0;
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level9_equalizerCultureTown")) {
+            for (final String goodID : this.tradeGoods.split(", ")) {
+                if (CivSettings.goods.get(goodID) != null) {
+                    talent += 150.0;
+                }
+            }
+        }
+        sources.put("Talents", talent);
+        total += talent;
 		/* Grab beakers generated from structures with components. */
 		double fromStructures = 0;
 		for (Structure struct : this.structures.values()) {
@@ -772,7 +802,17 @@ public class Town extends SQLObject {
 		newRate = rate * randomRate;
 		rates.put("Random Events", newRate - rate);
 		rate = newRate;
-		
+		for (final Town town : this.civ.getTowns()) {
+            if (town.getBuffManager().hasBuff("buff_spoil")) {
+                newRate *= 1.1;
+            }
+        }
+		rate = newRate;
+		double talent = 1.0;
+        if (this.getBuffManager().hasBuff("level1_hammerRateCap")) {
+            talent = this.getBuffManager().getEffectiveDouble("level1_hammerRateCap");
+        }
+        newRate = rate * talent;
 		/* Captured Town Penalty */
 		if (this.motherCiv != null) {
 			try {
@@ -807,13 +847,24 @@ public class Town extends SQLObject {
 				
 		/* Wonders and Goodies. */
 		double wonderGoodies = this.getBuffManager().getEffectiveInt(Buff.CONSTRUCTION);
+		wonderGoodies += this.getBuffManager().getEffectiveDouble("buff_grandcanyon_hammers");
 		sources.put("Wonders/Goodies", wonderGoodies);
 		total += wonderGoodies;
+		
+		if (this.hasScroll()) {
+            total += 500.0;
+            sources.put("Scroll of Hammers (Until " + this.getScrollTill() + ")", 500.0);
+		}
 		
 		double cultureHammers = this.getHammersFromCulture();
 		sources.put("Culture Biomes", cultureHammers);
 		total += cultureHammers; 
-		
+        double talent = 0.0;
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level3_extraHammerTown")) {
+            talent = this.getHammersFromTalent();
+        }
+        sources.put("Talents", talent);
+        total += talent;
 		/* Grab hammers generated from structures with components. */
 		double structures = 0;
 		double mines = 0;
@@ -1515,7 +1566,7 @@ public class Town extends SQLObject {
 		//upkeep += this.getSpreadUpkeep();
 		upkeep += this.getStructureUpkeep();
 		upkeep += this.getOutpostUpkeep();
-		
+        upkeep *= this.getBonusUpkeep();
 		upkeep *= getGovernment().upkeep_rate;
 		
 		if (this.getBuffManager().hasBuff("buff_colossus_reduce_upkeep")) {
@@ -2050,6 +2101,12 @@ public class Town extends SQLObject {
 		additional += (additionalGrapes*grapeCount);
 		rates.put("Wonders/Goodies", additional);
 		rate += additional;
+
+        double talent = 1.0;
+        if (this.getBuffManager().hasBuff("level1_growthCultureCap")) {
+            talent = this.getBuffManager().getEffectiveDouble("level1_growthCultureCap");
+        }
+        rate = rate * talent;
 	
 		return new AttrSource(rates, rate, null);
 	}
@@ -2086,6 +2143,19 @@ public class Town extends SQLObject {
 		sources.put("Culture Biomes", cultureSource);
 		total += cultureSource;
 		
+		double grapeCount = 0.0;
+        for (final String goodID : this.tradeGoods.split(", ")) {
+            if (CivSettings.goods.get(goodID) != null) {
+                for (final ConfigBuff configBuff : CivSettings.goods.get(goodID).buffs.values()) {
+                    if (configBuff.id.equals("buff_growth")) {
+                        grapeCount += 150.0;
+                    }
+                }
+            }
+        }
+        total += grapeCount;
+        sources.put("Goodies", grapeCount);
+		
 		/* Grab any growth from structures. */
 		double structures = 0;
 		for (Structure struct : this.structures.values()) {
@@ -2103,6 +2173,18 @@ public class Town extends SQLObject {
 		
 		total += structures;
 		sources.put("Structures", structures);
+		
+		boolean hasBurj = false;
+        for (final Town town : this.getCiv().getTowns()) {
+            if (town.hasWonder("w_burj")) {
+                hasBurj = true;
+                break;
+            }
+        }
+        if (hasBurj) {
+            sources.put("Wonders", 1000.0);
+            total += 1000.0;
+        }
 		
 		sources.put("Base Growth", baseGrowth);
 		total += baseGrowth;
@@ -2837,7 +2919,7 @@ public class Town extends SQLObject {
 		/* Additional rate increases from buffs. */
 		/* Great Library buff is made to not stack with Science_Rate */
 		double additional = rate*getBuffManager().getEffectiveDouble(Buff.SCIENCE_RATE);
-		additional += rate*getBuffManager().getEffectiveDouble("buff_greatlibrary_extra_beakers");
+		additional += rate*(getBuffManager().getEffectiveDouble("buff_greatlibrary_extra_beakers") + getBuffManager().getEffectiveDouble("buff_moscowstateuni_extra_beakers"));
 		rate += additional;
 		rates.put("Goodies/Wonders", additional);
 		
@@ -2866,6 +2948,17 @@ public class Town extends SQLObject {
 //		rate += education;
 //		rates.put("Education", education);
 
+        double talent = 1.0;
+        if (this.getBuffManager().hasBuff("level1_beakerRateCap")) {
+            talent = this.getBuffManager().getEffectiveDouble("level1_beakerRateCap");
+        }
+        if (this.getBuffManager().hasBuff("level7_extraInBestTown")) {
+            talent += 0.25;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level10_scientificFocusTown")) {
+            talent += 0.15;
+        }
+        rate = rate * talent;
 		return new AttrSource(rates, rate, null);
 	}
 	
@@ -2893,7 +2986,16 @@ public class Town extends SQLObject {
 		}
 		sources.put("Culture Biomes", fromCulture);
 		beakers += fromCulture;
-		
+
+        double talent = 0.0;
+        if (this.getCiv().getCapitol() != null) {
+            for (final CultureChunk cultureChunk : this.cultureChunks.values()) {
+                if (this.getCiv().getCapitol().getBuffManager().hasBuff("level3_extraBeakerTown") && cultureChunk.getBeakers() < 1.0) {
+                    talent += 0.25;
+                }
+            }
+        }
+        beakers += talent;
 		/* Grab beakers generated from structures with components. */
 		double fromStructures = 0;
 		for (Structure struct : this.structures.values()) {
@@ -2906,15 +3008,15 @@ public class Town extends SQLObject {
 				}
 			}
 		}
-
 		beakers += fromStructures;
 		sources.put("Structures", fromStructures);
 		
 		/* Grab any extra beakers from buffs. */
 		double wondersTrade = 0;
-		
 		//No more flat bonuses here, leaving it in case of new buffs
-		
+        if (this.getBuffManager().hasBuff("buff_advanced_mixing")) {
+        	wondersTrade += 150.0;
+        }
 		beakers += wondersTrade;
 		sources.put("Goodies/Wonders", wondersTrade);
 		
@@ -2946,8 +3048,6 @@ public class Town extends SQLObject {
 		/* Make sure we never give out negative beakers. */
 		beakers = Math.max(beakers, 0);
 		AttrSource rates = getBeakerRate();
-		
-		
 		
 		beakers = beakers*rates.total;
 		
@@ -3013,7 +3113,22 @@ public class Town extends SQLObject {
 		}
 		sources.put("Culture Biomes", fromCulture);
 		total += fromCulture;
-		
+
+        double talent = this.getBuffManager().getEffectiveDouble("level2_capitolHappinessCap");
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level2_civHappinessTown")) {
+            talent = this.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level2_civHappinessTown");
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level2_wonderCivHappinessTown")) {
+            talent = CivGlobal.getWonderCount();
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level3_extraRiverTown")) {
+            for (final CultureChunk cultureChunk : this.cultureChunks.values()) {
+                if (cultureChunk.getHappiness() < 0.02) {
+                    talent += 0.01;
+                }
+            }
+        }
+        total += talent;
 		/* Grab happiness generated from structures with components. */
 		double structures = 0;
 		for (Structure struct : this.structures.values()) {
@@ -3756,4 +3871,100 @@ public class Town extends SQLObject {
         }
         return x;
     }
+
+	 public int getReturnChance() {
+		 if (!this.hasTradeGood("good_titanium") && !this.hasTradeGood("good_poison_ivy")) {
+			 return 0;
+		 }
+		 int chance = 20;
+		 if (this.getTradeGoodCount("good_titanium") >= 2 || this.getTradeGoodCount("good_poison_ivy") >= 2) {
+			 chance = 30;
+		 }
+		 return chance;
+	 }
+
+	 public double getBonusCottageRate() {
+		 double rate = 1.0;
+		 for (final String goodID : this.tradeGoods.split(", ")) {
+			 if (CivSettings.goods.get(goodID) != null) {
+				 for (final ConfigBuff configBuff : CivSettings.goods.get(goodID).buffs.values()) {
+					 if (configBuff.id.equals("buff_demand")) {
+						 rate += 0.05;
+					 }
+				 }
+			 }
+		 }
+		 return rate;
+	 }
+
+	 public boolean otherCivHasNotreDame() {
+		 boolean has = false;
+		 for (final Relation relation : this.getCiv().getDiplomacyManager().getRelations()) {
+			 if (relation.getStatus().equals(Relation.Status.WAR)) {
+				 if (relation.isDeleted()) {
+					 continue;
+				 }
+				 if (this.getCiv() != relation.getAggressor()) {
+					 continue;
+				 }
+				 for (final Town town : relation.getOtherCiv().getTowns()) {
+					 if (town.hasWonder("w_notre_dame")) {
+						 has = true;
+						 break;
+					 }
+				 }
+			 }
+		 }
+		 return has;
+	 }
+
+	 public double getBonusUpkeep() {
+		 if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level8_noWarUpkeep")) {
+			 return 1.0;
+		 }
+		 if (!this.getCiv().getDiplomacyManager().isAtWar()) {
+			 return 1.0;
+		 }
+		 boolean enemyHasNotre = false;
+		 for (final Relation relation : this.getCiv().getDiplomacyManager().getRelations()) {
+			 if (relation.getStatus().equals(Relation.Status.WAR)) {
+				 if (relation.isDeleted()) {
+					 continue;
+				 }
+				 if (this.getCiv() != relation.getAggressor()) {
+					 continue;
+				 }
+				 for (final Town town : relation.getOtherCiv().getTowns()) {
+					 if (town.hasWonder("w_notre_dame")) {
+						 enemyHasNotre = true;
+						 break;
+					 }
+				 }
+			 }
+		 }
+		 double total = 1.0;
+		 for (final Relation relation2 : this.getCiv().getDiplomacyManager().getRelations()) {
+			 if (relation2.getStatus().equals(Relation.Status.WAR)) {
+				 if (relation2.isDeleted()) {
+					 continue;
+				 }
+				 if (this.getCiv() != relation2.getAggressor()) {
+					 continue;
+				 }
+				 total = 2.5;
+				 break;
+			 }
+		 }
+		 if (enemyHasNotre) {
+			 total = 5.0;
+		 }
+		 for (final Structure structure : this.getStructures()) {
+			 for (final Component comp : structure.attachedComponents) {
+				 if (comp instanceof AttributeWarUnpkeep) {
+					 total -= ((AttributeWarUnpkeep)comp).value;
+				 }
+			 }
+		 }
+		 return (total < 1.0) ? 1.0 : total;
+	 }
 }

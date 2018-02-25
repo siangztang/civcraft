@@ -35,6 +35,7 @@ import com.avrgaming.civcraft.object.BuildableDamageBlock;
 import com.avrgaming.civcraft.object.ControlPoint;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.object.StructureBlock;
+import com.avrgaming.civcraft.object.Town;
 import com.avrgaming.civcraft.object.TownChunk;
 import com.avrgaming.civcraft.permission.PlotPermissions;
 import com.avrgaming.civcraft.sessiondb.SessionEntry;
@@ -446,6 +447,25 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 			e.printStackTrace();
 			return;
 		}
+		if (this.getTown().getBuffManager().hasBuff("buff_chichen_itza_tower_hp") && this.getTown().getBuffManager().hasBuff("buff_greatlibrary_extra_beakers")) {
+            townhallControlHitpoints += 10;
+        }
+        int additionally = 0;
+        for (final Town town : this.getCiv().getTowns()) {
+            if (town.hasStructure("s_castle")) {
+                additionally += 3;
+            }
+        }
+        townhallControlHitpoints += additionally;
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level6_wcHPTown") && this.getCiv().getCapitol() != null) {
+            townhallControlHitpoints *= 2;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level5_extraHPcpTown") && this.getCiv().getCapitol() != null) {
+            townhallControlHitpoints *= (int)1.2;
+        }
+        if (this.getCiv().getCapitol() != null && this.getCiv().getCapitol().getBuffManager().hasBuff("level10_dominatorTown") && this.getCiv().getCapitol() != null) {
+            townhallControlHitpoints *= 2;
+        }
 		
 		BlockCoord coord = new BlockCoord(b);
 		this.controlPoints.put(coord, new ControlPoint(coord, this, townhallControlHitpoints));
@@ -557,6 +577,19 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public int getRegenRate() {
+		
+		if (this.getCiv().getCapitol().getBuffManager().hasBuff("level6_wcHPTown")) {
+			return 1;
+		}
+		if (this.info.regenRate == null) {
+			return 0;
+		}
+
+		return info.regenRate;
 	}
 	    
 

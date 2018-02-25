@@ -450,7 +450,10 @@ public class TrommelAsyncTask extends CivAsyncTask {
 							debug(this.trommel, "Doing Bonus");
 							processTrommelUpdate();
 						}
-					}					
+					}
+	                if (CivData.randChance(this.trommel.getTown().getReturnChance())) {
+	                    processTrommelUpdate();
+	                }		
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
