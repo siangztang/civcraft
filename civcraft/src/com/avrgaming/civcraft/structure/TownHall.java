@@ -316,7 +316,7 @@ public class TownHall extends Structure implements RespawnLocationHolder {
 		
 	}
 
-	public void createControlPoint(BlockCoord absCoord, String... info) {
+	public void createControlPoint(BlockCoord absCoord, String info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		

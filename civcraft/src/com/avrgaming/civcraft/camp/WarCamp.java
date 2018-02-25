@@ -230,7 +230,7 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 
 				break;
 			case "/control":
-				this.createControlPoint(absCoord);
+				this.createControlPoint(absCoord, "");
 				break;
 			}
 		}
@@ -418,7 +418,7 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 		
 	}
 	
-	public void createControlPoint(BlockCoord absCoord) {
+	public void createControlPoint(BlockCoord absCoord, String info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		
@@ -468,7 +468,7 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
         }
 		
 		BlockCoord coord = new BlockCoord(b);
-		this.controlPoints.put(coord, new ControlPoint(coord, this, townhallControlHitpoints));
+		this.controlPoints.put(coord, new ControlPoint(coord, this, townhallControlHitpoints, info));
 	}
 
 	@Override

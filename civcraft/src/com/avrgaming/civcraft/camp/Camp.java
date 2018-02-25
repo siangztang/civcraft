@@ -592,7 +592,7 @@ public class Camp extends Buildable {
 				this.addCampBlock(new BlockCoord(doorBlock2));
 				break;
 			case "/control":
-				this.createControlPoint(absCoord);
+				this.createControlPoint(absCoord, "");
 				break;
 			case "/literal":
 				/* Unrecognized command... treat as a literal sign. */
@@ -1107,7 +1107,7 @@ public class Camp extends Buildable {
 		}
 	}
 
-	public void createControlPoint(BlockCoord absCoord) {
+	public void createControlPoint(BlockCoord absCoord, String info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		
@@ -1133,7 +1133,7 @@ public class Camp extends Buildable {
 		}
 		
 		BlockCoord coord = new BlockCoord(b);		
-		this.controlBlocks.put(coord, new ControlPoint(coord, this, campControlHitpoints));
+		this.controlBlocks.put(coord, new ControlPoint(coord, this, campControlHitpoints, info));
 	}
 	
 	

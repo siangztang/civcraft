@@ -36,12 +36,12 @@ public class ControlPoint {
 	private Buildable buildable;
     private String info;
 
-	public ControlPoint (BlockCoord coord, Buildable buildable, int hitpoints, String ... info) {
+	public ControlPoint (BlockCoord coord, Buildable buildable, int hitpoints, String info) {
 		this.coord = coord;
 		this.setBuildable(buildable);
 		this.maxHitpoints = hitpoints;
 		this.hitpoints = this.maxHitpoints;
-		this.info = info[0];
+		this.info = info;
 	}
 	
 	/**

@@ -217,7 +217,7 @@ public class Capitol extends TownHall {
 	}
 	
 	@Override
-	public void createControlPoint(BlockCoord absCoord, String... info) {
+	public void createControlPoint(BlockCoord absCoord, String info) {
 		
 		Location centerLoc = absCoord.getLocation();
 		
