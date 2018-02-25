@@ -25,16 +25,16 @@ implements GuiAction {
     public void performAction(InventoryClickEvent event, ItemStack stack) {
         Player player = (Player)event.getWhoClicked();
         guiInventory = Bukkit.getServer().createInventory((InventoryHolder)player, 9, CivSettings.localize.localizedString("bookReborn_civSpaceHeading"));
-        ItemStack progressButton = LoreGuiItem.build("\u041f\u0440\u043e\u0433\u0440\u0435\u0441\u0441 \u043c\u0438\u0441\u0441\u0438\u0439", ItemManager.getId(Material.MAP), 0, "\u00a76" + CivSettings.localize.localizedString("click_to_view"));
+        ItemStack progressButton = LoreGuiItem.build(CivSettings.localize.localizedString("bookReborn_civSpaceProgressHeading"), ItemManager.getId(Material.MAP), 0, "§6" + CivSettings.localize.localizedString("click_to_view"));
         progressButton = LoreGuiItem.setAction(progressButton, "BookCivSpaceProgress");
         guiInventory.setItem(0, progressButton);
-        ItemStack endedMissionButton = LoreGuiItem.build("\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u043d\u044b\u0435 \u043c\u0438\u0441\u0441\u0438\u0438", ItemManager.getId(Material.MAP), 0, "\u00a76" + CivSettings.localize.localizedString("click_to_view"));
+        ItemStack endedMissionButton = LoreGuiItem.build(CivSettings.localize.localizedString("bookReborn_civSpaceEndedHeading"), ItemManager.getId(Material.MAP), 0, "§6" + CivSettings.localize.localizedString("click_to_view"));
         endedMissionButton = LoreGuiItem.setAction(endedMissionButton, "BookCivSpaceEnded");
         guiInventory.setItem(1, endedMissionButton);
-        ItemStack futureMissionsButton = LoreGuiItem.build("\u0411\u0443\u0434\u0443\u0449\u0438\u0435 \u043c\u0438\u0441\u0441\u0438\u0438", ItemManager.getId(Material.MAP), 0, "\u00a76" + CivSettings.localize.localizedString("click_to_view"));
+        ItemStack futureMissionsButton = LoreGuiItem.build(CivSettings.localize.localizedString("bookReborn_civSpaceFutureHeading"), ItemManager.getId(Material.MAP), 0, "§6" + CivSettings.localize.localizedString("click_to_view"));
         futureMissionsButton = LoreGuiItem.setAction(futureMissionsButton, "BookCivSpaceFuture");
         guiInventory.setItem(2, futureMissionsButton);
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("bookReborn_backToDashBoard"));
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("bookReborn_backToDashBoard"));
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", Book.guiInventory.getName());

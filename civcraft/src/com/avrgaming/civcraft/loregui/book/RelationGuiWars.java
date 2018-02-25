@@ -33,7 +33,7 @@ implements GuiAction {
         Inventory inventory = Bukkit.getServer().createInventory((InventoryHolder)event.getWhoClicked(), 54, CivSettings.localize.localizedString("resident_relationsGui_war"));
         for (Relation relation : civ.getDiplomacyManager().getRelations()) {
             if (relation.getStatus() == Relation.Status.WAR) {
-                itemStack = LoreGuiItem.build("", ItemManager.getId(Material.REDSTONE_BLOCK), 0, (Object)ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_relationToString", relation.toString()), "\u00a76" + CivSettings.localize.localizedString("relation_creationDate", sdf.format(relation.getCreatedDate())));
+                itemStack = LoreGuiItem.build("", ItemManager.getId(Material.REDSTONE_BLOCK), 0, (Object)ChatColor.RESET + CivSettings.localize.localizedString("resident_relationsGui_relationToString", relation.toString()), "§6" + CivSettings.localize.localizedString("relation_creationDate", sdf.format(relation.getCreatedDate())));
             }
             if (itemStack == null) continue;
             inventory.addItem(itemStack);

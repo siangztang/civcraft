@@ -36,7 +36,7 @@ implements GuiAction {
             return;
         }
         if (!civ.getLeaderGroup().hasMember(resident)) {
-            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPerm", "\u00a76" + civ.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPerm", "§6" + civ.getName() + CivColor.Red));
             return;
         }
         if (StringUtils.isBlank((String)civ.tradeGoods)) {
@@ -54,7 +54,7 @@ implements GuiAction {
             listInventory.setItem(i, tradeGood);
             ++i;
         }
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", BookGoodsGui.guiInventory.getName());

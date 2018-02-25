@@ -76,7 +76,7 @@ extends ProjectileComponent {
         }
         target.setFireTicks(60);
         resident.addPLCImmune(3);
-        CivMessage.send((Object)target, CivColor.LightGray + CivSettings.localize.localizedString("playerListen_combatHeading") + " " + CivSettings.localize.localizedString("var_playerListen_combatDefend", "\u00a7d'Enemey Tesla'", "\u00a7c" + dmg));
+        CivMessage.send((Object)target, CivColor.LightGray + CivSettings.localize.localizedString("playerListen_combatHeading") + " " + CivSettings.localize.localizedString("var_playerListen_combatDefend", "§d'Enemey Tesla'", CivColor.Red + dmg));
         CivMessage.sendTitle((Object)target, "", CivSettings.localize.localizedString("var_plc_entityMessage", this.getTown().getName()));
     }
 

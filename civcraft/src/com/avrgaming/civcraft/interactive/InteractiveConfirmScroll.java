@@ -90,7 +90,7 @@ implements InteractiveResponse {
                 CivMessage.sendCiv(civ, CivSettings.localize.localizedString("var_processScroll_addedHammersSettler", player.getDisplayName(), CivColor.LightGreenBold + 500 + CivColor.RESET, CivColor.GoldBold + town.getName() + CivColor.RESET));
             } else {
                 int percent = Integer.parseInt(lore[0].replaceAll("[^\\d]", ""));
-                String techName = nd.replace("\u00a7e\u041a " + CivColor.LightBlueBold, "");
+                String techName = nd;
                 if (civ.getResearchTech() == null) {
                     CivMessage.sendError(resident, CivSettings.localize.localizedString("var_processScroll_noTechInPrg", CivColor.LightGreenBold + percent + CivColor.RESET, CivColor.YellowBold + techName + CivColor.RESET));
                     resident.clearInteractiveMode();

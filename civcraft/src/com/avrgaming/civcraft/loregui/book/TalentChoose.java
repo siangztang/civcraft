@@ -39,7 +39,7 @@ implements GuiAction {
             return;
         }
         if (civ.isTalentIsUsed() && capitol.getCultureLevel() >= 10) {
-            CivMessage.send((Object)player, "\u00a7c" + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
+            CivMessage.send((Object)player, CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_choose_ended"));
             return;
         }
         ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(capitol.getCultureLevel());
@@ -51,7 +51,7 @@ implements GuiAction {
         firstTalent = LoreGuiItem.setActionData(firstTalent, "description", configLevelTalent.levelBuffDesc1);
         firstTalent = LoreGuiItem.setActionData(firstTalent, "passFields", "buff,number,description");
         firstTalent = LoreGuiItem.setActionData(firstTalent, "passAction", "ChooseTalent");
-        firstTalent = LoreGuiItem.setActionData(firstTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "\u00a7a", CivColor.GoldBold + "1" + "\u00a7a"));
+        firstTalent = LoreGuiItem.setActionData(firstTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "§a", CivColor.GoldBold + "1" + "§a"));
         firstTalent = LoreGuiItem.setActionData(firstTalent, "confirmText2", CivColor.RoseBold + configLevelTalent.levelBuffDesc1);
         ItemStack secondTalent = LoreGuiItem.build("", ItemManager.getId(Material.EMERALD_BLOCK), 0, configLevelTalent.levelBuffDesc2);
         secondTalent = LoreGuiItem.setAction(secondTalent, "Confirmation");
@@ -60,7 +60,7 @@ implements GuiAction {
         secondTalent = LoreGuiItem.setActionData(secondTalent, "description", configLevelTalent.levelBuffDesc2);
         secondTalent = LoreGuiItem.setActionData(secondTalent, "passFields", "buff,number,description");
         secondTalent = LoreGuiItem.setActionData(secondTalent, "passAction", "ChooseTalent");
-        secondTalent = LoreGuiItem.setActionData(secondTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "\u00a7a", CivColor.GoldBold + "2" + "\u00a7a"));
+        secondTalent = LoreGuiItem.setActionData(secondTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "§a", CivColor.GoldBold + "2" + "§a"));
         secondTalent = LoreGuiItem.setActionData(secondTalent, "confirmText2", CivColor.GoldBold + configLevelTalent.levelBuffDesc2);
         ItemStack thirdTalent = LoreGuiItem.build("", ItemManager.getId(Material.LAPIS_BLOCK), 0, configLevelTalent.levelBuffDesc3);
         thirdTalent = LoreGuiItem.setActionData(thirdTalent, "confirmText2", CivColor.BlueBold + configLevelTalent.levelBuffDesc3);
@@ -70,7 +70,7 @@ implements GuiAction {
         thirdTalent = LoreGuiItem.setActionData(thirdTalent, "description", configLevelTalent.levelBuffDesc3);
         thirdTalent = LoreGuiItem.setActionData(thirdTalent, "passFields", "buff,number,description");
         thirdTalent = LoreGuiItem.setActionData(thirdTalent, "passAction", "ChooseTalent");
-        thirdTalent = LoreGuiItem.setActionData(thirdTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "\u00a7a", CivColor.GoldBold + "3" + "\u00a7a"));
+        thirdTalent = LoreGuiItem.setActionData(thirdTalent, "confirmText", CivSettings.localize.localizedString("cmd_civ_talent_choose_confirmText", CivColor.GreenBold + capitol.getCultureLevel() + "§a", CivColor.GoldBold + "3" + "§a"));
         this.inventory.addItem(new ItemStack[]{firstTalent});
         this.inventory.addItem(new ItemStack[]{secondTalent});
         this.inventory.addItem(new ItemStack[]{thirdTalent});

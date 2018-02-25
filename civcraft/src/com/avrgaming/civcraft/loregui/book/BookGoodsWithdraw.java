@@ -38,11 +38,11 @@ implements GuiAction {
             return;
         }
         if (!to.getLeaderGroup().hasMember(resident) && !resident.getSelectedTown().getMayorGroup().hasMember(resident)) {
-            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPermM", "\u00a76" + to.getName() + "\u00a7c", "\u00a76" + from.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPermM", "§6" + to.getName() + CivColor.Red, "§6" + from.getName() + CivColor.Red));
             return;
         }
         if (StringUtils.isBlank((String)from.tradeGoods)) {
-            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "\u00a76" + from.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "§6" + from.getName() + CivColor.Red));
             return;
         }
         Inventory withdrawInventory = Bukkit.getServer().createInventory(player, 9, CivColor.GoldBold + CivSettings.localize.localizedString("cmd_civ_trade_gift_giftInvName", CivColor.RoseBold + from.getName()));
@@ -50,7 +50,7 @@ implements GuiAction {
         for (String goodID : from.tradeGoods.split(", ")) {
             ConfigTradeGood configTradeGood = CivSettings.goods.get(goodID);
             if (configTradeGood == null) continue;
-            String[] split = CivSettings.getBonusDisplayString(configTradeGood, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_clickToWithdraw", new StringBuilder().append("\u00a72").append(to.getName()).append("\u00a7a").toString())).split(";");
+            String[] split = CivSettings.getBonusDisplayString(configTradeGood, "§a" + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_clickToWithdraw", new StringBuilder().append("§2").append(to.getName()).append("§a").toString())).split(";");
             ItemStack tradeGood = LoreGuiItem.build(configTradeGood.name, configTradeGood.material, configTradeGood.material_data, split);
             tradeGood = LoreGuiItem.setAction(tradeGood, "Confirmation");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "civilizationName", to.getName());
@@ -58,11 +58,11 @@ implements GuiAction {
             tradeGood = LoreGuiItem.setActionData(tradeGood, "tradeGoodID", goodID);
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passFields", "civilizationName,townName,tradeGoodID");
             tradeGood = LoreGuiItem.setActionData(tradeGood, "passAction", "WithdrawTradeGood");
-            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_withdraw_confirmText", "\u00a72" + to.getName() + "\u00a7a"));
+            tradeGood = LoreGuiItem.setActionData(tradeGood, "confirmText", CivSettings.localize.localizedString("cmd_civ_trade_withdraw_confirmText", "§2" + to.getName() + "§a"));
             withdrawInventory.setItem(i, tradeGood);
             ++i;
         }
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", BookGoodsGui.guiInventory.getName());

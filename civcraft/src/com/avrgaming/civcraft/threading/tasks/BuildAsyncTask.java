@@ -233,9 +233,9 @@ public class BuildAsyncTask extends CivAsyncTask {
 		buildable.getTown().build_tasks.remove(this);
 		TaskMaster.syncTask(new PostBuildSyncTask(tpl, buildable), 10);
 		if (this.buildable instanceof Structure) {
-            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completed", this.buildable.getTown().getName(), "\u00a72" + this.buildable.getDisplayName() + CivColor.RESET));
+            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completed", this.buildable.getTown().getName(), "§2" + this.buildable.getDisplayName() + CivColor.RESET));
         } else if (this.buildable instanceof Wonder) {
-            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completedWonder", "\u00a7c" + this.buildable.getCiv().getName() + CivColor.RESET, "\u00a76" + this.buildable.getTown().getName() + CivColor.RESET, "\u00a7a" + this.buildable.getDisplayName() + CivColor.RESET));
+            CivMessage.global(CivSettings.localize.localizedString("var_buildAsync_completedWonder", CivColor.Red + this.buildable.getCiv().getName() + CivColor.RESET, "§6" + this.buildable.getTown().getName() + CivColor.RESET, "§a" + this.buildable.getDisplayName() + CivColor.RESET));
         }
 		buildable.onComplete();
 		return false;

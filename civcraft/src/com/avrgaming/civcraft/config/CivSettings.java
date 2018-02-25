@@ -955,13 +955,13 @@ public class CivSettings {
         for (ConfigBuff cBuff : configTradeGood.buffs.values()) {
             out.append((Object)ChatColor.UNDERLINE).append(cBuff.name);
             out.append(";");
-            out.append("\u00a7f" + (Object)ChatColor.ITALIC).append(cBuff.description);
+            out.append("§f" + (Object)ChatColor.ITALIC).append(cBuff.description);
             out.append(";");
         }
         if (configTradeGood.water) {
-            out.append("\u00a7b" + CivSettings.localize.localizedString("var_tradegood_water"));
+            out.append("§b" + CivSettings.localize.localizedString("var_tradegood_water"));
         } else {
-            out.append("\u00a7a" + CivSettings.localize.localizedString("var_tradegood_earth"));
+            out.append("§a" + CivSettings.localize.localizedString("var_tradegood_earth"));
         }
         out.append(";");
         if (!StringUtils.isBlank((String)addText)) {

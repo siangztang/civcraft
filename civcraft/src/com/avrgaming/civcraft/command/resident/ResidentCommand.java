@@ -88,7 +88,7 @@ public class ResidentCommand extends CommandBase {
             throw new CivException(CivSettings.localize.localizedString("cmd_res_report_badMessage", CivColor.GoldBold + split[2] + " " + split[3]));
         }
 		SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yy h:mm:ss a z");
-        CivMessage.send((Object)this.sender, "\u00a7c" + admin + ": Complaint #" + report.getId() + ": " + "\u00a7a" + result + "\u00a7b" + " (" + sdf.format(report.getCloseTime()) + ")");
+        CivMessage.send((Object)this.sender, CivColor.Red + admin + ": Complaint #" + report.getId() + ": " + "§a" + result + "§b" + " (" + sdf.format(report.getCloseTime()) + ")");
         resident.setReportChecked(false);
     }
 	

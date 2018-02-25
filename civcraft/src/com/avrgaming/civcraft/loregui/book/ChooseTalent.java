@@ -44,13 +44,13 @@ implements GuiAction {
             e.printStackTrace();
         }
         CivMessage.sendCiv(civ, CivSettings.localize.localizedString("cmd_civ_talent_choose_sucusses", player.getDisplayName(), number, description, capitol.getCultureLevel()));
-        CivMessage.send((Object)player, "\u00a7a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_sucussesSender"));
+        CivMessage.send((Object)player, "§a" + CivSettings.localize.localizedString("cmd_civ_talent_choose_sucussesSender"));
         player.closeInventory();
     }
 
     protected void addBuffToTown(Town town, String id) {
         try {
-            town.getBuffManager().addBuff(id, id, "\u041a\u0430\u043f\u0438\u0442\u043e\u043b\u0438\u0439 in " + town.getName());
+            town.getBuffManager().addBuff(id, id, "Capitol in " + town.getName());
         }
         catch (CivException e) {
             e.printStackTrace();

@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigSpaceMissions;
 import com.avrgaming.civcraft.loregui.GuiAction;
@@ -18,10 +19,10 @@ import com.avrgaming.civcraft.lorestorage.LoreGuiItemListener;
 import com.avrgaming.civcraft.main.CivCraft;
 import com.avrgaming.civcraft.main.CivGlobal;
 import com.avrgaming.civcraft.main.CivMessage;
-
 import com.avrgaming.civcraft.object.Civilization;
 import com.avrgaming.civcraft.object.Resident;
 import com.avrgaming.civcraft.threading.TaskMaster;
+import com.avrgaming.civcraft.util.CivColor;
 import com.avrgaming.civcraft.util.ItemManager;
 
 public class BookCivSpaceFuture
@@ -56,13 +57,13 @@ implements GuiAction {
         guiInventory = Bukkit.getServer().createInventory((InventoryHolder)player, 9, CivSettings.localize.localizedString("bookReborn_civSpaceFutureHeading"));
         for (int i = current; i <= 7; ++i) {
             ConfigSpaceMissions configSpaceMissions = CivSettings.spacemissions_levels.get(i);
-            ItemStack itemStack = LoreGuiItem.build("\u00a7c" + configSpaceMissions.name, ItemManager.getId(Material.GLASS), CivCraft.civRandom.nextInt(15), "\u00a76" + CivSettings.localize.localizedString("click_to_view"));
+            ItemStack itemStack = LoreGuiItem.build(CivColor.Red + configSpaceMissions.name, ItemManager.getId(Material.GLASS), CivCraft.civRandom.nextInt(15), "§6" + CivSettings.localize.localizedString("click_to_view"));
             itemStack = LoreGuiItem.setAction(itemStack, "CivSpaceComponents");
             itemStack = LoreGuiItem.setActionData(itemStack, "i", String.valueOf(i));
             itemStack = LoreGuiItem.setActionData(itemStack, "b", "false");
             guiInventory.addItem(itemStack);
         }
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, "\u041d\u0430\u0437\u0430\u0434 \u043a '\u0420\u0430\u043a\u0435\u0442\u043e\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435'");
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("loreGui_recipes_backMsg"));
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", BookCivSpace.guiInventory.getName());

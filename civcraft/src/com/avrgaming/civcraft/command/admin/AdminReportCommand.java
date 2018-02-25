@@ -25,28 +25,28 @@ extends CommandBase {
 
     public void close_cmd() throws CivException {
         if (this.args.length < 2) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("adcmd_report_close_enterID"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("adcmd_report_close_enterID"));
         }
         Integer reportID = Integer.parseInt(this.args[1]);
         Report report = CivGlobal.getReportById(reportID);
         if (report == null) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("adcmd_report_close_unkReport", reportID));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("adcmd_report_close_unkReport", reportID));
         }
         if (report.getClosed()) {
             Object[] arrobject = new Object[2];
             arrobject[0] = reportID;
             arrobject[1] = report.getBug() ? "bug" : "player";
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("adcmd_report_close_closedReport", arrobject));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("adcmd_report_close_closedReport", arrobject));
         }
         if (this.args.length < 3) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("adcmd_report_close_enterArgs"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("adcmd_report_close_enterArgs"));
         }
         StringBuilder messages = new StringBuilder();
         for (int i = 2; i < this.args.length; ++i) {
             messages.append(this.args[i]).append(i == this.args.length - 1 ? "" : " ");
         }
         report.close(this.sender.getName(), messages.toString());
-        CivMessage.sendSuccess(this.sender, "\u00a7c" + CivSettings.localize.localizedString("adcmd_report_close_succusess", reportID, messages.toString()));
+        CivMessage.sendSuccess(this.sender, CivColor.Red + CivSettings.localize.localizedString("adcmd_report_close_succusess", reportID, messages.toString()));
         Resident senderResident = CivGlobal.getResident(report.getReportedBy());
         senderResident.setReportChecked(true);
         senderResident.setReportResult(this.sender.getName() + "///" + messages + "///" + report.getCloseTime());
@@ -59,7 +59,7 @@ extends CommandBase {
         CivMessage.sendHeading(this.sender, "Server Bugs " + Bukkit.getServerName());
         for (Report report : CivGlobal.getReports()) {
             if (report.getClosed() || !report.getBug()) continue;
-            String message = CivColor.LightGray + "(" + report.getId() + ") " + "\u00a7a" + "Reporter: " + "\u00a7c" + report.getReportedBy() + " " + "\u00a7d" + "Time: " + sdf.format(report.getTime()) + " " + "\u00a7b" + "Proof: " + report.getProof();
+            String message = CivColor.LightGray + "(" + report.getId() + ") " + "§a" + "Reporter: " + CivColor.Red + report.getReportedBy() + " " + "§d" + "Time: " + sdf.format(report.getTime()) + " " + "§b" + "Proof: " + report.getProof();
             CivMessage.send((Object)this.sender, message);
         }
     }
@@ -69,7 +69,7 @@ extends CommandBase {
         CivMessage.sendHeading(this.sender, "Player Reports " + Bukkit.getServerName());
         for (Report report : CivGlobal.getReports()) {
             if (report.getClosed() || report.getBug()) continue;
-            String message = CivColor.LightGray + "(" + report.getId() + ") " + "\u00a7a" + "Reporter: " + "\u00a7c" + report.getReportedBy() + " " + "\u00a7d" + "Time: " + sdf.format(report.getTime()) + " " + "\u00a7b" + "Proof: " + report.getProof() + " " + "\u00a72" + "Player: " + report.getCause();
+            String message = CivColor.LightGray + "(" + report.getId() + ") " + "§a" + "Reporter: " + CivColor.Red + report.getReportedBy() + " " + "§d" + "Time: " + sdf.format(report.getTime()) + " " + "§b" + "Proof: " + report.getProof() + " " + "§2" + "Player: " + report.getCause();
             CivMessage.send((Object)this.sender, message);
         }
     }

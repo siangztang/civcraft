@@ -90,9 +90,9 @@ public class TownInfoCommand extends CommandBase {
             throw new CivException(CivSettings.localize.localizedString("cmd_town_info_tradeship_noShip"));
         }
         TradeShip tradeShip = (TradeShip)town.getStructureByType("ti_trade_ship");
-        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_level", "\u00a7b" + tradeShip.getLevel()));
-        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_progress", "\u00a7c" + tradeShip.getConsumeComponent().getCountString()));
-        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_stagnateDebuff", "\u00a76" + tradeShip.getLastResult() + "\u00a7a", "\u00a72" + "Progress" + "\u00a7a"));
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_level", "§b" + tradeShip.getLevel()));
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_progress", CivColor.Red + tradeShip.getConsumeComponent().getCountString()));
+        CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("cmd_town_info_tradeship_stagnateDebuff", "§6" + tradeShip.getLastResult() + "§a", "§2" + "Progress" + "§a"));
         CivMessage.sendHeading(this.sender, "");
     }
 
@@ -452,16 +452,16 @@ public class TownInfoCommand extends CommandBase {
 		out.add(CivColor.Green+CivSettings.localize.localizedString("SubTotal")+" "+CivColor.Yellow+total);
 		out.add(CivColor.Green+CivSettings.localize.localizedString("cmd_civ_gov_infoCottage")+" "+CivColor.Yellow+df.format(town.getCottageRate()*100)+"%");
         if (town.getBuffManager().hasBuff("buff_pyramid_cottage_bonus")) {
-            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_pyramid", new StringBuilder().append("\u00a7a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_pyramid_cottage_bonus") - 1.0) * 100.0)).toString()));
+            out.add("§2" + CivSettings.localize.localizedString("cmd_town_bonusCottage_pyramid", new StringBuilder().append("§a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_pyramid_cottage_bonus") - 1.0) * 100.0)).toString()));
         }
         if (town.getBuffManager().hasBuff("buff_hotel")) {
-            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_hotel", new StringBuilder().append("\u00a7a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_hotel") - 1.0) * 100.0)).toString()));
+            out.add("§2" + CivSettings.localize.localizedString("cmd_town_bonusCottage_hotel", new StringBuilder().append("§a").append(Math.round((town.getBuffManager().getEffectiveDouble("buff_hotel") - 1.0) * 100.0)).toString()));
         }
         if (town.getCiv().getCapitol() != null && town.getCiv().getCapitol().getBuffManager().hasBuff("level4_extraCottageTown")) {
-            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_talent", new StringBuilder().append("\u00a7a").append(Math.round((town.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level4_extraCottageTown") - 1.0) * 100.0)).toString()));
+            out.add("§2" + CivSettings.localize.localizedString("cmd_town_bonusCottage_talent", new StringBuilder().append("§a").append(Math.round((town.getCiv().getCapitol().getBuffManager().getEffectiveDouble("level4_extraCottageTown") - 1.0) * 100.0)).toString()));
         }
         if (town.getCiv().getStockExchangeLevel() >= 1) {
-            out.add("\u00a72" + CivSettings.localize.localizedString("cmd_town_bonusCottage_stockExchange", "\u00a7a30%", String.valueOf(town.getCiv().getStockExchangeLevel())));
+            out.add("§2" + CivSettings.localize.localizedString("cmd_town_bonusCottage_stockExchange", "§a30%", String.valueOf(town.getCiv().getStockExchangeLevel())));
         }
 		total *= town.getCottageRate();
 		out.add(CivColor.Green+CivSettings.localize.localizedString("Total")+" "+CivColor.Yellow+df.format(total)+" "+CivSettings.CURRENCY_NAME);

@@ -112,7 +112,7 @@ public class CivResearchCommand extends CommandBase {
         if (civ.getTechQueued() == null) {
             throw new CivException(CivSettings.localize.localizedString("cmd_civ_research_queueErrorListRemove"));
         }
-        CivMessage.sendCiv(civ, CivSettings.localize.localizedString("cmd_civ_research_queueListSucusses") + "\u00a7d" + civ.getTechQueued().name);
+        CivMessage.sendCiv(civ, CivSettings.localize.localizedString("cmd_civ_research_queueListSucusses") + "§d" + civ.getTechQueued().name);
     }
 
     public void calc_cmd() throws CivException {

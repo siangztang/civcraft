@@ -52,7 +52,7 @@ public class TalentList implements GuiAction
                 final int talentLevel = Integer.parseInt(buff.getId().replaceAll("[^\\d]", ""));
                 final ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(talentLevel);
                 int id = 5;
-                String description = "\u0421\u043b\u043e\u043c\u0430\u043b\u043e\u0441\u044c =(";
+                String description = CivSettings.localize.localizedString("Broken");
                 if (configLevelTalent.levelBuff1.equals(buff.getId())) {
                     id = ItemManager.getId(Material.REDSTONE_BLOCK);
                     description = "§c" + configLevelTalent.levelBuffDesc1;

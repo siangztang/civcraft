@@ -38,11 +38,11 @@ implements GuiAction {
             return;
         }
         if (!civ.getLeaderGroup().hasMember(resident) && !resident.getSelectedTown().getMayorGroup().hasMember(resident)) {
-            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPermM", "\u00a76" + civ.getName() + "\u00a7c", "\u00a76" + town.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("var_virtualTG_noPermM", "§6" + civ.getName() + CivColor.Red, "§6" + town.getName() + CivColor.Red));
             return;
         }
         if (StringUtils.isBlank((String)town.tradeGoods)) {
-            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "\u00a76" + town.getName() + "\u00a7c"));
+            CivMessage.sendError((Object)player, CivSettings.localize.localizedString("cmd_civ_trade_listtown_noGoods", "§6" + town.getName() + CivColor.Red));
             return;
         }
         Inventory listInventory = Bukkit.getServer().createInventory(player, 9, CivColor.GoldBold + CivSettings.localize.localizedString("cmd_civ_trade_listtown_listInvName", CivColor.RoseBold + town.getName()));
@@ -56,7 +56,7 @@ implements GuiAction {
             listInventory.setItem(i, tradeGood);
             ++i;
         }
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("var_virtualTG_backToMain"));
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", BookGoodsGui.guiInventory.getName());

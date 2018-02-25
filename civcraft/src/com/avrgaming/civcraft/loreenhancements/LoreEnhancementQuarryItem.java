@@ -12,7 +12,7 @@ extends LoreEnhancement
 implements Listener {
     @Override
     public String getDisplayName() {
-        return "\u041f\u0440\u0435\u0434\u043c\u0435\u0442 \u0441 \u043a\u0430\u0440\u044c\u0435\u0440\u0430";
+        return "Quarry Item";
     }
 
     @Override

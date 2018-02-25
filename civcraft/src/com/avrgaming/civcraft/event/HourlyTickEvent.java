@@ -57,7 +57,7 @@ public class HourlyTickEvent implements EventInterface {
             double completedHammers = Math.round(Double.valueOf(split[1]));
             int percentageCompleteBeakers = (int)((double)Math.round(Double.parseDouble(split[0])) / Double.parseDouble(CivSettings.spacemissions_levels.get((Object)Integer.valueOf((int)civ.getCurrentMission())).require_beakers) * 100.0);
             int percentageCompleteHammers = (int)((double)Math.round(Double.parseDouble(split[1])) / Double.parseDouble(CivSettings.spacemissions_levels.get((Object)Integer.valueOf((int)civ.getCurrentMission())).require_hammers) * 100.0);
-            CivMessage.sendCiv(civ, CivSettings.localize.localizedString("var_spaceshuttle_progress", "\u00a7c" + missionName + CivColor.RESET, "\u00a7b" + completedBeakers + "\u00a7c" + "(" + percentageCompleteBeakers + "%)" + CivColor.RESET, CivColor.LightGray + completedHammers + "\u00a7c" + "(" + percentageCompleteHammers + "%)" + CivColor.RESET));
+            CivMessage.sendCiv(civ, CivSettings.localize.localizedString("var_spaceshuttle_progress", CivColor.Red + missionName + CivColor.RESET, "§b" + completedBeakers + CivColor.Red + "(" + percentageCompleteBeakers + "%)" + CivColor.RESET, CivColor.LightGray + completedHammers + CivColor.Red + "(" + percentageCompleteHammers + "%)" + CivColor.RESET));
         }
 		
 		CivLog.info("TimerEvent: Hourly Finished -----------------------------");

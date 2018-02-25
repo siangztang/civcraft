@@ -321,7 +321,7 @@ public class BuildCommand extends CommandBase {
 		
 		Town town = getSelectedTown();
 		if (sinfo.id.equals("wonder_stock_exchange") && !town.canBuildStock(this.getPlayer())) {
-            throw new CivException("\u00a7c" + CivSettings.localize.localizedString("var_buildStockExchange_nogoodCondition", "http://wiki.minetexas.com/index.php/Stock_Exchange"));
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("var_buildStockExchange_nogoodCondition", "http://wiki.minetexas.com/index.php/Stock_Exchange"));
         }
 		if (sinfo.isWonder) {
 			Wonder wonder = Wonder.newWonder(getPlayer().getLocation(), sinfo.id, town);

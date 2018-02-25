@@ -46,10 +46,10 @@ implements QuestionResponseInterface {
             return;
         }
         if (param.equalsIgnoreCase("accept")) {
-            CivMessage.sendCiv(this.civ, "\u00a7a" + CivSettings.localize.localizedString("var_changetownrequest_accepted", fullLeaderName, fullResidentName, new StringBuilder().append("\u00a7c").append(this.from.getName()).toString(), new StringBuilder().append("\u00a7c").append(this.to.getName()).toString()));
+            CivMessage.sendCiv(this.civ, "§a" + CivSettings.localize.localizedString("var_changetownrequest_accepted", fullLeaderName, fullResidentName, new StringBuilder().append(CivColor.Red).append(this.from.getName()).toString(), new StringBuilder().append(CivColor.Red).append(this.to.getName()).toString()));
             this.changeTown();
         } else {
-            CivMessage.sendCiv(this.civ, CivColor.LightGray + CivSettings.localize.localizedString("var_changetownrequest_declined", fullLeaderName, fullResidentName, new StringBuilder().append("\u00a7c").append(this.from.getName()).toString(), new StringBuilder().append("\u00a7c").append(this.to.getName()).toString()));
+            CivMessage.sendCiv(this.civ, CivColor.LightGray + CivSettings.localize.localizedString("var_changetownrequest_declined", fullLeaderName, fullResidentName, new StringBuilder().append(CivColor.Red).append(this.from.getName()).toString(), new StringBuilder().append(CivColor.Red).append(this.to.getName()).toString()));
         }
     }
 
@@ -69,7 +69,7 @@ implements QuestionResponseInterface {
             this.resident.getTreasury().withdraw(50000.0);
             this.from.removeResident(this.resident);
             this.to.addResident(this.resident);
-            CivMessage.send((Object)this.resident, "\u00a7b" + CivSettings.localize.localizedString("sucusses_switch", this.to.getName()));
+            CivMessage.send((Object)this.resident, "§b" + CivSettings.localize.localizedString("sucusses_switch", this.to.getName()));
         }
         catch (AlreadyRegisteredException e) {
             e.printStackTrace();

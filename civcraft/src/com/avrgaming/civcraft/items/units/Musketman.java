@@ -32,7 +32,7 @@ extends UnitMaterial {
         AttributeUtil attrs = new AttributeUtil(is);
         attrs.addEnhancement("LoreEnhancementSoulBound", null, null);
         attrs.addLore(CivColor.Gold+CivSettings.localize.localizedString("itemLore_Souldbound"));
-        attrs.addLore("\u00a7bLevel 3");
+        attrs.addLore("§bLevel 3");
         attrs.addLore(CivColor.LightGray + "Effect:");
         attrs.addLore(CivColor.LightGray + "Passive");
         attrs.addLore(CivColor.LightGray + "+50% Sword Attack Bonus");

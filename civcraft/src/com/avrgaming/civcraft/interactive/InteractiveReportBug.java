@@ -26,7 +26,7 @@ implements InteractiveResponse {
             return;
         }
         if (message.equalsIgnoreCase("cancel")) {
-            CivMessage.send((Object)player, "\u00a7a" + (Object)ChatColor.BOLD + CivSettings.localize.localizedString("interactive_report_cancel"));
+            CivMessage.send((Object)player, "§a" + (Object)ChatColor.BOLD + CivSettings.localize.localizedString("interactive_report_cancel"));
             resident.clearInteractiveMode();
             return;
         }
@@ -41,7 +41,7 @@ implements InteractiveResponse {
             e.printStackTrace();
         }
         CivGlobal.addReport(report);
-        CivMessage.sendSuccess((CommandSender)player, CivSettings.localize.localizedString("var_interactive_reportbug_success", "\u00a7c" + message + CivColor.RESET, "\u00a7b" + report.getId()));
+        CivMessage.sendSuccess((CommandSender)player, CivSettings.localize.localizedString("var_interactive_reportbug_success", CivColor.Red + message + CivColor.RESET, "§b" + report.getId()));
         resident.clearInteractiveMode();
     }
 }

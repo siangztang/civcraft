@@ -87,27 +87,27 @@ public class AdminTownCommand extends CommandBase {
         for (Town town : CivGlobal.getTowns()) {
             String tradegoods =  town.tradeGoods;
             if (town == null || tradegoods.isEmpty()) continue;
-            result = result + "\u00a72" + town.getName() + ": ";
+            result = result + "§2" + town.getName() + ": ";
             for (String good : tradegoods.split(", ")) {
                 ConfigTradeGood configTradeGood = CivSettings.goods.get(good);
                 if (configTradeGood == null) continue;
-                result = result + "\u00a76" + configTradeGood.name + ", ";
+                result = result + "§6" + configTradeGood.name + ", ";
             }
         }
         if (result.equalsIgnoreCase("")) {
             throw new CivException(CivSettings.localize.localizedString("adcmd_town_tradegoods_noTradeGoods"));
         }
-        CivMessage.send((Object)this.sender, "\u00a7a" + CivSettings.localize.localizedString("adcmd_town_tradegoods_result", result));
+        CivMessage.send((Object)this.sender, "§a" + CivSettings.localize.localizedString("adcmd_town_tradegoods_result", result));
     }
 
     public void eventcancel_cmd() throws CivException {
         Town town = this.getNamedTown(1);
         if (town.getActiveEvent() == null) {
-            throw new CivException(CivSettings.localize.localizedString("adcmd_town_eventcancel_noEvent", "\u00a76" + town.getName() + "\u00a7c"));
+            throw new CivException(CivSettings.localize.localizedString("adcmd_town_eventcancel_noEvent", "§6" + town.getName() + CivColor.Red));
         }
         try {
-            CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("adcmd_town_eventcancel_succusess", "\u00a7b" + town.getName() + "\u00a7c", "\u00a76" + town.getActiveEvent().configRandomEvent.name));
-            CivMessage.sendTown(town, CivSettings.localize.localizedString("adcmd_town_eventcancel_succusessTown", "\u00a7a" + town.getActiveEvent().configRandomEvent.name + CivColor.RESET, ((Player)this.sender).getDisplayName()));
+            CivMessage.sendSuccess(this.sender, CivSettings.localize.localizedString("adcmd_town_eventcancel_succusess", "§b" + town.getName() + CivColor.Red, "§6" + town.getActiveEvent().configRandomEvent.name));
+            CivMessage.sendTown(town, CivSettings.localize.localizedString("adcmd_town_eventcancel_succusessTown", "§a" + town.getActiveEvent().configRandomEvent.name + CivColor.RESET, ((Player)this.sender).getDisplayName()));
             town.getActiveEvent().delete();
             town.setActiveEvent(null);
         }

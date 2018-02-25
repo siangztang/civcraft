@@ -34,7 +34,7 @@ implements GuiAction {
         catch (CivException e) {
             String message = e.getMessage();
             CivMessage.sendError((Object)player, message);
-            if (message.contains("\u041d\u0435\u043b\u044c\u0437\u044f \u0438\u043c\u0435\u0442\u044c \u0431\u043e\u043b\u0435\u0435")) {
+            if (message.contains("You can not have more")) {
                 from.depositTradeGood(tradeGoodID);
             }
             try {
@@ -49,8 +49,8 @@ implements GuiAction {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        CivMessage.sendCiv(to, CivSettings.localize.localizedString("cmd_civ_trade_withdraw_succusessMessageTo", player.getDisplayName(), "\u00a7a" + from.getName() + "\u00a7e", "\u00a7c" + CivSettings.goods.get((Object)tradeGoodID).name + CivColor.RESET));
-        CivMessage.sendTown(from, "\u00a7e" + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_succusessMessageFrom", new StringBuilder().append(player.getDisplayName()).append("\u00a7e").toString(), new StringBuilder().append("\u00a7c").append(CivSettings.goods.get((Object)tradeGoodID).name).append("\u00a7e").toString()));
+        CivMessage.sendCiv(to, CivSettings.localize.localizedString("cmd_civ_trade_withdraw_succusessMessageTo", player.getDisplayName(), "§a" + from.getName() + "§e", CivColor.Red + CivSettings.goods.get((Object)tradeGoodID).name + CivColor.RESET));
+        CivMessage.sendTown(from, "§e" + CivSettings.localize.localizedString("cmd_civ_trade_withdraw_succusessMessageFrom", new StringBuilder().append(player.getDisplayName()).append("§e").toString(), new StringBuilder().append(CivColor.Red).append(CivSettings.goods.get((Object)tradeGoodID).name).append("§e").toString()));
         player.closeInventory();
     }
 }

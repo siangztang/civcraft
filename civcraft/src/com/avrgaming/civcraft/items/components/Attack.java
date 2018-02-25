@@ -114,7 +114,7 @@ public class Attack extends ItemComponent {
                 }
                 Object[] arrobject = new Object[2];
                 arrobject[0] = toDamage;
-                arrobject[1] = !(toDamage instanceof Player) ? CivColor.RoseBold + CivColor.ITALIC + "\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043e " + CivColor.RESET + CivColor.LightBlueItalic : "";
+                arrobject[1] = !(toDamage instanceof Player) ? CivColor.RoseBold + CivColor.ITALIC + "Player " + CivColor.RESET + CivColor.LightBlueItalic : "";
                 CivMessage.send((Object)event.getDamager(), CivColor.LightBlueItalic + CivSettings.localize.localizedString("loreEnh_LightStrike_Sucusses", arrobject));
                 if (!(toDamage instanceof Player)) continue;
                 CivMessage.send((Object)event.getEntity(), CivSettings.localize.localizedString("loreEnh_LightStrike_Sucusses2", event.getDamager().getName()));

@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+
 import com.avrgaming.civcraft.config.CivSettings;
 import com.avrgaming.civcraft.config.ConfigSpaceRocket;
 import com.avrgaming.civcraft.loregui.CivSpaceEnded;
@@ -33,12 +34,12 @@ implements GuiAction {
             int count = Integer.parseInt(craftMatID.replaceAll("[^\\d]", ""));
             String craftMat = craftMatID.replace(String.valueOf(count), "");
             LoreCraftableMaterial itemToGetName = LoreCraftableMaterial.getCraftMaterialFromId(craftMat);
-            ItemStack itemStack = LoreGuiItem.build(itemToGetName.getName(), itemToGetName.getConfigMaterial().item_id, itemToGetName.getConfigMaterial().item_data, "\u00a76\u0420\u0430\u043a\u0435\u0442\u043e\u0441\u0442\u0440\u043e\u0435\u043d\u0438\u0435");
+            ItemStack itemStack = LoreGuiItem.build(itemToGetName.getName(), itemToGetName.getConfigMaterial().item_id, itemToGetName.getConfigMaterial().item_data, "§6"+CivSettings.localize.localizedString("bookReborn_civSpaceMenu"));
             itemStack.setAmount(count);
             guiInventory.addItem(itemStack);
         }
-        String backTo = fromEnded ? "'\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u043d\u044b\u0435 \u043c\u0438\u0441\u0441\u0438'" : "\u0411\u0443\u0434\u0443\u0449\u0438\u0435 \u043c\u0438\u0441\u0441\u0438\u0438";
-        ItemStack backButton = LoreGuiItem.build("\u041d\u0430\u0437\u0430\u0434", ItemManager.getId(Material.MAP), 0, "\u041d\u0430\u0437\u0430\u0434 \u043a " + backTo);
+        String backTo = fromEnded ? CivSettings.localize.localizedString("bookReborn_civSpaceEndedHeading") : CivSettings.localize.localizedString("bookReborn_civSpaceFutureHeading");
+        ItemStack backButton = LoreGuiItem.build(CivSettings.localize.localizedString("loreGui_recipes_back"), ItemManager.getId(Material.MAP), 0, CivSettings.localize.localizedString("loregui_backto")+" " + backTo);
         backButton = LoreGuiItem.setAction(backButton, "OpenInventory");
         backButton = LoreGuiItem.setActionData(backButton, "invType", "showGuiInv");
         backButton = LoreGuiItem.setActionData(backButton, "invName", fromEnded ? CivSpaceEnded.guiInventory.getName() : CivSpaceFuture.guiInventory.getName());

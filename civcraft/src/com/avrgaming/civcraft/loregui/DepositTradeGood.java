@@ -35,7 +35,7 @@ implements GuiAction {
         catch (CivException e) {
             String message = e.getMessage();
             CivMessage.sendError((Object)player, message);
-            if (message.contains("\u0423 \u0432\u0430\u0448\u0435\u0439 \u0446\u0438\u0432\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u0438 \u043d\u0435\u0442")) {
+            if (message.contains("Your civilization does not have")) {
                 to.withdrawTradeGood(tradeGoodID);
             }
             try {
@@ -50,8 +50,8 @@ implements GuiAction {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        CivMessage.sendCiv(from, CivSettings.localize.localizedString("cmd_civ_trade_deposit_succusessMessageFrom", player.getDisplayName(), "\u00a7a" + to.getName() + CivColor.RESET, "\u00a7c" + CivSettings.goods.get((Object)tradeGoodID).name + CivColor.RESET));
-        CivMessage.sendTown(to, "\u00a7e" + CivSettings.localize.localizedString("cmd_civ_trade_deposit_succusessMessageFrom", new StringBuilder().append(player.getDisplayName()).append("\u00a7e").toString(), new StringBuilder().append("\u00a7a").append(from.getName()).append("\u00a7e").toString(), new StringBuilder().append("\u00a7c").append(CivSettings.goods.get((Object)tradeGoodID).name).append("\u00a7e").toString()));
+        CivMessage.sendCiv(from, CivSettings.localize.localizedString("cmd_civ_trade_deposit_succusessMessageFrom", player.getDisplayName(), "§a" + to.getName() + CivColor.RESET, CivColor.Red + CivSettings.goods.get((Object)tradeGoodID).name + CivColor.RESET));
+        CivMessage.sendTown(to, "§e" + CivSettings.localize.localizedString("cmd_civ_trade_deposit_succusessMessageFrom", new StringBuilder().append(player.getDisplayName()).append("§e").toString(), new StringBuilder().append("§a").append(from.getName()).append("§e").toString(), new StringBuilder().append(CivColor.Red).append(CivSettings.goods.get((Object)tradeGoodID).name).append("§e").toString()));
         player.closeInventory();
     }
 }

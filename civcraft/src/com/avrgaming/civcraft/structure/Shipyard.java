@@ -164,7 +164,7 @@ public class Shipyard extends WaterStructure {
                     return;
                 }
                 nextTeleport = timeNow + 60000L;
-                CivMessage.send((Object)player, "\u00a7a" + CivSettings.localize.localizedString("stable_respawningAlert"));
+                CivMessage.send((Object)player, "§a" + CivSettings.localize.localizedString("stable_respawningAlert"));
                 player.teleport(placeToTeleport);
                 resident.getTreasury().withdraw(1000.0);
                 resident.setNextTeleport(nextTeleport);
