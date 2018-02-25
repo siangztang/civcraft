@@ -341,7 +341,7 @@ public class PostBuildSyncTask implements Runnable {
 			case "/control":
 				if (buildable instanceof TownHall) {
 					TownHall townhall = (TownHall)buildable;
-					townhall.createControlPoint(absCoord);
+					townhall.createControlPoint(absCoord, "");
 				}
                 if (!(buildable instanceof Neuschwanstein)) {
                     break;
