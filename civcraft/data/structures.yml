@@ -694,8 +694,8 @@ structures:
 
   - id: s_spoil
     template: kamenolom
-    template_y_shift: 1
-    displayName: Spoil
+    template_y_shift: -10
+    displayName: Excavation Site
     allow_outside_town: false
     require_tech: 'tech_construction'
     require_structure:

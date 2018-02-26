@@ -117,7 +117,13 @@ public class AdminCommand extends CommandBase {
         commands.put("talentcount", CivSettings.localize.localizedString("adcmd_talentcount"));
         commands.put("gc", CivSettings.localize.localizedString("cmd_gc"));
         commands.put("pasteruin", CivSettings.localize.localizedString("cmd_pasteruin"));
+        commands.put("report", CivSettings.localize.localizedString("adcmd_report"));
 	}
+    
+    public void report_cmd() {
+        final AdminReportCommand cmd = new AdminReportCommand();
+        cmd.onCommand(this.sender, null, "report", this.stripArgs(this.args, 1));
+    }
 	
     public void pasteruin_cmd() throws CivException {
         final Schematic schem = WorldListener.schematics.get(CivCraft.civRandom.nextInt(WorldListener.schematics.size() - 1));

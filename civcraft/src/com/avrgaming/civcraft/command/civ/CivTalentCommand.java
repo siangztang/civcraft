@@ -51,6 +51,9 @@ public class CivTalentCommand extends CommandBase {
             throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_next_ended"));
         }
         ConfigLevelTalent configLevelTalent = CivSettings.talentLevels.get(capitol.getCultureLevel() + 1);
+        if (configLevelTalent == null) {
+            throw new CivException(CivColor.Red + CivSettings.localize.localizedString("cmd_civ_talent_next_ended"));
+        }
         CivMessage.sendHeading(sender, configLevelTalent.levelName + " (" + configLevelTalent.level + ")");
         CivMessage.send((Object)sender, CivColor.Red + configLevelTalent.levelBuffDesc1);
         CivMessage.send((Object)sender, CivColor.Green + configLevelTalent.levelBuffDesc2);
