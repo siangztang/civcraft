@@ -126,7 +126,6 @@ public class Civilization extends SQLObject {
 	private LinkedList<WarCamp> warCamps = new LinkedList<WarCamp>();
     private ConfigTech techQueue = null;
     private double settlerCost = 25000.0;
-    private boolean talentIsUsed;
     int currentMission = 1;
     boolean missionActive = false;
     String missionProgress = "0:0";
@@ -188,7 +187,6 @@ public class Civilization extends SQLObject {
 					"`conquered_date` long,"+
 				    "`created_date` long," +
 				    "`settlerCost` double DEFAULT 25000,"+
-				    "`talentIsUsed` boolean DEFAULT false,"+
 				    "`currentMission` int(11) DEFAULT 0,"+
 				    "`missionActive` boolean DEFAULT false,"+
 				    "`missionProgress` mediumtext,"+
@@ -268,7 +266,6 @@ public class Civilization extends SQLObject {
 				this.setCurrentEra(tech.era);
 			}
 		}
-		this.talentIsUsed = rs.getBoolean("talentIsUsed");
         this.currentMission = rs.getInt("currentMission");
         this.missionActive = rs.getBoolean("missionActive");
         this.missionProgress = rs.getString("missionProgress");
@@ -319,7 +316,6 @@ public class Civilization extends SQLObject {
 		hashmap.put("adminCiv", this.adminCiv);
 		hashmap.put("conquered", this.conquered);
         hashmap.put("settlerCost", this.settlerCost);
-        hashmap.put("talentIsUsed", this.talentIsUsed);
         hashmap.put("currentMission", this.currentMission);
         hashmap.put("missionActive", this.missionActive);
         hashmap.put("missionProgress", this.missionProgress);
@@ -1975,14 +1971,6 @@ public class Civilization extends SQLObject {
     
     public void setSettlerCost(final double settlerCost) {
         this.settlerCost = settlerCost;
-    }
-    
-    public boolean isTalentIsUsed() {
-        return this.talentIsUsed;
-    }
-    
-    public void setIsUsedTalent(final Boolean bool) {
-        this.talentIsUsed = bool;
     }
     
     public int getStockExchangeLevel() {

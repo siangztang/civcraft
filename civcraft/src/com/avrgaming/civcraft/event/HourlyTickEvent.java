@@ -45,7 +45,7 @@ public class HourlyTickEvent implements EventInterface {
 		TaskMaster.syncTask(new CampHourlyTick(), 0);
 		
 		for (Civilization civ : CivGlobal.getCivs()) {
-            if (civ.isTalentIsUsed()) continue;
+            if (civ.getCapitol().highestTalentLevel() >= civ.getCapitol().getCultureLevel()) continue;
             CivMessage.sendCiv(civ, CivSettings.localize.localizedString("PlayerLoginAsync_civTalentNotUsed"));
         }
         for (Civilization civ : CivGlobal.getCivs()) {

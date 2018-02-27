@@ -198,7 +198,7 @@ public class Town extends SQLObject {
 	private Date created_date;
 	
     public String tradeGoods = "";
-    private String talents = "";
+    private ArrayList<Talent> talents = new ArrayList<Talent>();
     private long conquered_date = 0L;
     private String quarryPickaxes = "0:0:0:0:0:0:0:0";
 	
@@ -288,7 +288,7 @@ public class Town extends SQLObject {
 		//this.setHomeChunk(rs.getInt("homechunk_id"));
 		this.setExtraHammers(rs.getDouble("extra_hammers"));
 		this.setAccumulatedCulture(rs.getInt("culture"));
-        this.talents = rs.getString("talents");
+        this.setTalentsFromString(rs.getString("talents"));
         this.conquered_date = rs.getLong("conquered_date");
 		if (rs.getString("quarryPickaxes") != null && !rs.getString("quarryPickaxes").equalsIgnoreCase("")) {
             this.quarryPickaxes = rs.getString("quarryPickaxes");
@@ -328,7 +328,6 @@ public class Town extends SQLObject {
 		}
 		
 		this.getCiv().addTown(this);	
-        this.setTalentsFromString(this.talents);
         this.processTradeLoad();
 	}
 
@@ -363,7 +362,7 @@ public class Town extends SQLObject {
 		hashmap.put("upgrades", this.getUpgradesString());
 		hashmap.put("coins", this.getTreasury().getBalance());
 		hashmap.put("dbg_civ_name", this.getCiv().getName());
-        hashmap.put("talents", this.talents);
+        hashmap.put("talents", this.getStringFromTalents());
         hashmap.put("conquered_date", this.conquered_date);
         hashmap.put("quarryPickaxes", this.quarryPickaxes);
         hashmap.put("tradeGoods", this.tradeGoods);
@@ -3647,33 +3646,59 @@ public class Town extends SQLObject {
         return null;
     }
     
-    public String getTalents() {
+    public ArrayList<Talent> getTalents() {
         return this.talents;
     }
-    
-    public void addTalent(final String talent) {
-        (this.talents = this.talents + "," + talent).replace("null", "");
-        for (final Structure structure : this.getStructures()) {
-            structure.onBonusGoodieUpdate();
-        }
+
+    public void addTalent(final Talent talent) throws CivException {
+    	this.talents.add(talent);
+    	if (!this.getBuffManager().hasBuff(talent.buff) && talent.buff != null) {
+    		this.getBuffManager().addBuff(talent.buff, talent.buff, "Talent in " + this.getName());
+    		for (final Structure structure : this.getStructures()) {
+    			structure.onBonusGoodieUpdate();
+    		}
+    	}
+    }
+
+    private void setTalentsFromString(final String talents) throws CivException {
+    	if (talents.length() == 0) {
+    		return;
+    	}
+    	String[] split = talents.split(",");
+    	for (final String talentUnparsed : split) {
+    		if (talentUnparsed == null) {
+    			continue;
+    		}
+    		String[] talentParsed = talentUnparsed.split(".");
+    		Talent talent = new Talent(Integer.valueOf(talentParsed[0]), talentParsed[1]);
+    		this.talents.add(talent);
+    		if (!this.getBuffManager().hasBuff(talent.buff) && talent.buff != null) {
+    			this.getBuffManager().addBuff(talent.buff, talent.buff, "Talent in " + this.getName());
+    		}
+    	}
+    	if (this.talents.size() >= 1) {
+    		for (final Structure structure : this.getStructures()) {
+    			structure.onBonusGoodieUpdate();
+    		}
+    	}
+    }
+
+    private String getStringFromTalents() {
+    	String string = "";
+    	for (Talent talent : this.talents) {
+    		string += talent.level+"."+talent.buff+",";
+    	}
+    	return string;
     }
     
-    private void setTalentsFromString(final String talentshString) throws CivException {
-        String[] split = talentshString.split(",");
-        for (final String talentId : split) {
-            if (talentId != null) {
-                if (!talentId.equals("")) {
-                    try {
-                        if (!this.getBuffManager().hasBuff(talentId) && talentId != null) {
-                            this.getBuffManager().addBuff(talentId, talentId, "Talent " + this.getName());
-                        }
-                    }
-                    catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+    public int highestTalentLevel() {
+    	int level = 0;
+    	CivLog.debug("level 0");
+    	for (Talent talent : this.talents) {
+    		level = Math.max(level, talent.level);
+        	CivLog.debug("level "+level);
+    	}
+    	return level;
     }
     
     public ArrayList<ConfigUnit> getAvailableArtifacts() {

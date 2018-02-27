@@ -58,10 +58,6 @@ culture_levels:
       chunks: 40
 
 talent_levels:
-# Приписка Cap - для баффов только на столицу (все баффается на столицу, но при основании новых город нужно же им давать этот бафф, если он на циву)
-# Приписка Town - для цивы
-# Также при захвате чтоб не стакали баффы
-
     - level: 1
       levelName: 'Capitol'
       levelBuff1: 'level1_hammerRateCap'
@@ -108,7 +104,7 @@ talent_levels:
       levelBuffDesc3: 'Increases the strength of the control blocks by 20%'
     
     - level: 6
-      levelName: 'Stone of Intercession'
+      levelName: 'Conflict'
       levelBuff1: 'level6_extraCPdmgTown'
       levelBuff2: 'level6_extraStrucutreDmgTown'
       levelBuff3: 'level6_wcHPTown'
@@ -117,7 +113,7 @@ talent_levels:
       levelBuffDesc3: 'Doubles the HP of the War camps and allows it to regenerate 1 hp per minute.'
     
     - level: 7
-      levelName: 'The science'
+      levelName: 'Scienctific'
       levelBuff1: 'level7_cheaperCostCap'
       levelBuff2: 'level7_higherIncomeTown'
       levelBuff3: 'level7_extraInBestTown'
