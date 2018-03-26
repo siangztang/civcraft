@@ -177,6 +177,19 @@ public class WarListener implements Listener {
 		if (War.isWarTime()) {
 			event.setCancelled(false);
 		} else {
+			if (event.getEntity() instanceof TNTPrimed) {
+				TNTPrimed tnt = (TNTPrimed) event.getEntity();
+				if (tnt.getSource() instanceof Player) {
+					Player p = (Player) tnt.getSource();
+					Resident res = CivGlobal.getResident(p);
+					coord.setFromLocation(event.getLocation());
+					CultureChunk cc = CivGlobal.getCultureChunk(coord);
+					if (cc != null && cc.getCiv() == res.getCiv()) {
+						event.setCancelled(false);
+						return;
+					}
+				}
+			}
 			event.setCancelled(true);
 			return;
 		}
