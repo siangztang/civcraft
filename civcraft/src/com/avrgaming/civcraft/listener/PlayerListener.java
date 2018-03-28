@@ -439,11 +439,9 @@ public class PlayerListener implements Listener {
 	public void OnBrewEvent(BrewEvent event) {
 		/* Hardcoded disables based on ingredients used. */
 		if (event.getContents().contains(Material.BLAZE_POWDER)) {
-			for (int i = 0; i < 4; i++) {
-				if (event.getContents().getItem(i).getType() == Material.BLAZE_POWDER) {
-					event.setCancelled(true);
-					return;
-				}
+			if (event.getContents().getItem(3).getType() == Material.BLAZE_POWDER) {
+				event.setCancelled(true);
+				return;
 			}
 		}
 		
