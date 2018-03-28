@@ -438,14 +438,22 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void OnBrewEvent(BrewEvent event) {
 		/* Hardcoded disables based on ingredients used. */
-		if (event.getContents().contains(Material.SPIDER_EYE) ||
-			event.getContents().contains(Material.GOLDEN_CARROT) ||
-			event.getContents().contains(Material.GHAST_TEAR) ||
-			event.getContents().contains(Material.FERMENTED_SPIDER_EYE) ||
-			event.getContents().contains(Material.BLAZE_POWDER) ||
-			event.getContents().contains(Material.SULPHUR)) {
-			event.setCancelled(true);
+		if (event.getContents().contains(Material.BLAZE_POWDER)) {
+			for (int i = 0; i < 4; i++) {
+				if (event.getContents().getItem(i).getType() == Material.BLAZE_POWDER) {
+					event.setCancelled(true);
+					return;
+				}
+			}
 		}
+		
+		if (event.getContents().contains(Material.SPIDER_EYE) ||
+				event.getContents().contains(Material.GOLDEN_CARROT) ||
+				event.getContents().contains(Material.GHAST_TEAR) ||
+				event.getContents().contains(Material.FERMENTED_SPIDER_EYE) ||
+				event.getContents().contains(Material.SULPHUR)) {
+				event.setCancelled(true);
+			}
 		
 		if (event.getContents().contains(Material.POTION)) {
 			ItemStack potion = event.getContents().getItem(event.getContents().first(Material.POTION));
