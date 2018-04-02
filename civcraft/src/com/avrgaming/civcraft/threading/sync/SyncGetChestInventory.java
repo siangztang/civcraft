@@ -51,13 +51,12 @@ public class SyncGetChestInventory implements Runnable {
 	
 	@Override
 	public void run() {
-		
 		if (lock.tryLock()) {
 			try {	
 				for (int i = 0; i < UPDATE_LIMIT; i++) {
 					GetChestRequest request = requestQueue.poll();
 					if (request == null) {
-						continiue;
+						continue;
 					}
 					
 					Chest chest = null;
