@@ -519,7 +519,7 @@ public class WarCamp extends Buildable implements RespawnLocationHolder {
 		
 		boolean allDestroyed = true;
 		for (ControlPoint c : this.controlPoints.values()) {
-			if (c.isDestroyed() == false) {
+			if (!c.isDestroyed() && c.getBuildable() == this) {
 				allDestroyed = false;
 				break;
 			}
