@@ -188,6 +188,10 @@ public class PlayerListener implements Listener {
 //					}
 //				}
 			}
+			
+			if (!event.isCancelled()) {
+				TaskMaster.asyncTask(PlayerChunkNotifyAsyncTask.class.getSimpleName(), 
+					new PlayerChunkNotifyAsyncTask(event.getFrom(), event.getTo(), event.getPlayer().getName()), 0);
 		}
 	}
 		
