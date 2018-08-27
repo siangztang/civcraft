@@ -1075,13 +1075,17 @@ public class CivGlobal {
 		sb.setDamageable(damageable);
 		structureBlocks.put(coord, sb);
 		
-		String key = getXYKey(coord);
-		HashSet<Buildable> buildables = buildablesInChunk.get(key);
-		if (buildables == null) {
-			buildables = new HashSet<Buildable>();
+		if (!(owner instanceof Wall) && !(owner instanceof Road)) {
+			String key = getXYKey(coord);
+			HashSet<Buildable> buildables = buildablesInChunk.get(key);
+			
+			if (buildables == null) {
+				buildables = new HashSet<Buildable>();
+			}
+			
+			buildables.add(owner);
+			buildablesInChunk.put(key, buildables);
 		}
-		buildables.add(owner);
-		buildablesInChunk.put(key, buildables);
 		
 //		BlockCoord xz = new BlockCoord(coord.getWorldname(), coord.getX(), 0, coord.getZ());
 //		LinkedList<StructureBlock> sbList = structureBlocksIn2D.get(xz);
