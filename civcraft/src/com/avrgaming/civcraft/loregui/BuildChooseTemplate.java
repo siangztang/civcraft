@@ -79,6 +79,7 @@ public class BuildChooseTemplate implements GuiAction {
 					CivColor.Gray+CivSettings.localize.localizedString("loreGui_template_unbound5"));				
 			infoRec = LoreGuiItem.setAction(infoRec, "ActivatePerk");
 			infoRec = LoreGuiItem.setActionData(infoRec, "perk", perk.getIdent());
+			inv.addItem(infoRec);
 			}
 		}
 		
