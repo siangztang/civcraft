@@ -19,12 +19,13 @@
 package com.avrgaming.civcraft.threading.sync;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 
 import com.avrgaming.civcraft.main.CivData;
 import com.avrgaming.civcraft.threading.sync.request.GetChestRequest;
@@ -33,16 +34,15 @@ import com.avrgaming.civcraft.util.ItemManager;
 public class SyncGetChestInventory implements Runnable {
 	
 	public static final int TIMEOUT_SECONDS = 2;
-	public static final int UPDATE_LIMIT = 20;
+	public static final int UPDATE_LIMIT = 250;
 	
 	public static ReentrantLock lock;
 	
-	public static Queue<GetChestRequest> requestQueue = new LinkedList<GetChestRequest>();
+	public static ConcurrentLinkedQueue<GetChestRequest> requestQueue =
+            new ConcurrentLinkedQueue<>();
 	
-	public static boolean add(GetChestRequest request)  
-	{
-		//XXX is this needed anymore?
-		return requestQueue.offer(request);
+	public static boolean add(GetChestRequest request) {
+		return requestQueue.add(request);
 	}
 	
 	public SyncGetChestInventory() {
@@ -51,32 +51,39 @@ public class SyncGetChestInventory implements Runnable {
 	
 	@Override
 	public void run() {
-		
 		if (lock.tryLock()) {
 			try {	
 				for (int i = 0; i < UPDATE_LIMIT; i++) {
 					GetChestRequest request = requestQueue.poll();
 					if (request == null) {
-						return;
+						continue;
 					}
 					
-					Block b = Bukkit.getWorld(request.worldName).getBlockAt(request.block_x, request.block_y, request.block_z);
 					Chest chest = null;
-
-					// We will return NULL if the chunk was not loaded.
-					if (b.getChunk().isLoaded()) {
-						try {
-							chest = (Chest)b.getState();
-						} catch (ClassCastException e) {
-							/* The block wasn't a chest, but force it. */
-							ItemManager.setTypeId(b, CivData.CHEST);
-							ItemManager.setTypeId(b.getState(), CivData.CHEST);
-							b.getState().update();
-							chest = (Chest)b.getState();
-							
-						}
-					} 
-			
+    
+                                        int chunkX = request.block_x >> 4;
+                                        int chunkZ = request.block_z >> 4;
+                                        net.minecraft.server.v1_11_R1.Chunk chunk =
+                                            ((CraftWorld) Bukkit.getWorld(request.worldName))
+                                                .getHandle()
+                                                .getChunkIfLoaded(chunkX, chunkZ);
+            
+                                        if (chunk != null) {
+                                            Block b =
+                                                chunk.bukkitChunk.getBlock(
+                                                    request.block_x, request.block_y, request.block_z);
+    
+                                            try {
+                                                chest = (Chest)b.getState();
+                                            } catch (ClassCastException e) {
+                                                ItemManager.setTypeId(b, CivData.CHEST);
+                                                ItemManager.setTypeId(b.getState(), CivData.CHEST);
+                                                b.getState().update();
+                                                chest = (Chest)b.getState();
+                                            }
+                                        }
+					
+					
 					/* Set the result and signal all threads we're complete. */					
 					request.result = chest.getBlockInventory();
 					request.finished = true;
@@ -86,8 +93,6 @@ public class SyncGetChestInventory implements Runnable {
 			} finally {
 				lock.unlock();
 			}
-		} else {
-		//	CivLog.warning("Unable to aquire lock in sync tick thread. Lock busy.");
 		}
 	}
 }
